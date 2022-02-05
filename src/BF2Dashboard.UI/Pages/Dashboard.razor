@@ -1,0 +1,35 @@
+﻿@page "/"
+@using BF2Dashboard.Domain.BattlefieldApi
+@using BF2Dashboard.Domain.Repositories
+
+<PageTitle>Dashboard</PageTitle>
+
+<h1>Servers</h1>
+@if (_servers == null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <ul>
+        @foreach (var srv in _servers)
+        {
+            <li>
+                [@srv.NumPlayers/@srv.MaxPlayers] @srv.Name
+            </li>
+        }
+    </ul>
+}
+
+@code {
+    private IReadOnlyList<Server>? _servers;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var result = await ServerListRepository.GetAllServers();
+        _servers = result.Where(s => s.NumPlayers > 8)
+            .OrderByDescending(s => s.NumPlayers)
+            .ToList();
+    }
+
+}
