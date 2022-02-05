@@ -35,7 +35,7 @@ public class ServerListRepository : HttpRepositoryBase
 
     private static async Task<PagedServerListResponse> GetServerListForPage(int pageNumber)
     {
-        var response = await HttpClient.GetAsync($"{Constants.ApiBaseUrl}/servers/{pageNumber}");
+        var response = await HttpClient.GetAsync($"{Constants.ApiBaseUrl}/servers/{pageNumber}?perPage=100");
         var json = await response.Content.ReadAsStringAsync();
         var servers = JsonSerializer.Deserialize<List<Server>>(json, JsonOptions)
                       ?? throw new SerializationException(json);
