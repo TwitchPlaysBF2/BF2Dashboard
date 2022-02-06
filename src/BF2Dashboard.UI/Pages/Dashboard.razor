@@ -23,17 +23,39 @@ else
 }
 
 @code {
+    private List<Server>? _pinnedServers;
     private IReadOnlyList<Server>? _servers;
 
     protected override async Task OnInitializedAsync()
     {
+        _pinnedServers = await LoadPinnedServers();
         _servers = await ServerListService.GetServerList();
+    }
+
+    private async Task<List<Server>> LoadPinnedServers()
+    {
+        var result = await _browserStorage.GetItemAsync<List<Server>>(nameof(_pinnedServers));
+        return result ?? new List<Server>();
     }
 
     private async Task OnServerPinToggle(Server server)
     {
-        Console.WriteLine($"Pinning server: {server.Name} {server.Guid}");
-        _servers = await ServerListService.GetServerList();
+        if (server.IsPinned)
+            await AddPinnedServer(server);
+        else
+            await RemovePinnedServer(server);
+    }
+
+    private async Task AddPinnedServer(Server server)
+    {
+        _pinnedServers!.Add(server);
+        await _browserStorage.SetItemAsync(nameof(_pinnedServers), _pinnedServers);
+    }
+
+    private async Task RemovePinnedServer(Server server)
+    {
+        _pinnedServers!.Remove(server);
+        await _browserStorage.SetItemAsync(nameof(_pinnedServers), _pinnedServers);
     }
 
 }
