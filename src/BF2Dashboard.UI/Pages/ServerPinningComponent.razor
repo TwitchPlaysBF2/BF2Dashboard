@@ -1,0 +1,28 @@
+﻿@using BF2Dashboard.Domain.BattlefieldApi
+
+<button @onclick="async () => await TogglePinStatus()">
+    @if (Server.IsPinned)
+    {
+        <i class="bi bi-arrow-90deg-down"></i>
+    }
+    else
+    {
+        <i class="bi bi-arrow-bar-up"></i>
+    }
+</button>
+
+@code {
+
+    [Parameter]
+    public Server Server { get; set; } = default!;
+
+    [Parameter]
+    public EventCallback<Server> OnServerPinToggleEventCallback { get; set; }
+
+    private async Task TogglePinStatus()
+    {
+        Server.IsPinned = !Server.IsPinned;
+        await OnServerPinToggleEventCallback.InvokeAsync(Server);
+    }
+
+}

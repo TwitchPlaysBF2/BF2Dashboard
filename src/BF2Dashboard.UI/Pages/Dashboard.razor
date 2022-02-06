@@ -12,20 +12,11 @@
 else
 {
     <ul>
-        @foreach (var srv in _servers)
+        @foreach (var server in _servers)
         {
             <li>
-                <button @onclick="async () => await TogglePinStatus(srv)">
-                    @if (@srv.IsPinned)
-                    {
-                        <i class="bi bi-arrow-90deg-down"></i>
-                    }
-                    else
-                    {
-                        <i class="bi bi-arrow-bar-up"></i>
-                    }
-                </button>
-                [@srv.NumPlayers/@srv.MaxPlayers] @srv.Name
+                <ServerPinningComponent Server="@server" OnServerPinToggleEventCallback="async s => await OnServerPinToggle(s)"/>
+                [@server.NumPlayers/@server.MaxPlayers] @server.Name
             </li>
         }
     </ul>
@@ -39,9 +30,9 @@ else
         _servers = await ServerListService.GetServerList();
     }
 
-    private async Task TogglePinStatus(Server server)
+    private async Task OnServerPinToggle(Server server)
     {
-        server.IsPinned = !server.IsPinned;
+        Console.WriteLine($"Pinning server: {server.Name} {server.Guid}");
         _servers = await ServerListService.GetServerList();
     }
 
