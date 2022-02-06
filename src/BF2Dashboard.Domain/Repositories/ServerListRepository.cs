@@ -9,14 +9,14 @@ namespace BF2Dashboard.Domain.Repositories;
 /// </summary>
 public class ServerListRepository : HttpRepositoryBase
 {
-    public static async Task<IReadOnlyList<Server>> GetAllServers()
+    public static async Task<IReadOnlyList<Server>> QueryServerList()
     {
         var servers = new List<Server>();
 
         for (var i = 1;; i++)
         {
             Console.WriteLine($"Querying servers, page {i}");
-            var pagedResponse = await GetServerListForPage(i);
+            var pagedResponse = await QueryServersForPage(i);
             servers.AddRange(pagedResponse.Servers);
 
             if (pagedResponse.IsLastPage || pagedResponse.IsEmpty)
@@ -33,7 +33,7 @@ public class ServerListRepository : HttpRepositoryBase
         return uniqueServers;
     }
 
-    private static async Task<PagedServerListResponse> GetServerListForPage(int pageNumber)
+    private static async Task<PagedServerListResponse> QueryServersForPage(int pageNumber)
     {
         var response = await HttpClient.GetAsync($"{Constants.ApiBaseUrl}/servers/{pageNumber}?perPage=100");
         var json = await response.Content.ReadAsStringAsync();

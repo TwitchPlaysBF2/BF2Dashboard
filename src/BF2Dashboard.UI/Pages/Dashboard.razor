@@ -1,6 +1,6 @@
 ﻿@page "/"
 @using BF2Dashboard.Domain.BattlefieldApi
-@using BF2Dashboard.Domain.Repositories
+@using BF2Dashboard.Domain.Services
 
 <PageTitle>Dashboard</PageTitle>
 
@@ -15,6 +15,16 @@ else
         @foreach (var srv in _servers)
         {
             <li>
+                <button @onclick="async () => await TogglePinStatus(srv)">
+                    @if (@srv.IsPinned)
+                    {
+                        <i class="bi bi-arrow-90deg-down"></i>
+                    }
+                    else
+                    {
+                        <i class="bi bi-arrow-bar-up"></i>
+                    }
+                </button>
                 [@srv.NumPlayers/@srv.MaxPlayers] @srv.Name
             </li>
         }
@@ -26,10 +36,14 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        var result = await ServerListRepository.GetAllServers();
-        _servers = result.Where(s => s.NumPlayers > 8)
-            .OrderByDescending(s => s.NumPlayers)
-            .ToList();
+        _servers = await ServerListService.GetServerList();
     }
+
+    private async Task TogglePinStatus(Server server)
+    {
+        server.IsPinned = !server.IsPinned;
+        _servers = await ServerListService.GetServerList();
+    }
+
 
 }

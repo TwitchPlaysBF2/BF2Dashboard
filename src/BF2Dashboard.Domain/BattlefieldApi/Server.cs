@@ -6,6 +6,8 @@ namespace BF2Dashboard.Domain.BattlefieldApi;
 [Serializable]
 public class Server
 {
+    public bool IsPinned { get; set; }
+    
     [JsonPropertyName("guid")]
     public string Guid { get; set; }
 
