@@ -7,7 +7,7 @@
 <h1>Servers</h1>
 @if (_servers == null)
 {
-    <p>Loading...</p>
+    <div class="spinner-border" style="width: 3rem; height: 3rem;" role="status"></div>
 }
 else
 {
@@ -44,6 +44,5 @@ else
         server.IsPinned = !server.IsPinned;
         _servers = await ServerListService.GetServerList();
     }
-
 
 }
