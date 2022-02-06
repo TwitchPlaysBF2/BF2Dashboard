@@ -14,8 +14,7 @@ public static class ServerListService
 
         var result = CachedServerList
             .Where(s => s.NumPlayers > 0)
-            .OrderByDescending(s => s.IsPinned)
-            .ThenByDescending(s => s.NumPlayers)
+            .OrderByDescending(s => s.NumPlayers)
             .ToList();
 
         return result;

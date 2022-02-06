@@ -21,7 +21,9 @@
 
     private async Task TogglePinStatus()
     {
-        Server.IsPinned = !Server.IsPinned;
+        var newStatus = !Server.IsPinned;
+        Console.WriteLine($"Setting pin status to {newStatus} of server: {Server.Name} {Server.Guid}");
+        Server.IsPinned = newStatus;
         await OnServerPinToggleEventCallback.InvokeAsync(Server);
     }
 
