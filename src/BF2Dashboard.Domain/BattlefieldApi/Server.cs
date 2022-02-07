@@ -144,9 +144,9 @@ public class Server
     public bool NoVehicles { get; set; }
 
     [JsonPropertyName("teams")]
-    public List<Team> Teams { get; } = new();
+    public List<Team> Teams { get; set; }
 
     [JsonPropertyName("players")]
-    public List<Player> Players { get; } = new();
+    public List<Player> Players { get; set; }
 }
 #pragma warning restore CS8618
