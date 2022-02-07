@@ -5,9 +5,9 @@ namespace BF2Dashboard.Domain.Services;
 
 public static class ServerListService
 {
-    private static IReadOnlyList<Server>? CachedServerList { get; set; }
+    private static List<Server>? CachedServerList { get; set; }
 
-    public static async Task<IReadOnlyList<Server>> GetServerList()
+    public static async Task<List<Server>> GetServerList()
     {
         try
         {

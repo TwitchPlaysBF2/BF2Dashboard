@@ -9,7 +9,7 @@ namespace BF2Dashboard.Domain.Repositories;
 /// </summary>
 public class ServerListRepository : HttpRepositoryBase
 {
-    public static async Task<IReadOnlyList<Server>> QueryServerList()
+    public static async Task<List<Server>> QueryServerList()
     {
         var servers = new List<Server>();
 

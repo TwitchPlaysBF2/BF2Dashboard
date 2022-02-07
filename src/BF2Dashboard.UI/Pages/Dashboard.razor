@@ -6,57 +6,66 @@
 
 <PageTitle>Dashboard</PageTitle>
 
-<h2>Pinned servers</h2>
-<div style="min-height: 200px;">
-    @if (_pinnedServers == null)
+
+<h2>Battlefield 2 Servers</h2>
+<table class="table table-hover" style="width: 35%">
+    <thead>
+    <tr>
+        <th scope="col">Player</th>
+        <th scope="col"></th>
+        <th scope="col">Servername</th>
+    </tr>
+    </thead>
+    <tbody>
+    @if (_pinnedServers != null)
+    {
+        @foreach (var server in _pinnedServers.OrderByDescending(s => s.NumPlayers))
+        {
+            <tr class="table-secondary">
+                <td>
+                    [@server.NumPlayers/@server.MaxPlayers]
+                </td>
+                <td>
+                    <ServerPinningComponent Server="@server" OnServerPinToggleEventCallback="async s => await OnServerPinToggle(s)"/>
+                </td>
+                <td>
+                    <button type="button" class="btn btn-link display-block" @onclick="() => _selectedServer = server">@server.Name</button>
+                </td>
+            </tr>
+        }
+    }
+    @if (_allServers == null)
     {
         <LoadingSpinner/>
     }
-    else if (_pinnedServers.Any())
-    {
-        <ul>
-            @foreach (var pinnedServer in _pinnedServers.OrderByDescending(s => s.NumPlayers))
-            {
-                <li>
-                    [@pinnedServer.NumPlayers/@pinnedServer.MaxPlayers] @pinnedServer.Name
-                </li>
-            }
-        </ul>
-    }
     else
     {
-        <p>
-            <i>Pin a server below, to see it here.</i>
-        </p>
-    }
-</div>
-
-<h2>All Servers</h2>
-@if (_servers == null)
-{
-    <LoadingSpinner/>
-}
-else
-{
-    <ul>
-        @foreach (var server in _servers)
+        @foreach (var server in _allServers.OrderByDescending(s => s.NumPlayers))
         {
-            <li>
-                <ServerPinningComponent Server="@server" OnServerPinToggleEventCallback="async s => await OnServerPinToggle(s)"/>
-                [@server.NumPlayers/@server.MaxPlayers] @server.Name
-            </li>
+            <tr class="@HighlightIfRecentlyUnpinned(server)">
+                <td>
+                    [@server.NumPlayers/@server.MaxPlayers]
+                </td>
+                <td>
+                    <ServerPinningComponent Server="@server" OnServerPinToggleEventCallback="async s => await OnServerPinToggle(s)"/>
+                </td>
+                <td>
+                    <button type="button" class="btn btn-link display-block" @onclick="() => _selectedServer = server">@server.Name</button>
+                </td>
+            </tr>
         }
-    </ul>
-}
+    }
+    </tbody>
+</table>
 
 @code {
     private List<Server>? _pinnedServers;
-    private IReadOnlyList<Server>? _servers;
+    private List<Server>? _allServers;
 
     protected override async Task OnInitializedAsync()
     {
         _pinnedServers = await LoadPinnedServers();
-        _servers = await ServerListService.GetServerList();
+        _allServers = await ServerListService.GetServerList();
     }
 
     private async Task<List<Server>> LoadPinnedServers()
@@ -76,13 +85,25 @@ else
     private async Task AddPinnedServer(Server server)
     {
         _pinnedServers!.Add(server);
-        await _browserStorage.SetItemAsync(nameof(_pinnedServers), _pinnedServers);
+        _allServers!.Remove(server);
+        await SavePinnedServers();
     }
 
     private async Task RemovePinnedServer(Server server)
     {
         _pinnedServers!.Remove(server);
+        _allServers!.Add(server);
+        await SavePinnedServers();
+    }
+
+    private async Task SavePinnedServers()
+    {
         await _browserStorage.SetItemAsync(nameof(_pinnedServers), _pinnedServers);
+    }
+
+    private string HighlightIfRecentlyUnpinned(Server server)
+    {
+        return server.HasRecentlyTouchedPinState ? "table-dark" : "";
     }
 
 }
