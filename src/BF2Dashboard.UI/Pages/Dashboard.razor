@@ -65,12 +65,12 @@ else
         return result ?? new List<Server>();
     }
 
-    private async Task OnServerPinToggle(Server server)
+    private async Task OnServerPinToggle(Server toggledServer)
     {
-        if (server.IsPinned)
-            await AddPinnedServer(server);
+        if (toggledServer.IsPinned)
+            await AddPinnedServer(toggledServer);
         else
-            await RemovePinnedServer(server);
+            await RemovePinnedServer(toggledServer);
     }
 
     private async Task AddPinnedServer(Server server)
