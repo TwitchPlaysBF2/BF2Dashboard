@@ -9,14 +9,22 @@ public static class ServerListService
 
     public static async Task<IReadOnlyList<Server>> GetServerList()
     {
-        if (CachedServerList == null)
-            CachedServerList = await ServerListRepository.QueryServerList();
+        try
+        {
+            if (CachedServerList == null)
+                CachedServerList = await ServerListRepository.QueryServerList();
 
-        var result = CachedServerList
-            .Where(s => s.NumPlayers > 0)
-            .OrderByDescending(s => s.NumPlayers)
-            .ToList();
+            var result = CachedServerList
+                .Where(s => s.NumPlayers > 0)
+                .OrderByDescending(s => s.NumPlayers)
+                .ToList();
 
-        return result;
+            return result;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex);
+            return new List<Server>();
+        }
     }
 }
