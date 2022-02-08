@@ -1,18 +1,18 @@
 ﻿@using BF2Dashboard.Domain.BattlefieldApi
-
 @if (Server != null)
 {
-    <h3>Top 5 Players on @Server.Name:</h3>
-    <table class="table table-hover" style="width:300px; font-size: 8pt">
+    <table class="table table-hover">
         <thead>
         <tr>
             <th scope="col">Playername</th>
             <th scope="col">Score</th>
-            <th scope="col">Team</th>
         </tr>
         </thead>
         <tbody>
-        @foreach (var player in Server.Players.Take(5).OrderByDescending(p => p.Score).Where(p => !p.Aibot))
+        @foreach (var player in Server.Players
+            .OrderByDescending(p => p.Score)
+            .Where(p => !p.Aibot)
+            .Where(p => p.TeamLabel == TeamLabelFilter))
         {
             <tr>
                 <td>
@@ -20,9 +20,6 @@
                 </td>
                 <td>
                     @player.Score
-                </td>
-                <td>
-                    @player.TeamLabel
                 </td>
             </tr>
         }
@@ -34,4 +31,7 @@
 {
     [Parameter]
     public Server? Server { get; set; }
+
+    [Parameter]
+    public string? TeamLabelFilter { get; set; }
 }

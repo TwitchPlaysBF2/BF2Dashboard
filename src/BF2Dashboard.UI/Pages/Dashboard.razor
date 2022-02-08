@@ -6,41 +6,49 @@
 
 <PageTitle>Dashboard</PageTitle>
 
-<Scoreboard Server="_selectedServer"/>
-
 <h2>Battlefield 2 Servers</h2>
-<ul class="list-group" style="width: 30%">
-    @if (_pinnedServers != null)
-    {
-        @foreach (var server in _pinnedServers.OrderByDescending(s => s.NumPlayers))
-        {
-            <li class="list-group-item d-flex justify-content-between align-items-center text-nowrap active">
-                <ServerPinningComponent Server="@server" OnServerPinToggleEventCallback="async s => await OnServerPinToggle(s)"/>
-                <button type="button" class="btn btn-link display-block" @onclick="() => _selectedServer = server">
-                    @server.Name
-                </button>
-                <span class="badge bg-primary rounded-pill">@server.NumPlayers / @server.MaxPlayers</span>
-            </li>
-        }
-    }
-    @if (_allServers == null)
-    {
-        <LoadingSpinner/>
-    }
-    else
-    {
-        @foreach (var server in _allServers.OrderByDescending(s => s.NumPlayers))
-        {
-            <li class="list-group-item d-flex justify-content-between align-items-center text-nowrap">
-                <ServerPinningComponent Server="@server" OnServerPinToggleEventCallback="async s => await OnServerPinToggle(s)"/>
-                <button type="button" class="btn btn-link display-block" @onclick="() => _selectedServer = server">
-                    @server.Name
-                </button>
-                <span class="badge bg-primary rounded-pill">@server.NumPlayers / @server.MaxPlayers</span>
-            </li>
-        }
-    }
-</ul>
+<div class="row">
+    <div class="table-responsive col-md-6">
+        <ul class="list-group">
+            @if (_pinnedServers != null)
+            {
+                @foreach (var server in _pinnedServers.OrderByDescending(s => s.NumPlayers))
+                {
+                    <li class="list-group-item d-flex justify-content-between align-items-center text-nowrap active">
+                        <ServerPinningComponent Server="@server" OnServerPinToggleEventCallback="async s => await OnServerPinToggle(s)"/>
+                        <button type="button" class="btn btn-link display-block" @onclick="() => _selectedServer = server">
+                            @server.Name
+                        </button>
+                        <span class="badge bg-primary rounded-pill">@server.NumPlayers / @server.MaxPlayers</span>
+                    </li>
+                }
+            }
+            @if (_allServers == null)
+            {
+                <LoadingSpinner/>
+            }
+            else
+            {
+                @foreach (var server in _allServers.OrderByDescending(s => s.NumPlayers))
+                {
+                    <li class="list-group-item d-flex justify-content-between align-items-center text-nowrap">
+                        <ServerPinningComponent Server="@server" OnServerPinToggleEventCallback="async s => await OnServerPinToggle(s)"/>
+                        <button type="button" class="btn btn-link display-block" @onclick="() => _selectedServer = server">
+                            @server.Name
+                        </button>
+                        <span class="badge bg-primary rounded-pill">@server.NumPlayers / @server.MaxPlayers</span>
+                    </li>
+                }
+            }
+        </ul>
+    </div>
+    <div class="table-responsive col-md-3">
+        <Scoreboard Server="_selectedServer" TeamLabelFilter="@_selectedServer?.Team1"/>
+    </div>
+    <div class="table-responsive col-md-3">
+        <Scoreboard Server="_selectedServer" TeamLabelFilter="@_selectedServer?.Team2"/>
+    </div>
+</div>
 
 @code {
     private List<Server>? _pinnedServers;
@@ -92,4 +100,3 @@
     }
 
 }
-
