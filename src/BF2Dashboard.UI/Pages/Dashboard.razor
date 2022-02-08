@@ -36,7 +36,7 @@
                         <button type="button" class="btn btn-link display-block" @onclick="() => _selectedServer = server">
                             @server.Name
                         </button>
-                        <span class="badge bg-primary rounded-pill">@server.NumPlayers / @server.MaxPlayers</span>
+                        <span class="badge bg-primary rounded-pill">@server.NumPlayersWithoutBots / @server.MaxPlayers</span>
                     </li>
                 }
             }

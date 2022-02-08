@@ -6,6 +6,8 @@ namespace BF2Dashboard.Domain.BattlefieldApi;
 [Serializable]
 public class Player
 {
+    public bool IsLikelyHuman => Ping != 0;
+
     [JsonPropertyName("pid")]
     public int Pid { get; set; }
 

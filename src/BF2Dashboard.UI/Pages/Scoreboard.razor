@@ -10,9 +10,9 @@
         </thead>
         <tbody>
         @foreach (var player in Server.Players
-            .OrderByDescending(p => p.Score)
-            .Where(p => !p.Aibot)
-            .Where(p => p.TeamLabel == TeamLabelFilter))
+            .Where(p => p.IsLikelyHuman)
+            .Where(p => p.TeamLabel == TeamLabelFilter)
+            .OrderByDescending(p => p.Score))
         {
             <tr>
                 <td>
