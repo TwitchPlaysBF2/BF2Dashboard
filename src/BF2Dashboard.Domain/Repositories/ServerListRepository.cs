@@ -35,13 +35,22 @@ public class ServerListRepository : HttpRepositoryBase
 
     private static async Task<PagedServerListResponse> QueryServersForPage(int pageNumber)
     {
-        var response = await HttpClient.GetAsync($"{Constants.ApiBaseUrl}/servers/{pageNumber}?perPage=100");
-        var json = await response.Content.ReadAsStringAsync();
-        var servers = JsonSerializer.Deserialize<List<Server>>(json, JsonOptions)
-                      ?? throw new SerializationException(json);
+        var endpoint = $"{Constants.ApiBaseUrl}/servers/{pageNumber}?perPage=100";
+        try
+        {
+            var response = await HttpClient.GetAsync(endpoint);
+            var json = await response.Content.ReadAsStringAsync();
+            var servers = JsonSerializer.Deserialize<List<Server>>(json, JsonOptions)
+                          ?? throw new SerializationException(json);
 
-        var maximumKnownPages = response.Headers.GetValues("X-Total-Pages").FirstOrDefault();
+            var maximumKnownPages = response.Headers.GetValues("X-Total-Pages").FirstOrDefault();
 
-        return new PagedServerListResponse(servers, pageNumber, maximumKnownPages);
+            return new PagedServerListResponse(servers, pageNumber, maximumKnownPages);
+        }
+        catch
+        {
+            Console.WriteLine($"Failed querying endpoint {endpoint}");
+            throw;
+        }
     }
 }
