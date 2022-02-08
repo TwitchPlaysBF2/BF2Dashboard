@@ -1,15 +1,7 @@
 ﻿@using BF2Dashboard.Domain.BattlefieldApi
 
-<button @onclick="async () => await TogglePinStatus()">
-    @if (Server.IsPinned)
-    {
-        <i class="bi bi-arrow-90deg-down"></i>
-    }
-    else
-    {
-        <i class="bi bi-arrow-bar-up"></i>
-    }
-</button>
+<i class="bi @(Server.IsPinned ? "bi-heart-fill" : "bi-heart") grow" style="font-size: 20pt" @onclick="async () => await TogglePinStatus()">
+</i>
 
 @code {
 
