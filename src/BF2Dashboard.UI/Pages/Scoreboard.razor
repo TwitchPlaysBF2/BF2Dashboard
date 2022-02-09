@@ -10,7 +10,7 @@
         </thead>
         <tbody>
         @foreach (var player in Server.Players
-            .Where(p => p.IsLikelyHuman)
+            .Where(p => p.IsHuman)
             .Where(p => p.TeamLabel == TeamLabelFilter)
             .OrderByDescending(p => p.Score))
         {

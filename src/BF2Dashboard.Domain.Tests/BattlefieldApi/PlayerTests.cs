@@ -17,7 +17,7 @@ public class PlayerTests
             Ping = ping
         };
 
-        Assert.That(player.IsLikelyHuman, Is.True);
+        Assert.That(player.IsHuman, Is.True);
     }
 
     [TestCase(true, 0, 0)]
@@ -31,6 +31,6 @@ public class PlayerTests
             Ping = ping
         };
 
-        Assert.That(player.IsLikelyHuman, Is.False);
+        Assert.That(player.IsHuman, Is.False);
     }
 }

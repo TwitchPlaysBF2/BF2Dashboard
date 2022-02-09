@@ -20,7 +20,7 @@ public class Server
 
     public bool HasRecentlyTouchedPinState { get; private set; }
 
-    public int NumPlayersWithoutBots => Players.Count(p => p.IsLikelyHuman);
+    public int NumPlayersWithoutBots => Players.Count(p => p.IsHuman);
 
     [JsonPropertyName("guid")]
     public string Guid { get; set; }
