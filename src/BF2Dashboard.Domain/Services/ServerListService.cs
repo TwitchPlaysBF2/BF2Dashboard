@@ -13,7 +13,6 @@ public static class ServerListService
             var serverList = await ServerListRepository.QueryServerList();
 
             var result = serverList
-                .Where(s => s.NumPlayersWithoutBots > 0)
                 .OrderByDescending(s => s.NumPlayersWithoutBots)
                 .ToList();
 
