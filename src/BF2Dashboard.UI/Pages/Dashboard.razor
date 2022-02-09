@@ -12,7 +12,7 @@
         <ul class="list-group">
             @if (_pinnedServers != null)
             {
-                @foreach (var server in _pinnedServers.OrderByDescending(s => s.NumPlayers))
+                @foreach (var server in _pinnedServers.OrderByDescending(s => s.NumPlayersWithoutBots))
                 {
                     <li class="list-group-item d-flex justify-content-between align-items-center text-nowrap active">
                         <ServerPinningComponent Server="@server" OnServerPinToggleEventCallback="async s => await OnServerPinToggle(s)"/>
@@ -29,7 +29,7 @@
             }
             else
             {
-                @foreach (var server in _allServers.OrderByDescending(s => s.NumPlayers))
+                @foreach (var server in _allServers.OrderByDescending(s => s.NumPlayersWithoutBots))
                 {
                     <li class="list-group-item d-flex justify-content-between align-items-center text-nowrap">
                         <ServerPinningComponent Server="@server" OnServerPinToggleEventCallback="async s => await OnServerPinToggle(s)"/>
@@ -92,11 +92,6 @@
     private async Task SavePinnedServers()
     {
         await _browserStorage.SetItemAsync(nameof(_pinnedServers), _pinnedServers);
-    }
-
-    private string HighlightIfRecentlyUnpinned(Server server)
-    {
-        return server.HasRecentlyTouchedPinState ? "table-dark" : "";
     }
 
 }
