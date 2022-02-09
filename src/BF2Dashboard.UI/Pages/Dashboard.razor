@@ -14,7 +14,7 @@
             {
                 @foreach (var server in _pinnedServers.OrderByDescending(s => s.NumPlayersWithoutBots))
                 {
-                    <li class="list-group-item d-flex justify-content-between align-items-center text-nowrap active">
+                    <li class="list-group-item list-group-item-action d-flex justify-content-between align-items-center text-nowrap active">
                         <ServerPinningComponent Server="@server" OnServerPinToggleEventCallback="async s => await OnServerPinToggle(s)"/>
                         <button type="button" class="btn btn-link display-block" @onclick="() => _selectedServer = server">
                             @server.Name
@@ -31,7 +31,7 @@
             {
                 @foreach (var server in _allServers.OrderByDescending(s => s.NumPlayersWithoutBots))
                 {
-                    <li class="list-group-item d-flex justify-content-between align-items-center text-nowrap">
+                    <li class="list-group-item list-group-item-action d-flex justify-content-between align-items-center text-nowrap">
                         <ServerPinningComponent Server="@server" OnServerPinToggleEventCallback="async s => await OnServerPinToggle(s)"/>
                         <button type="button" class="btn btn-link display-block" @onclick="() => _selectedServer = server">
                             @server.Name
