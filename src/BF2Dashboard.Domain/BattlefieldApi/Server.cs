@@ -35,7 +35,7 @@ public class Server
     public string Name { get; set; }
 
     [JsonPropertyName("numPlayers")]
-    public int NumPlayers { get; set; }
+    private int NumPlayers { get; set; }
 
     [JsonPropertyName("maxPlayers")]
     public int MaxPlayers { get; set; }
