@@ -59,12 +59,31 @@
     {
         _pinnedServers = await LoadPinnedServers();
         _allServers = await ServerListService.GetServerList();
+        UpdateOrRemovePinnedServerInstances(_allServers);
     }
 
     private async Task<List<Server>> LoadPinnedServers()
     {
         var result = await _browserStorage.GetItemAsync<List<Server>>(nameof(_pinnedServers));
         return result ?? new List<Server>();
+    }
+
+    private void UpdateOrRemovePinnedServerInstances(IReadOnlyCollection<Server> freshlyUpdatedServerInstances)
+    {
+        for (var i = 0; i < _pinnedServers!.Count; i++)
+        {
+            var updatedPinnedServerInstance = freshlyUpdatedServerInstances.FirstOrDefault(s => s.Guid == _pinnedServers[i].Guid);
+            if (updatedPinnedServerInstance != null)
+            {
+                _pinnedServers[i] = updatedPinnedServerInstance;
+                _pinnedServers[i].IsPinned = true;
+                _allServers!.Remove(updatedPinnedServerInstance); // avoiding duplication since server gets 'moved' up
+            }
+            else
+            {
+                _pinnedServers.Remove(_pinnedServers[i]); // server is gone, we don't render old instances
+            }
+        }
     }
 
     private async Task OnServerPinToggle(Server toggledServer)
@@ -91,7 +110,7 @@
 
     private async Task SavePinnedServers()
     {
-        // await _browserStorage.SetItemAsync(nameof(_pinnedServers), _pinnedServers);
+        await _browserStorage.SetItemAsync(nameof(_pinnedServers), _pinnedServers);
     }
 
 }
