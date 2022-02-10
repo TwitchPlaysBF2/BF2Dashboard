@@ -5,6 +5,8 @@
 
 A web portal for personalizable things related to Battlefield2, for example your favorite BF2 servers.
 
+Currently under early development. Goal is to kickstart my frontend know-how and learn more about Blazor WASM while also producing something handy for the BF2 family.
+
 Made using C# and ASP.NET Core Blazor WebAssembly
 
 Special thanks to @cetteup for providing the bflist.io API
