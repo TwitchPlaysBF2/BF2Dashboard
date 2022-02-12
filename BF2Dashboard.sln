@@ -1,10 +1,14 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BF2Dashboard.UI", "BF2Dashboard.UI\BF2Dashboard.UI.csproj", "{9BAD111C-564F-4641-A298-4CFFD6EB1DFB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BF2Dashboard.Domain", "src\BF2Dashboard.Domain\BF2Dashboard.Domain.csproj", "{1AC3A973-96C4-499B-A425-9069A9A8A515}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BF2Dashboard.Domain", "BF2Dashboard.Domain\BF2Dashboard.Domain.csproj", "{1AC3A973-96C4-499B-A425-9069A9A8A515}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BF2Dashboard.UI", "src\BF2Dashboard.UI\BF2Dashboard.UI.csproj", "{9BAD111C-564F-4641-A298-4CFFD6EB1DFB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BF2Dashboard.Domain.Tests", "BF2Dashboard.Domain.Tests\BF2Dashboard.Domain.Tests.csproj", "{D670C590-D611-49E7-9068-29406BAC4A80}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{6ED356A7-8B47-4613-AD01-C85CF28491BD}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{664D406C-2F83-48F0-BFC3-408D5CB53C65}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BF2Dashboard.Domain.Tests", "src\BF2Dashboard.Domain.Tests\BF2Dashboard.Domain.Tests.csproj", "{D670C590-D611-49E7-9068-29406BAC4A80}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -24,5 +28,16 @@ Global
 		{D670C590-D611-49E7-9068-29406BAC4A80}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D670C590-D611-49E7-9068-29406BAC4A80}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D670C590-D611-49E7-9068-29406BAC4A80}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{1AC3A973-96C4-499B-A425-9069A9A8A515} = {6ED356A7-8B47-4613-AD01-C85CF28491BD}
+		{9BAD111C-564F-4641-A298-4CFFD6EB1DFB} = {6ED356A7-8B47-4613-AD01-C85CF28491BD}
+		{D670C590-D611-49E7-9068-29406BAC4A80} = {664D406C-2F83-48F0-BFC3-408D5CB53C65}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {3CB609D9-5D54-4C11-A371-DAAC8B74E430}
 	EndGlobalSection
 EndGlobal

@@ -20,15 +20,12 @@ jobs:
 
       - name: Build with dotnet
         run: dotnet build --configuration Release
-        working-directory: src
 
       - name: Run Tests
         run: dotnet test --configuration Release --no-build
-        working-directory: src
 
       - name: Create Artifacts
-        run: dotnet publish BF2Dashboard.UI/BF2Dashboard.UI.csproj -c:Release -o:../public -p:GHPages=true -p:GHPagesBase=.
-        working-directory: src
+        run: dotnet publish src/BF2Dashboard.UI/BF2Dashboard.UI.csproj -c:Release -o:public -p:GHPages=true -p:GHPagesBase=..
 
       - name: Deploy Artifacts to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
