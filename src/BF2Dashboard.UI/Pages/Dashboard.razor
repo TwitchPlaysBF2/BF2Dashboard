@@ -9,18 +9,37 @@
 <h2>Battlefield 2 Servers</h2>
 <div class="row">
     <div class="table-responsive col-md-6">
-        <ul class="list-group">
+        <MudExpansionPanels>
+            @* @if (_pinnedServers != null) *@
+            @* { *@
+            @*     @foreach (var server in _pinnedServers.OrderByDescending(s => s.NumPlayersWithoutBots)) *@
+            @*     { *@
+            @*         <MudTreeViewItem Value="@server.Name" title="Show scoreboard"> *@
+            @*             <div class="col"> *@
+            @*                 <ServerPinningComponent Server="@server" OnServerPinToggleEventCallback="async s => await OnServerPinToggle(s)"/> *@
+            @*                 <div class="row"> *@
+            @*                     <div class="table-responsive col-md-3"> *@
+            @*                         <Scoreboard Server="server" TeamLabelFilter="@server.Team1"/> *@
+            @*                     </div> *@
+            @*                     <div class="table-responsive col-md-3"> *@
+            @*                         <Scoreboard Server="server" TeamLabelFilter="@server.Team2"/> *@
+            @*                     </div> *@
+            @*                     <span class="badge bg-primary rounded-pill" title="Number of players (without bots)">@server.NumPlayersWithoutBots / @server.MaxPlayers</span> *@
+            @*                 </div> *@
+            @*             </div> *@
+            @*         </MudTreeViewItem> *@
+            @*     } *@
+            @* } *@
             @if (_pinnedServers != null)
             {
                 @foreach (var server in _pinnedServers.OrderByDescending(s => s.NumPlayersWithoutBots))
                 {
-                    <li class="list-group-item list-group-item-action d-flex justify-content-between align-items-center text-nowrap active">
+                    <p>
                         <ServerPinningComponent Server="@server" OnServerPinToggleEventCallback="async s => await OnServerPinToggle(s)"/>
-                        <button type="button" class="btn btn-link display-block" @onclick="() => _selectedServer = server" title="Show scoreboard">
-                            @server.Name
-                        </button>
-                        <span class="badge bg-primary rounded-pill" title="Number of players (without bots)">@server.NumPlayersWithoutBots / @server.MaxPlayers</span>
-                    </li>
+                        <br />
+                        Pinned: @server.Name;
+                    </p>
+                    
                 }
             }
             @if (_allServers == null)
@@ -31,22 +50,35 @@
             {
                 @foreach (var server in _allServers.OrderByDescending(s => s.NumPlayersWithoutBots))
                 {
-                    <li class="list-group-item list-group-item-action d-flex justify-content-between align-items-center text-nowrap">
-                        <ServerPinningComponent Server="@server" OnServerPinToggleEventCallback="async s => await OnServerPinToggle(s)"/>
-                        <button type="button" class="btn btn-link display-block" @onclick="() => _selectedServer = server">
-                            @server.Name
-                        </button>
-                        <span class="badge bg-primary rounded-pill" title="Number of players (without bots)">@server.NumPlayersWithoutBots / @server.MaxPlayers</span>
-                    </li>
+                    <MudExpansionPanel HideIcon="true">
+                        <TitleContent>
+                            <div class="d-flex">
+                                <MudText Class="mt-1">
+                                    @server.Name
+                                </MudText>
+                                <div class="mud-theme-primary py-4 px-6 mx-4 rounded-xl d-flex ml-auto">
+                                    <MudTooltip Text="Number of players (without bots)" Arrow="true" Placement="Placement.Left">
+                                        @(server.NumPlayersWithoutBots + " / " + @server.MaxPlayers) <MudIcon ></MudIcon>
+                                    </MudTooltip>
+                                </div>
+                            </div>
+                        </TitleContent>
+                        <ChildContent>
+                            <div class="row">
+                                <ServerPinningComponent Server="@server" OnServerPinToggleEventCallback="async s => await OnServerPinToggle(s)"/>
+                                <div class="col">
+                                    <Scoreboard Server="@server" TeamLabelFilter="@server.Team1"/>
+                                </div>
+                                <div class="col">
+                                    <Scoreboard Server="@server" TeamLabelFilter="@server.Team2"/>
+                                </div>
+                            </div>
+                        </ChildContent>
+                    </MudExpansionPanel>
                 }
             }
-        </ul>
-    </div>
-    <div class="table-responsive col-md-3">
-        <Scoreboard Server="_selectedServer" TeamLabelFilter="@_selectedServer?.Team1"/>
-    </div>
-    <div class="table-responsive col-md-3">
-        <Scoreboard Server="_selectedServer" TeamLabelFilter="@_selectedServer?.Team2"/>
+
+        </MudExpansionPanels>
     </div>
 </div>
 
@@ -54,6 +86,8 @@
     private List<Server>? _pinnedServers;
     private List<Server>? _allServers;
     private Server? _selectedServer;
+    private string? SelectedTreeViewNode { get; set; }
+
 
     protected override async Task OnInitializedAsync()
     {

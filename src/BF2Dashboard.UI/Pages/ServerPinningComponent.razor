@@ -1,10 +1,16 @@
 ﻿@using BF2Dashboard.Domain.BattlefieldApi
 
-<i class="bi @(Server.IsPinned ? "bi-heart-fill" : "bi-heart") grow" style="font-size: 20pt" @onclick="async () => await TogglePinStatus()">
+@* <MudToggleIconButton Icon="@Icons.Material.Filled.AlarmOff" Color="@Color.Error" Title="Off" *@
+@*                      ToggledIcon="@Icons.Material.Filled.AlarmOn" ToggledColor="@Color.Success" ToggledTitle="On" *@
+@*                      ToggledChanged="DoSomething"/> *@
+
+@* <button value="Add to favorites" class="btn btn-link display-block" type="button" @onclick="async () => await TogglePinStatus()">Add to favorites</button> *@
+
+<i class="bi @(Server.IsPinned ? "bi-heart-fill" : "bi-heart")" style="font-size: 20pt" @onclick="async () => await TogglePinStatus()">
 </i>
 
 @code {
-
+    
     [Parameter]
     public Server Server { get; set; } = default!;
 
