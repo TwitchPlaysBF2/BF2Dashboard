@@ -1,7 +1,6 @@
 ﻿@using BF2Dashboard.Domain.BattlefieldApi
 
-<i class="bi @(Server.IsPinned ? "bi-heart-fill" : "bi-heart") grow" style="font-size: 20pt" @onclick="async () => await TogglePinStatus()">
-</i>
+<HxButton Text="Toggle" OnClick="async _ => await TogglePinStatus()"></HxButton>
 
 @code {
 
