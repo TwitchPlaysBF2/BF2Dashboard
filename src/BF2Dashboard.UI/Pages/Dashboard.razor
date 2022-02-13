@@ -9,18 +9,35 @@
 <h2>Battlefield 2 Servers</h2>
 <div class="row">
     <div class="table-responsive col-md-6">
-        <ul class="list-group">
+        <div class="accordion" id="accordionExample">
             @if (_pinnedServers != null)
             {
                 @foreach (var server in _pinnedServers.OrderByDescending(s => s.NumPlayersWithoutBots))
                 {
-                    <li class="list-group-item list-group-item-action d-flex justify-content-between align-items-center text-nowrap active">
-                        <ServerPinningComponent Server="@server" OnServerPinToggleEventCallback="async s => await OnServerPinToggle(s)"/>
-                        <button type="button" class="btn btn-link display-block" @onclick="() => _selectedServer = server" title="Show scoreboard">
-                            @server.Name
-                        </button>
-                        <span class="badge bg-primary rounded-pill" title="Number of players (without bots)">@server.NumPlayersWithoutBots / @server.MaxPlayers</span>
-                    </li>
+                    <div class="accordion-item">
+                        <div class="accordion-header">
+                            <div class="accordion-item d-flex justify-content-between align-items-center text-nowrap @server.IsPinned ? 'active' : ''">
+                                <ServerPinningComponent Server="@server" OnServerPinToggleEventCallback="async s => await OnServerPinToggle(s)"/>
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse_@server.Guid" @onclick="() => _selectedServer = server">
+                                    @server.Name
+                                    <span class="badge bg-primary rounded-pill" title="Number of players (without bots)">@server.NumPlayersWithoutBots / @server.MaxPlayers</span>
+                                </button>
+                            </div>
+
+                            <div id="collapse_@server.Guid" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                                <div class="accordion-body">
+                                    <div class="row">
+                                        <div class="col">
+                                            <Scoreboard Players="@_selectedServer?.Players" TeamLabelFilter="@_selectedServer?.Team1"/>
+                                        </div>
+                                        <div class="col">
+                                            <Scoreboard Players="@_selectedServer?.Players" TeamLabelFilter="@_selectedServer?.Team2"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 }
             }
             @if (_allServers == null)
@@ -31,22 +48,33 @@
             {
                 @foreach (var server in _allServers.OrderByDescending(s => s.NumPlayersWithoutBots))
                 {
-                    <li class="list-group-item list-group-item-action d-flex justify-content-between align-items-center text-nowrap">
-                        <ServerPinningComponent Server="@server" OnServerPinToggleEventCallback="async s => await OnServerPinToggle(s)"/>
-                        <button type="button" class="btn btn-link display-block" @onclick="() => _selectedServer = server">
-                            @server.Name
-                        </button>
-                        <span class="badge bg-primary rounded-pill" title="Number of players (without bots)">@server.NumPlayersWithoutBots / @server.MaxPlayers</span>
-                    </li>
+                    <div class="accordion-item">
+                        <div class="accordion-header">
+                            <div class="accordion-item d-flex justify-content-between align-items-center text-nowrap @server.IsPinned ? 'active' : ''">
+                                <ServerPinningComponent Server="@server" OnServerPinToggleEventCallback="async s => await OnServerPinToggle(s)"/>
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse_@server.Guid" @onclick="() => _selectedServer = server">
+                                    @server.Name
+                                    <span class="badge bg-primary rounded-pill" title="Number of players (without bots)">@server.NumPlayersWithoutBots / @server.MaxPlayers</span>
+                                </button>
+                            </div>
+
+                            <div id="collapse_@server.Guid" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                                <div class="accordion-body">
+                                    <div class="row">
+                                        <div class="col">
+                                            <Scoreboard Players="@_selectedServer?.Players" TeamLabelFilter="@_selectedServer?.Team1"/>
+                                        </div>
+                                        <div class="col">
+                                            <Scoreboard Players="@_selectedServer?.Players" TeamLabelFilter="@_selectedServer?.Team2"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 }
             }
-        </ul>
-    </div>
-    <div class="table-responsive col-md-3">
-        <Scoreboard Server="_selectedServer" TeamLabelFilter="@_selectedServer?.Team1"/>
-    </div>
-    <div class="table-responsive col-md-3">
-        <Scoreboard Server="_selectedServer" TeamLabelFilter="@_selectedServer?.Team2"/>
+        </div>
     </div>
 </div>
 

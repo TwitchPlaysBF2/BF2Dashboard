@@ -1,7 +1,10 @@
 ﻿@using BF2Dashboard.Domain.BattlefieldApi
-
-<i class="bi @(Server.IsPinned ? "bi-heart-fill" : "bi-heart") grow" style="font-size: 20pt" @onclick="async () => await TogglePinStatus()">
-</i>
+<div class="col">
+    <div class="container">
+        <i class="bi @(Server.IsPinned ? "bi-heart-fill" : "bi-heart") grow" style="font-size: 20pt" @onclick="async () => await TogglePinStatus()">
+        </i>
+    </div>
+</div>
 
 @code {
 
