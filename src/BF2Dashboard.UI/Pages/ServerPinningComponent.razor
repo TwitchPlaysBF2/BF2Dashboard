@@ -1,7 +1,10 @@
 ﻿@using BF2Dashboard.Domain.BattlefieldApi
+@using BF2Dashboard.Domain.Services
+@inject ServerHandlingService _serverHandlingService
+
 <div class="col">
     <div class="container">
-        <i class="bi @(Server.IsPinned ? "bi-heart-fill" : "bi-heart") grow" style="font-size: 20pt" @onclick="async () => await TogglePinStatus()">
+        <i class="bi @(Server.IsPinned ? "bi-heart-fill" : "bi-heart") grow" style="font-size: 20pt" @onclick="async () => await _serverHandlingService.TogglePin(Server.Guid)">
         </i>
     </div>
 </div>
@@ -10,16 +13,5 @@
 
     [Parameter]
     public Server Server { get; set; } = default!;
-
-    [Parameter]
-    public EventCallback<Server> OnServerPinToggleEventCallback { get; set; }
-
-    private async Task TogglePinStatus()
-    {
-        var newStatus = !Server.IsPinned;
-        Console.WriteLine($"Setting pin status to {newStatus} of server: {Server.Name} {Server.Guid}");
-        Server.IsPinned = newStatus;
-        await OnServerPinToggleEventCallback.InvokeAsync(Server);
-    }
 
 }
