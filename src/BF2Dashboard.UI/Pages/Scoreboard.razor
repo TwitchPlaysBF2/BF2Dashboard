@@ -1,6 +1,7 @@
 ﻿@using BF2Dashboard.Domain.BattlefieldApi
-@if (Players != null)
-{
+@using BF2Dashboard.Domain.Services
+@inject ServerCachingService _serverCachingService
+
     <table class="table table-hover">
         <thead>
         <tr>
@@ -9,10 +10,7 @@
         </tr>
         </thead>
         <tbody>
-        @foreach (var player in Players
-            .Where(p => p.IsHuman)
-            .Where(p => p.TeamLabel == TeamLabelFilter)
-            .OrderByDescending(p => p.Score))
+        @foreach (var player in ResolvePlayers())
         {
             <tr>
                 <td>
@@ -28,13 +26,30 @@
         }
         </tbody>
     </table>
-}
 
 @code
 {
     [Parameter]
-    public IReadOnlyCollection<Player>? Players { get; set; }
+    public string? SelectedServerId { get; set; }
 
     [Parameter]
     public string? TeamLabelFilter { get; set; }
+
+    private List<Player> ResolvePlayers()
+    {
+        if (string.IsNullOrWhiteSpace(SelectedServerId))
+            return new List<Player>();
+        
+        var server = _serverCachingService.GetFromCache(SelectedServerId);
+        if (server == null)
+            return new List<Player>();
+
+        var result = server.Players
+            .Where(p => p.IsHuman)
+            .Where(p => p.TeamLabel == TeamLabelFilter)
+            .OrderByDescending(p => p.Score)
+            .ToList();
+
+        return result;
+    }
 }

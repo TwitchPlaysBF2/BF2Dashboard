@@ -3,6 +3,7 @@
 @using BF2Dashboard.Domain.Services
 @using Blazored.LocalStorage
 @inject ILocalStorageService _browserStorage
+@inject ServerCachingService _cachingService
 
 <PageTitle>Dashboard</PageTitle>
 
@@ -12,32 +13,7 @@
         <div class="accordion" id="accordionExample">
             @if (_pinnedServers != null)
             {
-                <Virtualize Items="@_pinnedServers.OrderByDescending(s => s.NumPlayersWithoutBots).ToList()" Context="server" TItem="Server">
-                    <div class="accordion-item">
-                        <div class="accordion-header">
-                            <div class="accordion-item d-flex justify-content-between align-items-center text-nowrap @server.IsPinned ? 'active' : ''">
-                                <ServerPinningComponent Server="@server" OnServerPinToggleEventCallback="async s => await OnServerPinToggle(s)"/>
-                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse_@server.Guid" @onclick="() => _selectedServer = server">
-                                    @server.Name
-                                    <span class="badge bg-primary rounded-pill" title="Number of players (without bots)">@server.NumPlayersWithoutBots / @server.MaxPlayers</span>
-                                </button>
-                            </div>
-
-                            <div id="collapse_@server.Guid" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
-                                <div class="accordion-body">
-                                    <div class="row">
-                                        <div class="col">
-                                            <Scoreboard Players="@_selectedServer?.Players" TeamLabelFilter="@_selectedServer?.Team1"/>
-                                        </div>
-                                        <div class="col">
-                                            <Scoreboard Players="@_selectedServer?.Players" TeamLabelFilter="@_selectedServer?.Team2"/>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </Virtualize>
+                @RenderServerList(_pinnedServers)
             }
             @if (_allServers == null)
             {
@@ -45,47 +21,54 @@
             }
             else
             {
-                <Virtualize Items="@_allServers.OrderByDescending(s => s.NumPlayersWithoutBots).ToList()" Context="server" TItem="Server">
-                    <div class="accordion-item">
-                        <div class="accordion-header">
-                            <div class="accordion-item d-flex justify-content-between align-items-center text-nowrap @server.IsPinned ? 'active' : ''">
-                                <ServerPinningComponent Server="@server" OnServerPinToggleEventCallback="async s => await OnServerPinToggle(s)"/>
-                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse_@server.Guid" @onclick="() => _selectedServer = server">
-                                    @server.Name
-                                    <span class="badge bg-primary rounded-pill" title="Number of players (without bots)">@server.NumPlayersWithoutBots / @server.MaxPlayers</span>
-                                </button>
-                            </div>
-
-                            <div id="collapse_@server.Guid" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
-                                <div class="accordion-body">
-                                    <div class="row">
-                                        <div class="col">
-                                            <Scoreboard Players="@_selectedServer?.Players" TeamLabelFilter="@_selectedServer?.Team1"/>
-                                        </div>
-                                        <div class="col">
-                                            <Scoreboard Players="@_selectedServer?.Players" TeamLabelFilter="@_selectedServer?.Team2"/>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </Virtualize>
+                @RenderServerList(_allServers)
             }
         </div>
     </div>
 </div>
 
 @code {
-    private List<Server>? _pinnedServers;
-    private List<Server>? _allServers;
-    private Server? _selectedServer;
+
+    private readonly RenderFragment<List<Server>> RenderServerList = serverList => __builder =>
+    {
+        <Virtualize Items="@serverList.OrderByDescending(s => s.NumPlayersWithoutBots).ToList()" Context="server" TItem="Server">
+            <div class="accordion-item">
+                <div class="accordion-header">
+                    <div class="accordion-item d-flex justify-content-between align-items-center text-nowrap @server.IsPinned ? 'active' : ''">
+                        @* <ServerPinningComponent Server="@server" OnServerPinToggleEventCallback="async s => await OnServerPinToggle(s)"/> *@
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse_@server.Guid">
+                            @server.Name
+                            <span class="badge bg-primary rounded-pill" title="Number of players (without bots)">@server.NumPlayersWithoutBots / @server.MaxPlayers</span>
+                        </button>
+                    </div>
+
+                    <div id="collapse_@server.Guid" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                        <div class="accordion-body">
+                            <div class="row">
+                                <div class="col">
+                                    <Scoreboard SelectedServerId="@server.Guid" TeamLabelFilter="@server.Team1"/>
+                                </div>
+                                <div class="col">
+                                    <Scoreboard SelectedServerId="@server.Guid" TeamLabelFilter="@server.Team2"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </Virtualize>
+    };
+
+    private static List<Server>? _pinnedServers;
+    private static List<Server>? _allServers;
 
     protected override async Task OnInitializedAsync()
     {
         _pinnedServers = await LoadPinnedServers();
         _allServers = await ServerListService.GetServerList();
         UpdateOrRemovePinnedServerInstances(_allServers);
+        _cachingService.SaveToCache(_pinnedServers);
+        _cachingService.SaveToCache(_allServers);
     }
 
     private async Task<List<Server>> LoadPinnedServers()
