@@ -12,8 +12,7 @@
         <div class="accordion" id="accordionExample">
             @if (_pinnedServers != null)
             {
-                @foreach (var server in _pinnedServers.OrderByDescending(s => s.NumPlayersWithoutBots))
-                {
+                <Virtualize Items="@_pinnedServers.OrderByDescending(s => s.NumPlayersWithoutBots).ToList()" Context="server" TItem="Server">
                     <div class="accordion-item">
                         <div class="accordion-header">
                             <div class="accordion-item d-flex justify-content-between align-items-center text-nowrap @server.IsPinned ? 'active' : ''">
@@ -38,7 +37,7 @@
                             </div>
                         </div>
                     </div>
-                }
+                </Virtualize>
             }
             @if (_allServers == null)
             {
@@ -46,8 +45,7 @@
             }
             else
             {
-                @foreach (var server in _allServers.OrderByDescending(s => s.NumPlayersWithoutBots))
-                {
+                <Virtualize Items="@_allServers.OrderByDescending(s => s.NumPlayersWithoutBots).ToList()" Context="server" TItem="Server">
                     <div class="accordion-item">
                         <div class="accordion-header">
                             <div class="accordion-item d-flex justify-content-between align-items-center text-nowrap @server.IsPinned ? 'active' : ''">
@@ -72,7 +70,7 @@
                             </div>
                         </div>
                     </div>
-                }
+                </Virtualize>
             }
         </div>
     </div>
