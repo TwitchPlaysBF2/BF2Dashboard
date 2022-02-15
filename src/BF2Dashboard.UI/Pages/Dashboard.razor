@@ -17,7 +17,7 @@
                     <li class="list-group-item list-group-item-action d-flex justify-content-between align-items-center text-nowrap active">
                         <ServerPinningComponent Server="@server" OnServerPinToggleEventCallback="async s => await OnServerPinToggle(s)"/>
                         <button type="button" class="btn btn-link display-block" @onclick="() => _selectedServer = server" title="Show scoreboard">
-                            @server.Name
+                            @server.Name (@server.MapName)
                         </button>
                         <span class="badge bg-primary rounded-pill" title="Number of players (without bots)">@server.NumPlayersWithoutBots / @server.MaxPlayers</span>
                     </li>
