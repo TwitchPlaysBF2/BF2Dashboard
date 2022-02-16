@@ -4,7 +4,7 @@
 [![Discord](https://img.shields.io/discord/820358321839276052?color=%237289da&label=Discord&logo=discord&logoColor=%237289da&style=flat-square)](https://discord.link/TwitchPlaysBF2)
 [![last commit](https://img.shields.io/github/last-commit/TwitchPlaysBF2/BF2Dashboard?logo=git&logoColor=9147FF&style=flat-square)](https://github.com/TwitchPlaysBF2/BF2Dashboard/commits)
 
-A web portal with customizable gadgets related to the game Battlefield 2, e.g. your favorite BF2 servers.
+A web portal with customizable gadgets related to the game Battlefield 2, e.g. your favorite BF2 servers, live streams and resources.
 
 Currently under early development.
 
