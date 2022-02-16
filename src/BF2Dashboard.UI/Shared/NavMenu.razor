@@ -1,6 +1,6 @@
 ﻿<div class="top-row ps-3 navbar navbar-dark">
     <div class="container-fluid">
-        <a class="navbar-brand" href="">BF2.TV</a>
+        <a class="navbar-brand" href=""><img style="width: 25px" src="favicon.ico?03" alt="BF2.TV" /> BF2.TV</a>
         <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
             <span class="navbar-toggler-icon"></span>   
         </button>
@@ -30,13 +30,13 @@
 </div>
 
 @code {
-    private bool _collapseNavMenu = true;
+    private bool _shouldCollapseMenuOnMobile = true;
 
-    private string? NavMenuCssClass => _collapseNavMenu ? "collapse" : null;
+    private string? NavMenuCssClass => _shouldCollapseMenuOnMobile ? "collapse" : null;
 
     private void ToggleNavMenu()
     {
-        _collapseNavMenu = !_collapseNavMenu;
+        _shouldCollapseMenuOnMobile = !_shouldCollapseMenuOnMobile;
     }
 
 }
