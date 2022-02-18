@@ -4,6 +4,8 @@ namespace BF2Dashboard.Domain.Services;
 
 public class ServerCachingService
 {
+    private List<Server> CachedServers { get; set; } = new();
+
     public void SaveToCache(List<Server> servers)
     {
         CachedServers = servers;
@@ -19,6 +21,4 @@ public class ServerCachingService
         bool HasSameGuid(Server server) =>
             string.Equals(server.Guid, serverGuid, StringComparison.CurrentCultureIgnoreCase);
     }
-
-    private List<Server> CachedServers { get; set; } = new();
 }
