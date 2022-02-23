@@ -15,7 +15,9 @@ public class ToggleFavoriteReducers
         else
             newList.Add(action.Server);
 
-        var newState = new FavoriteServerListState(newList);
+        var reorderedServerList = newList.OrderByDescending(s => s.NumPlayersWithoutBots).ToList();
+
+        var newState = new FavoriteServerListState(reorderedServerList);
         return newState;
     }
 
