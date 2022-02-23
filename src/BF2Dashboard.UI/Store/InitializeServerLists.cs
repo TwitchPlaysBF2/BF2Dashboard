@@ -9,19 +9,19 @@ public class LoadServerListAction
 {
 }
 
-public class LoadServerListEffect
+public class InitializeServerListsEffect
 {
     private readonly IServerListService _serverListService;
     private readonly ILocalStorageService _localStorageService;
 
-    public LoadServerListEffect(IServerListService serverListService, ILocalStorageService localStorageService)
+    public InitializeServerListsEffect(IServerListService serverListService, ILocalStorageService localStorageService)
     {
         _serverListService = serverListService;
         _localStorageService = localStorageService;
     }
 
     [EffectMethod(actionType: typeof(LoadServerListAction))]
-    public async Task Load(IDispatcher dispatcher)
+    public async Task InitializeServerLists(IDispatcher dispatcher)
     {
         var fullServerList = await _serverListService.GetServerList();
         dispatcher.Dispatch(new SetFullServerListAction(fullServerList));
@@ -29,6 +29,11 @@ public class LoadServerListEffect
         var favoriteServerIds = await _localStorageService.GetItemAsync<List<string>>(Commons.FavoriteServerListKey);
         var favorites = fullServerList?
             .Where(s => favoriteServerIds?.Contains(s.Guid) == true)
+            ?.Select(s =>
+            {
+                s.IsPinned = true;
+                return s;
+            })
             ?.ToList();
 
         dispatcher.Dispatch(new SetFavoriteServerListAction(favorites ?? new List<Server>()));
