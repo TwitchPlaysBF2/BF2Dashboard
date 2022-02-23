@@ -39,12 +39,6 @@
                             <div id="collapse_@server.Guid" class="accordion-collapse collapse">
                                 <div class="accordion-body ps-5 pe-3 pb-5">
                                     <div class="row">
-                                        @if (server.IsPinned)
-                                        {
-                                            <span>Pinned</span>
-                                        }
-                                    </div>
-                                    <div class="row">
                                         <div class="col ms-5">
                                             @* <Scoreboard SelectedServerId="@server.Guid" TeamLabelFilter="@server.Team1"/> *@
                                             <table class="table table-hover">
@@ -138,16 +132,6 @@
 
                             <div id="collapsed_@server.Guid" class="accordion-collapse collapse">
                                 <div class="accordion-body ps-5 pe-3 pb-5">
-                                    <div class="row">
-                                        @if (server.IsPinned)
-                                        {
-                                            <span>Pinned</span>
-                                        }
-                                        else
-                                        {
-                                            <span>Not pinned</span>
-                                        }
-                                    </div>
                                     <div class="row">
                                         <div class="col ms-5">
                                             @* <Scoreboard SelectedServerId="@server.Guid" TeamLabelFilter="@server.Team1"/> *@
