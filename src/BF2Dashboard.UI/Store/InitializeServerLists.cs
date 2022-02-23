@@ -5,7 +5,7 @@ using Fluxor;
 
 namespace BF2Dashboard.UI.Store;
 
-public class LoadServerListAction
+public class InitializeServerListsAction
 {
 }
 
@@ -20,7 +20,7 @@ public class InitializeServerListsEffect
         _localStorageService = localStorageService;
     }
 
-    [EffectMethod(actionType: typeof(LoadServerListAction))]
+    [EffectMethod(actionType: typeof(InitializeServerListsAction))]
     public async Task InitializeServerLists(IDispatcher dispatcher)
     {
         var fullServerList = await _serverListService.GetServerList();
