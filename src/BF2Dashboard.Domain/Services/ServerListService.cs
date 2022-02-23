@@ -3,9 +3,9 @@ using BF2Dashboard.Domain.Repositories;
 
 namespace BF2Dashboard.Domain.Services;
 
-public static class ServerListService
+public class ServerListService : IServerListService
 {
-    public static async Task<List<Server>> GetServerList()
+    public async Task<List<Server>> GetServerList()
     {
         try
         {
