@@ -6,9 +6,13 @@
 @inject IState<FavoriteServerListState> FavoriteServerListState
 @inject IState<FullServerListState> FullServerListState
 
-<PageTitle>Dashboard</PageTitle>
+<h2>
+    Battlefield 2 Servers
+    <button class="btn btn-dark btn-sm" title="Refresh server data" @onclick="Refresh">
+        <i class="bi bi-arrow-clockwise" style="font-size: 15pt;"></i>
+    </button>
+</h2>
 
-<h2>Battlefield 2 Servers</h2>
 <div class="row">
     @if (FullServerListState.Value.ServerList == null || FavoriteServerListState.Value.ServerList == null)
     {
@@ -211,17 +215,24 @@
 </div>
 
 @code {
-    private bool _isInitialized = false;
+    private bool _isDataLoaded = false;
 
     protected override void OnInitialized()
     {
-        if (!_isInitialized)
+        if (!_isDataLoaded)
         {
             Dispatcher.Dispatch(new InitializeServerListsAction());
-            _isInitialized = true;
+            _isDataLoaded = true;
         }
 
         base.OnInitialized();
+    }
+
+    private void Refresh()
+    {
+        Dispatcher.Dispatch(new SetFullServerListAction(null));
+        Dispatcher.Dispatch(new SetFavoriteServerListAction(null));
+        Dispatcher.Dispatch(new InitializeServerListsAction());
     }
 
     private void ToggleFavorite(Server server)

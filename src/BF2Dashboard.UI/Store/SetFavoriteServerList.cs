@@ -5,9 +5,9 @@ namespace BF2Dashboard.UI.Store;
 
 public class SetFavoriteServerListAction
 {
-    public List<Server> Servers { get; }
+    public List<Server>? Servers { get; }
 
-    public SetFavoriteServerListAction(List<Server> servers)
+    public SetFavoriteServerListAction(List<Server>? servers)
     {
         Servers = servers;
     }

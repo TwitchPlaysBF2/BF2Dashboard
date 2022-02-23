@@ -5,9 +5,9 @@ namespace BF2Dashboard.UI.Store;
 
 public class SetFullServerListAction
 {
-    public List<Server> Servers { get; }
+    public List<Server>? Servers { get; }
 
-    public SetFullServerListAction(List<Server> servers)
+    public SetFullServerListAction(List<Server>? servers)
     {
         Servers = servers;
     }
