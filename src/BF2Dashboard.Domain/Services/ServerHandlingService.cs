@@ -8,14 +8,16 @@ public class ServerHandlingService
     private readonly string _commonPersistenceKey = "pinnedservers";
     private readonly ILocalStorageService _localStorageService;
     private readonly ServerCachingService _serverCachingService;
+    private readonly IServerListService _serverListService;
     public List<Server> FavoriteServers = new();
     public List<Server> AllServers = new();
     public event Action OnToggle;
 
-    public ServerHandlingService(ILocalStorageService localStorageService, ServerCachingService serverCachingService)
+    public ServerHandlingService(ILocalStorageService localStorageService, ServerCachingService serverCachingService, IServerListService serverListService)
     {
         _localStorageService = localStorageService;
         _serverCachingService = serverCachingService;
+        _serverListService = serverListService;
     }
 
     public async Task TogglePin(string serverGuid)
@@ -56,7 +58,7 @@ public class ServerHandlingService
             FavoriteServers = result;
         }
 
-        AllServers = await ServerListService.GetServerList();
+        AllServers = await _serverListService.GetServerList();
         _serverCachingService.SaveToCache(AllServers);
         UpdateOrRemovePinnedServerInstances(AllServers);
 

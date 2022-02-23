@@ -1,9 +1,15 @@
 ﻿@page "/"
+@inherits FluxorComponent
 @using BF2Dashboard.Domain.Services
+@using BF2Dashboard.Domain.BattlefieldApi
+@using BF2Dashboard.UI.Store
 @using Blazored.LocalStorage
 @inject ILocalStorageService _browserStorage
 @inject ServerCachingService _cachingService
 @inject ServerHandlingService _serverHandlingService
+@inject IDispatcher Dispatcher
+@inject IState<FavoriteServerListState> FavoriteServerListState
+@inject IState<FullServerListState> FullServerListState
 
 <PageTitle>Dashboard</PageTitle>
 
@@ -12,29 +18,227 @@
     <div class="col-md-6">
         <div class="accordion accordion-flush bg-dark" id="mainAccordion">
             All:
-            <ServerListComponent IsFavoriteList="false" OnToggle="OnServerToggle"/>
+            @if (FullServerListState.Value.ServerList == null)
+            {
+                <LoadingSpinner/>
+            }
+            else
+            {
+                <Virtualize Context="server" Items="FullServerListState.Value.ServerList">
+                    <div class="accordion-item">
+                        <div class="accordion-header">
+                            <div class="accordion-item d-flex justify-content-between align-items-center text-nowrap @server.IsPinned ? 'active' : ''">
+                                <button @onclick="() => ToggleFavorite(server)" type="button" value="Toggle Favorite">(TOGGLE - IsFavorite: @server.IsPinned)</button>
+                                @* <ServerPinningComponent Server="@server"/> *@
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" aria-expanded="false" data-bs-target="#collapse_@server.Guid">
+                                    <span class="badge bg-primary rounded-pill me-3" title="Number of players (without bots)">@server.NumPlayersWithoutBots / @server.MaxPlayers</span>
+                                    @server.Name
+                                </button>
+                            </div>
+
+                            <div id="collapse_@server.Guid" class="accordion-collapse collapse">
+                                <div class="accordion-body ps-5 pe-3 pb-5">
+                                    <div class="row">
+                                        @if (server.IsPinned)
+                                        {
+                                            <span>Pinned</span>
+                                        }
+                                    </div>
+                                    <div class="row">
+                                        <div class="col ms-5">
+                                            @* <Scoreboard SelectedServerId="@server.Guid" TeamLabelFilter="@server.Team1"/> *@
+                                            <table class="table table-hover">
+                                                <thead>
+                                                <tr>
+                                                    <th scope="col">@server.Team1 Player</th>
+                                                    <th scope="col">Score</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                @foreach (var player in server.Players
+                                                    .Where(p => p.IsHuman)
+                                                    .Where(p => p.TeamLabel == server.Team1)
+                                                    .OrderByDescending(p => p.Score)
+                                                    .ToList())
+                                                {
+                                                    <tr>
+                                                        <td>
+                                                            <a title="Open BF2Hub profile" class="link-light text-nowrap text-decoration-none" target="_blank"
+                                                               href="https://www.bf2hub.com/player/@player.Name">
+                                                                <span>@player.Tag @player.Name</span>
+                                                            </a>
+                                                        </td>
+                                                        <td>
+                                                            @player.Score
+                                                        </td>
+                                                    </tr>
+                                                }
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div class="col ms-5">
+                                            @* <Scoreboard SelectedServerId="@server.Guid" TeamLabelFilter="@server.Team2"/> *@
+                                            <table class="table table-hover">
+                                                <thead>
+                                                <tr>
+                                                    <th scope="col">@server.Team2 Player</th>
+                                                    <th scope="col">Score</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                @foreach (var player in server.Players
+                                                    .Where(p => p.IsHuman)
+                                                    .Where(p => p.TeamLabel == server.Team2)
+                                                    .OrderByDescending(p => p.Score)
+                                                    .ToList())
+                                                {
+                                                    <tr>
+                                                        <td>
+                                                            <a title="Open BF2Hub profile" class="link-light text-nowrap text-decoration-none" target="_blank"
+                                                               href="https://www.bf2hub.com/player/@player.Name">
+                                                                <span>@player.Tag @player.Name</span>
+                                                            </a>
+                                                        </td>
+                                                        <td>
+                                                            @player.Score
+                                                        </td>
+                                                    </tr>
+                                                }
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </Virtualize>
+            }
         </div>
     </div>
     <div class="col-md-6">
         <div class="accordion accordion-flush bg-dark" id="favoritesAccordion">
             Favorites:
-            <ServerListComponent IsFavoriteList="true" OnToggle="OnServerToggle"/>
+
+            @if (FavoriteServerListState.Value.ServerList == null)
+            {
+                <LoadingSpinner/>
+            }
+            else
+            {
+                <Virtualize Context="server" Items="@FavoriteServerListState.Value.ServerList">
+                    <div class="accordion-item">
+                        <div class="accordion-header">
+                            <div class="accordion-item d-flex justify-content-between align-items-center text-nowrap @server.IsPinned ? 'active' : ''">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" aria-expanded="false" data-bs-target="#collapse_@server.Guid">
+                                    <span class="badge bg-primary rounded-pill me-3" title="Number of players (without bots)">@server.NumPlayersWithoutBots / @server.MaxPlayers</span>
+                                    @server.Name
+                                </button>
+                            </div>
+
+                            <div id="collapsed_@server.Guid" class="accordion-collapse collapse">
+                                <div class="accordion-body ps-5 pe-3 pb-5">
+                                    <div class="row">
+                                        @if (server.IsPinned)
+                                        {
+                                            <span>Pinned</span>
+                                        }
+                                        else
+                                        {
+                                            <span>Not pinned</span>
+                                        }
+                                    </div>
+                                    <div class="row">
+                                        <div class="col ms-5">
+                                            @* <Scoreboard SelectedServerId="@server.Guid" TeamLabelFilter="@server.Team1"/> *@
+                                            <table class="table table-hover">
+                                                <thead>
+                                                <tr>
+                                                    <th scope="col">@server.Team1 Player</th>
+                                                    <th scope="col">Score</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                @foreach (var player in server.Players
+                                                    .Where(p => p.IsHuman)
+                                                    .Where(p => p.TeamLabel == server.Team1)
+                                                    .OrderByDescending(p => p.Score)
+                                                    .ToList())
+                                                {
+                                                    <tr>
+                                                        <td>
+                                                            <a title="Open BF2Hub profile" class="link-light text-nowrap text-decoration-none" target="_blank"
+                                                               href="https://www.bf2hub.com/player/@player.Name">
+                                                                <span>@player.Tag @player.Name</span>
+                                                            </a>
+                                                        </td>
+                                                        <td>
+                                                            @player.Score
+                                                        </td>
+                                                    </tr>
+                                                }
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div class="col ms-5">
+                                            @* <Scoreboard SelectedServerId="@server.Guid" TeamLabelFilter="@server.Team2"/> *@
+                                            <table class="table table-hover">
+                                                <thead>
+                                                <tr>
+                                                    <th scope="col">@server.Team2 Player</th>
+                                                    <th scope="col">Score</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                @foreach (var player in server.Players
+                                                    .Where(p => p.IsHuman)
+                                                    .Where(p => p.TeamLabel == server.Team2)
+                                                    .OrderByDescending(p => p.Score)
+                                                    .ToList())
+                                                {
+                                                    <tr>
+                                                        <td>
+                                                            <a title="Open BF2Hub profile" class="link-light text-nowrap text-decoration-none" target="_blank"
+                                                               href="https://www.bf2hub.com/player/@player.Name">
+                                                                <span>@player.Tag @player.Name</span>
+                                                            </a>
+                                                        </td>
+                                                        <td>
+                                                            @player.Score
+                                                        </td>
+                                                    </tr>
+                                                }
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </Virtualize>
+            }
         </div>
     </div>
 </div>
 
 @code {
+    private bool Initialized = false;
 
-    protected override Task OnAfterRenderAsync(bool firstRender)
+    protected override void OnInitialized()
     {
-        _serverHandlingService.OnToggle -= OnServerToggle;
-        _serverHandlingService.OnToggle += OnServerToggle;
-        return Task.CompletedTask;
+        if (!Initialized)
+        {
+            Dispatcher.Dispatch(new LoadServerListAction());
+            Initialized = true;
+        }
+
+        base.OnInitialized();
     }
 
-    private void OnServerToggle()
+    private void ToggleFavorite(Server server)
     {
-        StateHasChanged();
+        Dispatcher.Dispatch(new ToggleFavoriteAction(server));
     }
 
 }
