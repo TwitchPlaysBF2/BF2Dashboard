@@ -3,6 +3,10 @@
 }
 
 .grow:hover {
-    transform: scale(1.5);
+    transform: scale(1.4);
     cursor: pointer;
+}
+
+#scoreboard tbody tr td {
+    vertical-align: center;
 }
