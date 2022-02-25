@@ -59,9 +59,12 @@ public class ResolvePidListIntoFriendListAction
 {
     public List<int> PidList { get; }
 
-    public ResolvePidListIntoFriendListAction(List<int> pidList)
+    public List<Server> ServerList { get; }
+
+    public ResolvePidListIntoFriendListAction(List<int> pidList, List<Server> serverList)
     {
         PidList = pidList;
+        ServerList = serverList;
     }
 }
 
@@ -94,40 +97,30 @@ public class FriendListEffects
         await _localStorageService.SetItemAsync(Commons.FriendListKey, pidList);
     }
 
-    [EffectMethod(typeof(InitializeFriendListAction))]
-    public async Task OnInitializeFriendList(IDispatcher dispatcher)
+    [EffectMethod]
+    public async Task InitializeFriendList(SetFullServerListAction action, IDispatcher dispatcher)
     {
         var pidList = await _localStorageService.GetItemAsync<List<int>>(Commons.FriendListKey);
-        dispatcher.Dispatch(new ResolvePidListIntoFriendListAction(pidList));
+        dispatcher.Dispatch(new ResolvePidListIntoFriendListAction(pidList, action.ServerList ?? new List<Server>()));
     }
 
     [EffectMethod]
     public async Task OnResolvePidList(ResolvePidListIntoFriendListAction action, IDispatcher dispatcher)
     {
-        var friendList = ResolveFromPidList(action.PidList);
+        var friendList = ResolveFriendList(action.PidList, action.ServerList).ToList();
         dispatcher.Dispatch(new SetFriendListAction(friendList));
-    }
 
-    private List<FriendModel> ResolveFromPidList(List<int> pidList)
-    {
-        var serverList = _serverList.Value.ServerList;
-        if (serverList == null)
-            return new List<FriendModel>();
-
-        var friendList = ResolveFriendList(pidList, serverList).ToList();
-        return friendList;
-    }
-
-    private static IEnumerable<FriendModel> ResolveFriendList(List<int> pidList, List<Server> serverList)
-    {
-        foreach (var friendPid in pidList)
+        IEnumerable<FriendModel> ResolveFriendList(List<int> pidList, List<Server> serverList)
         {
-            foreach (var server in serverList)
+            foreach (var friendPid in pidList)
             {
-                var player = server.Players.FirstOrDefault(p => p.Pid == friendPid);
-                if (player != null)
+                foreach (var server in serverList)
                 {
-                    yield return FriendModel.Create(player, server);
+                    var player = server.Players.FirstOrDefault(p => p.Pid == friendPid);
+                    if (player != null)
+                    {
+                        yield return FriendModel.Create(player, server);
+                    }
                 }
             }
         }

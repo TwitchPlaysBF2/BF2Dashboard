@@ -19,12 +19,12 @@
     Friends:
     @if (_friendListState.Value.FriendList != null)
     {
-        <li>
+        <ul>
             @foreach (var friend in _friendListState.Value.FriendList)
             {
-                <span>@friend.Player.Tag @friend.Player.Name (on @friend.ServerInfo.Name)</span>
+                <li>@friend.Player.Tag @friend.Player.Name (on @friend.ServerInfo.Name)</li>
             }
-        </li>
+        </ul>
     }
 </div>
 
@@ -264,15 +264,21 @@ else
 </div>
 
 @code {
-    private bool _isDataLoaded = false;
+    private bool _isServerDataLoaded = false;
+    private bool _isFriendListLoaded = false;
 
     protected override void OnInitialized()
     {
-        if (!_isDataLoaded)
+        if (!_isServerDataLoaded)
         {
             Dispatcher.Dispatch(new InitializeServerListsAction());
+            _isServerDataLoaded = true;
+        }
+
+        if (_isServerDataLoaded && !_isFriendListLoaded)
+        {
             Dispatcher.Dispatch(new InitializeFriendListAction());
-            _isDataLoaded = true;
+            _isFriendListLoaded = true;
         }
 
         base.OnInitialized();
@@ -283,6 +289,7 @@ else
         Dispatcher.Dispatch(new SetFullServerListAction(null));
         Dispatcher.Dispatch(new SetFavoriteServerListAction(null));
         Dispatcher.Dispatch(new InitializeServerListsAction());
+        Dispatcher.Dispatch(new InitializeFriendListAction());
     }
 
     private void ToggleFavorite(Server server)
