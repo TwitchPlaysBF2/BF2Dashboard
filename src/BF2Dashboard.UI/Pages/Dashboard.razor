@@ -3,9 +3,9 @@
 @using BF2Dashboard.Domain.BattlefieldApi
 @using BF2Dashboard.UI.Store
 @using BF2Dashboard.UI.Store.FriendList
-@inject IDispatcher Dispatcher
-@inject IState<FavoriteServerListState> FavoriteServerListState
-@inject IState<FullServerListState> FullServerListState
+@inject IDispatcher _dispatcher
+@inject IState<FavoriteServerListState> _favoriteServerListState
+@inject IState<FullServerListState> _fullServerListState
 @inject IState<FriendListState> _friendListState
 
 <h2>
@@ -29,7 +29,7 @@
 </div>
 
 <div class="row">
-@if (FullServerListState.Value.ServerList == null || FavoriteServerListState.Value.ServerList == null)
+@if (_fullServerListState.Value.ServerList == null || _favoriteServerListState.Value.ServerList == null)
 {
     <LoadingSpinner/>
 }
@@ -40,7 +40,7 @@ else
             <h3>All:</h3>
         </div>
         <div class="accordion accordion-flush bg-dark" id="mainAccordion">
-            @foreach (var server in FullServerListState.Value.ServerList)
+            @foreach (var server in _fullServerListState.Value.ServerList)
             {
                 <!-- All Servers -->
                 <div class="accordion-item">
@@ -149,9 +149,9 @@ else
             <h3>Your favorites:</h3>
         </div>
         <div class="accordion accordion-flush bg-dark" id="favoritesAccordion">
-            @if (FavoriteServerListState.Value.ServerList?.Any() == true)
+            @if (_favoriteServerListState.Value.ServerList?.Any() == true)
             {
-                foreach (var server in FavoriteServerListState.Value.ServerList)
+                foreach (var server in _favoriteServerListState.Value.ServerList)
                 {
                     <!-- Favorites -->
                     <div class="accordion-item">
@@ -271,13 +271,13 @@ else
     {
         if (!_isServerDataLoaded)
         {
-            Dispatcher.Dispatch(new InitializeServerListsAction());
+            _dispatcher.Dispatch(new InitializeServerListsAction());
             _isServerDataLoaded = true;
         }
 
         if (_isServerDataLoaded && !_isFriendListLoaded)
         {
-            Dispatcher.Dispatch(new InitializeFriendListAction());
+            _dispatcher.Dispatch(new InitializeFriendListAction());
             _isFriendListLoaded = true;
         }
 
@@ -286,20 +286,20 @@ else
 
     private void Refresh()
     {
-        Dispatcher.Dispatch(new SetFullServerListAction(null));
-        Dispatcher.Dispatch(new SetFavoriteServerListAction(null));
-        Dispatcher.Dispatch(new InitializeServerListsAction());
-        Dispatcher.Dispatch(new InitializeFriendListAction());
+        _dispatcher.Dispatch(new SetFullServerListAction(null));
+        _dispatcher.Dispatch(new SetFavoriteServerListAction(null));
+        _dispatcher.Dispatch(new InitializeServerListsAction());
+        _dispatcher.Dispatch(new InitializeFriendListAction());
     }
 
     private void ToggleFavorite(Server server)
     {
-        Dispatcher.Dispatch(new ToggleFavoriteAction(server));
+        _dispatcher.Dispatch(new ToggleFavoriteAction(server));
     }
 
     private void AddFriend(int playerPid)
     {
-        Dispatcher.Dispatch(new AddFriendAction(playerPid));
+        _dispatcher.Dispatch(new AddFriendAction(playerPid));
     }
 
 }
