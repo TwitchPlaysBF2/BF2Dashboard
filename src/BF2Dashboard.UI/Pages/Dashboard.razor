@@ -7,6 +7,7 @@
 @inject IState<FavoriteServerListState> _favoriteServerListState
 @inject IState<FullServerListState> _fullServerListState
 @inject IState<FriendListState> _friendListState
+@inject IState<LoadingState> _loadingState
 
 <h2>
     Battlefield 2 Servers
@@ -289,7 +290,6 @@ else
         _dispatcher.Dispatch(new SetFullServerListAction(null));
         _dispatcher.Dispatch(new SetFavoriteServerListAction(null));
         _dispatcher.Dispatch(new InitializeServerListsAction());
-        _dispatcher.Dispatch(new InitializeFriendListAction());
     }
 
     private void ToggleFavorite(Server server)

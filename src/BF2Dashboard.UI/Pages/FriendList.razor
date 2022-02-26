@@ -1,0 +1,50 @@
+﻿@page "/friends"
+@using BF2Dashboard.UI.Store.FriendList
+@using BF2Dashboard.UI.Store
+@inherits FluxorComponent
+@inject IDispatcher _dispatcher
+@inject IState<FriendListState> _friendListState
+@inject IState<LoadingState> _loadingState
+
+<h3><span class="oi oi-people" aria-hidden="true"></span> Friends</h3>
+<div class="container">
+    @if (_friendListState.Value.FriendList == null)
+    {
+        <LoadingSpinner/>
+    }
+    else
+    {
+        <ul>
+            @foreach (var friend in _friendListState.Value.FriendList)
+            {
+                <li>
+                    @friend.FullName
+                </li>
+            }
+        </ul>
+    }
+</div>
+
+@code {
+
+    private bool _isServerDataLoaded = false;
+    private bool _isFriendListLoaded = false;
+
+    protected override void OnInitialized()
+    {
+        if (!_isServerDataLoaded)
+        {
+            _dispatcher.Dispatch(new InitializeServerListsAction());
+            _isServerDataLoaded = true;
+        }
+
+        if (_isServerDataLoaded && !_isFriendListLoaded)
+        {
+            _dispatcher.Dispatch(new InitializeFriendListAction());
+            _isFriendListLoaded = true;
+        }
+
+        base.OnInitialized();
+    }
+
+}

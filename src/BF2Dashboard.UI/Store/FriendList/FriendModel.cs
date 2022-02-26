@@ -4,6 +4,8 @@ namespace BF2Dashboard.UI.Store.FriendList;
 
 public class FriendModel
 {
+    public string FullName => $"{Player.Tag} {Player.Name}";
+    
     public Player Player { get; private init; }
 
     public ServerInfoModel ServerInfo { get; private init; }
@@ -15,5 +17,10 @@ public class FriendModel
             Player = player,
             ServerInfo = ServerInfoModel.FromServer(server),
         };
+    }
+
+    public override string ToString()
+    {
+        return FullName;
     }
 }
