@@ -10,3 +10,25 @@
 #scoreboard tbody tr td {
     vertical-align: center;
 }
+
+.dynamic-server-name-width-xs {
+    max-width: 300px;
+}
+
+@media (min-width: 768px) {
+    .dynamic-server-name-width-sm {
+        max-width: 300px;
+    }
+}
+
+@media (min-width: 992px) {
+    .dynamic-server-name-width-md {
+        max-width: 300px;
+    }
+}
+
+@media (min-width: 1200px) {
+    .dynamic-server-name-width-lg {
+        max-width: 800px;
+    }
+}

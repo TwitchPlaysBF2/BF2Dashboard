@@ -33,10 +33,46 @@ else
                         <div class="accordion-item d-flex justify-content-between align-items-center text-nowrap @server.IsPinned ? 'active' : ''">
                             <i class="bi @(server.IsPinned ? "bi-heart-fill" : "bi-heart") grow p-3" style="font-size: 20pt" @onclick="() => ToggleFavorite(server)" title="Add or remove from favorites">
                             </i>
-                            <button class="accordion-button collapsed btn @(server.NumPlayersWithoutBots == 0 ? "disabled" : "")" type="button" data-bs-toggle="collapse" aria-expanded="false" data-bs-target="#collapsed_@server.Guid">
-                                <span class="badge bg-primary rounded-pill me-3" title="Number of players (without bots)">@server.NumPlayersWithoutBots / @server.MaxPlayers</span>
-                                <div class="container">
-                                    <div class="row">
+                            <button class="accordion-button collapsed btn @(server.NumPlayersWithoutBots == 0 ? "disabled" : "")" style="min-width: 500px;"
+                                    type="button" data-bs-toggle="collapse" aria-expanded="false" data-bs-target="#collapsed_@server.Guid">
+                                <div class="col" style="min-width: 73px;">
+                                    <span class="badge bg-primary rounded-pill me-3" title="Number of players (not counting bots)">@server.NumPlayersWithoutBots / @server.MaxPlayers</span>
+                                </div>
+                                <div id="serverIcons" class="row align-middle">
+                                    <div class="col-1">
+                                        @if (server.Ranked)
+                                        {
+                                            <img src="img/ranked.png" alt="Ranked" title="Ranked"/>
+                                        }
+                                        else
+                                        {
+                                            <img src="img/unranked.png" alt="Unranked" title="Unranked"/>
+                                        }
+                                    </div>
+                                    <div class="col-1">
+                                        @if (server.Battlerecorder)
+                                        {
+                                            <i class="bi bi-camera-video" style="font-size: 14px;" title="Battlerecorder is enabled"></i>
+                                        }
+                                        else
+                                        {
+                                            <i class="bi bi-camera-video-off opacity-25" style="font-size: 14px;" title="Battlerecorder not enabled"></i>
+                                        }
+                                    </div>
+                                    <div class="col-1">
+                                        @if (server.Password)
+                                        {
+                                            <i class="bi bi-lock-fill" style="font-size: 14px;" title="Requires password"></i>
+                                        }
+                                        else
+                                        {
+                                            <i class="bi bi-unlock" style="opacity: .1; font-size: 14px;" title="Has no password"></i>
+                                        }
+                                    </div>
+                                </div>
+                                <div id="serverText" class="container">
+                                    <div class="row dynamic-server-name-width-xs dynamic-server-name-width-sm dynamic-server-name-width-md dynamic-server-name-width-lg"
+                                         style="display: inline-block; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">
                                         @server.Name
                                     </div>
                                     <div class="row">
@@ -52,7 +88,7 @@ else
                             <div class="accordion-body ps-5 pe-3 pb-5">
                                 <div class="row d-flex justify-content-center text-center">
                                     <span class="mb-4">
-                                            <small><strong>Server IP</strong>: @server.Ip:@server.Port</small>
+                                        <small><strong>Server IP</strong>: @server.Ip:@server.Port</small>
                                     </span>
                                 </div>
                                 <div class="row">
@@ -150,9 +186,44 @@ else
                                 <i class="bi bi-trash grow p-3" style="font-size: 15pt" @onclick="() => ToggleFavorite(server)" title="Remove from favorites">
                                 </i>
                                 <button class="accordion-button collapsed btn @(server.NumPlayersWithoutBots == 0 ? "disabled" : "")" type="button" data-bs-toggle="collapse" aria-expanded="false" data-bs-target="#collapsed_favorite_@server.Guid">
-                                    <span class="badge bg-primary rounded-pill me-3" title="Number of players (without bots)">@server.NumPlayersWithoutBots / @server.MaxPlayers</span>
-                                    <div class="container">
-                                        <div class="row">
+                                    <div class="col" style="min-width: 73px;">
+                                        <span class="badge bg-primary rounded-pill me-3" title="Number of players (not counting bots)">@server.NumPlayersWithoutBots / @server.MaxPlayers</span>
+                                    </div>
+                                    <div id="serverIcons" class="row align-middle">
+                                        <div class="col-1">
+                                            @if (server.Ranked)
+                                            {
+                                                <img src="img/ranked.png" alt="Ranked" title="Ranked"/>
+                                            }
+                                            else
+                                            {
+                                                <img src="img/unranked.png" alt="Unranked" title="Unranked"/>
+                                            }
+                                        </div>
+                                        <div class="col-1">
+                                            @if (server.Battlerecorder)
+                                            {
+                                                <i class="bi bi-camera-video" style="font-size: 14px;" title="Battlerecorder is enabled"></i>
+                                            }
+                                            else
+                                            {
+                                                <i class="bi bi-camera-video-off opacity-25" style="font-size: 14px;" title="Battlerecorder not enabled"></i>
+                                            }
+                                        </div>
+                                        <div class="col-1">
+                                            @if (server.Password)
+                                            {
+                                                <i class="bi bi-lock-fill" style="font-size: 14px;" title="Requires password"></i>
+                                            }
+                                            else
+                                            {
+                                                <i class="bi bi-unlock" style="opacity: .1; font-size: 14px;" title="Has no password"></i>
+                                            }
+                                        </div>
+                                    </div>
+                                    <div id="serverText" class="container">
+                                        <div class="row dynamic-server-name-width-xs dynamic-server-name-width-sm dynamic-server-name-width-md dynamic-server-name-width-lg"
+                                             style="display: inline-block; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">
                                             @server.Name
                                         </div>
                                         <div class="row">
