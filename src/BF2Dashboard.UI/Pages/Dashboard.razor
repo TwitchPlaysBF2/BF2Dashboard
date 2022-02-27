@@ -33,7 +33,7 @@ else
                         <div class="accordion-item d-flex justify-content-between align-items-center text-nowrap @server.IsPinned ? 'active' : ''">
                             <i class="bi @(server.IsPinned ? "bi-heart-fill" : "bi-heart") grow p-3" style="font-size: 20pt" @onclick="() => ToggleFavorite(server)" title="Add or remove from favorites">
                             </i>
-                            <button class="accordion-button collapsed btn @(server.NumPlayersWithoutBots == 0 ? "disabled" : "")" style="min-width: 500px;"
+                            <button class="accordion-button collapsed btn @CalculateServerOpacityClass(server)" style="min-width: 500px;"
                                     type="button" data-bs-toggle="collapse" aria-expanded="false" data-bs-target="#collapsed_@server.Guid">
                                 <div class="col" style="min-width: 73px;">
                                     <span class="badge bg-primary rounded-pill me-3" title="Number of players (not counting bots)">@server.NumPlayersWithoutBots / @server.MaxPlayers</span>
@@ -91,78 +91,81 @@ else
                                         <small><strong>Server IP</strong>: @server.Ip:@server.Port</small>
                                     </span>
                                 </div>
-                                <div class="row">
-                                    <div class="col ps-5">
-                                        <!-- Scoreboard -->
-                                        <table id="scoreboard" class="table table-sm table-hover table-borderless">
-                                            <thead class="mb-1">
-                                            <tr>
-                                                <th scope="col" class="align-middle text-truncate">@server.Team1 Player</th>
-                                                <th style="width: 5%;" scope="col" class="align-middle text-center">Score</th>
-                                                <th style="width: 0;"></th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                            @foreach (var player in server.Players
-                                                .Where(p => p.IsHuman)
-                                                .Where(p => p.TeamLabel == server.Team1)
-                                                .OrderByDescending(p => p.Score)
-                                                .ToList())
-                                            {
+                                @if (server.NumPlayersWithoutBots > 0)
+                                {
+                                    <div class="row">
+                                        <div class="col ps-5">
+                                            <!-- Scoreboard -->
+                                            <table id="scoreboard" class="table table-sm table-hover table-borderless">
+                                                <thead class="mb-1">
                                                 <tr>
-                                                    <td style="vertical-align: center;">
-                                                        <a title="Open BF2Hub profile" class="link-light text-nowrap text-decoration-none" target="_blank"
-                                                           href="https://www.bf2hub.com/player/@player.Name">
-                                                            <span>@player.Tag @player.Name</span>
-                                                        </a>
-                                                    </td>
-                                                    <td class="text-center">
-                                                        @player.Score
-                                                    </td>
-                                                    <td class="text-center">
-                                                        <i class="btn btn-sm btn-outline-success bi bi-person-plus grow" @onclick="() => AddFriend(player.Pid)" title="Mark as friend"></i>
-                                                    </td>
+                                                    <th scope="col" class="align-middle text-truncate">@server.Team1 Player</th>
+                                                    <th style="width: 5%;" scope="col" class="align-middle text-center">Score</th>
+                                                    <th style="width: 0;"></th>
                                                 </tr>
-                                            }
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                    <div class="col ps-5">
-                                        <!-- Scoreboard -->
-                                        <table id="scoreboard" class="table table-sm table-hover table-borderless">
-                                            <thead>
-                                            <tr>
-                                                <th scope="col" class="align-middle text-truncate">@server.Team2 Player</th>
-                                                <th style="width: 5%;" scope="col" class="align-middle text-center">Score</th>
-                                                <th style="width: 0;"></th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                            @foreach (var player in server.Players
-                                                .Where(p => p.IsHuman)
-                                                .Where(p => p.TeamLabel == server.Team2)
-                                                .OrderByDescending(p => p.Score)
-                                                .ToList())
-                                            {
+                                                </thead>
+                                                <tbody>
+                                                @foreach (var player in server.Players
+                                                    .Where(p => p.IsHuman)
+                                                    .Where(p => p.TeamLabel == server.Team1)
+                                                    .OrderByDescending(p => p.Score)
+                                                    .ToList())
+                                                {
+                                                    <tr>
+                                                        <td style="vertical-align: center;">
+                                                            <a title="Open BF2Hub profile" class="link-light text-nowrap text-decoration-none" target="_blank"
+                                                               href="https://www.bf2hub.com/player/@player.Name">
+                                                                <span>@player.Tag @player.Name</span>
+                                                            </a>
+                                                        </td>
+                                                        <td class="text-center">
+                                                            @player.Score
+                                                        </td>
+                                                        <td class="text-center">
+                                                            <i class="btn btn-sm btn-outline-success bi bi-person-plus grow" @onclick="() => AddFriend(player.Pid)" title="Mark as friend"></i>
+                                                        </td>
+                                                    </tr>
+                                                }
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div class="col ps-5">
+                                            <!-- Scoreboard -->
+                                            <table id="scoreboard" class="table table-sm table-hover table-borderless">
+                                                <thead>
                                                 <tr>
-                                                    <td>
-                                                        <a title="Open BF2Hub profile" class="link-light text-nowrap text-decoration-none" target="_blank"
-                                                           href="https://www.bf2hub.com/player/@player.Name">
-                                                            <span>@player.Tag @player.Name</span>
-                                                        </a>
-                                                    </td>
-                                                    <td class="text-center">
-                                                        @player.Score
-                                                    </td>
-                                                    <td class="text-center">
-                                                        <i class="btn btn-sm btn-outline-success bi bi-person-plus grow" @onclick="() => AddFriend(player.Pid)" title="Mark as friend"></i>
-                                                    </td>
+                                                    <th scope="col" class="align-middle text-truncate">@server.Team2 Player</th>
+                                                    <th style="width: 5%;" scope="col" class="align-middle text-center">Score</th>
+                                                    <th style="width: 0;"></th>
                                                 </tr>
-                                            }
-                                            </tbody>
-                                        </table>
+                                                </thead>
+                                                <tbody>
+                                                @foreach (var player in server.Players
+                                                    .Where(p => p.IsHuman)
+                                                    .Where(p => p.TeamLabel == server.Team2)
+                                                    .OrderByDescending(p => p.Score)
+                                                    .ToList())
+                                                {
+                                                    <tr>
+                                                        <td>
+                                                            <a title="Open BF2Hub profile" class="link-light text-nowrap text-decoration-none" target="_blank"
+                                                               href="https://www.bf2hub.com/player/@player.Name">
+                                                                <span>@player.Tag @player.Name</span>
+                                                            </a>
+                                                        </td>
+                                                        <td class="text-center">
+                                                            @player.Score
+                                                        </td>
+                                                        <td class="text-center">
+                                                            <i class="btn btn-sm btn-outline-success bi bi-person-plus grow" @onclick="() => AddFriend(player.Pid)" title="Mark as friend"></i>
+                                                        </td>
+                                                    </tr>
+                                                }
+                                                </tbody>
+                                            </table>
+                                        </div>
                                     </div>
-                                </div>
+                                }
                             </div>
                         </div>
                     </div>
@@ -185,7 +188,7 @@ else
                             <div class="accordion-item d-flex justify-content-between align-items-center text-nowrap @server.IsPinned ? 'active' : ''">
                                 <i class="bi bi-trash grow p-3" style="font-size: 15pt" @onclick="() => ToggleFavorite(server)" title="Remove from favorites">
                                 </i>
-                                <button class="accordion-button collapsed btn @(server.NumPlayersWithoutBots == 0 ? "disabled" : "")" type="button" data-bs-toggle="collapse" aria-expanded="false" data-bs-target="#collapsed_favorite_@server.Guid">
+                                <button class="accordion-button collapsed btn @CalculateServerOpacityClass(server)" type="button" data-bs-toggle="collapse" aria-expanded="false" data-bs-target="#collapsed_favorite_@server.Guid">
                                     <div class="col" style="min-width: 73px;">
                                         <span class="badge bg-primary rounded-pill me-3" title="Number of players (not counting bots)">@server.NumPlayersWithoutBots / @server.MaxPlayers</span>
                                     </div>
@@ -242,78 +245,81 @@ else
                                             <small><strong>Server IP</strong>: @server.Ip:@server.Port</small>
                                         </span>
                                     </div>
-                                    <div class="row">
-                                        <div class="col ps-5">
-                                            <!-- Scoreboard -->
-                                            <table id="scoreboard" class="table table-sm table-hover table-borderless">
-                                                <thead>
-                                                <tr>
-                                                    <th scope="col" class="align-middle text-truncate">@server.Team1 Player</th>
-                                                    <th style="width: 5%;" scope="col" class="align-middle text-center">Score</th>
-                                                    <th style="width: 0;"></th>
-                                                </tr>
-                                                </thead>
-                                                <tbody>
-                                                @foreach (var player in server.Players
-                                                    .Where(p => p.IsHuman)
-                                                    .Where(p => p.TeamLabel == server.Team1)
-                                                    .OrderByDescending(p => p.Score)
-                                                    .ToList())
-                                                {
+                                    @if (server.NumPlayersWithoutBots > 0)
+                                    {
+                                        <div class="row">
+                                            <div class="col ps-5">
+                                                <!-- Scoreboard -->
+                                                <table id="scoreboard" class="table table-sm table-hover table-borderless">
+                                                    <thead>
                                                     <tr>
-                                                        <td>
-                                                            <a title="Open BF2Hub profile" class="link-light text-nowrap text-decoration-none" target="_blank"
-                                                               href="https://www.bf2hub.com/player/@player.Name">
-                                                                <span>@player.Tag @player.Name</span>
-                                                            </a>
-                                                        </td>
-                                                        <td class="text-center">
-                                                            @player.Score
-                                                        </td>
-                                                        <td class="text-center">
-                                                            <i class="btn btn-sm btn-outline-success bi bi-person-plus grow" @onclick="() => AddFriend(player.Pid)" title="Mark as friend"></i>
-                                                        </td>
+                                                        <th scope="col" class="align-middle text-truncate">@server.Team1 Player</th>
+                                                        <th style="width: 5%;" scope="col" class="align-middle text-center">Score</th>
+                                                        <th style="width: 0;"></th>
                                                     </tr>
-                                                }
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                        <div class="col ps-5">
-                                            <!-- Scoreboard -->
-                                            <table id="scoreboard" class="table table-sm table-hover table-borderless">
-                                                <thead>
-                                                <tr>
-                                                    <th scope="col" class="align-middle text-truncate">@server.Team2 Player</th>
-                                                    <th style="width: 5%;" scope="col" class="align-middle text-center">Score</th>
-                                                    <th style="width: 0;"></th>
-                                                </tr>
-                                                </thead>
-                                                <tbody>
-                                                @foreach (var player in server.Players
-                                                    .Where(p => p.IsHuman)
-                                                    .Where(p => p.TeamLabel == server.Team2)
-                                                    .OrderByDescending(p => p.Score)
-                                                    .ToList())
-                                                {
+                                                    </thead>
+                                                    <tbody>
+                                                    @foreach (var player in server.Players
+                                                        .Where(p => p.IsHuman)
+                                                        .Where(p => p.TeamLabel == server.Team1)
+                                                        .OrderByDescending(p => p.Score)
+                                                        .ToList())
+                                                    {
+                                                        <tr>
+                                                            <td>
+                                                                <a title="Open BF2Hub profile" class="link-light text-nowrap text-decoration-none" target="_blank"
+                                                                   href="https://www.bf2hub.com/player/@player.Name">
+                                                                    <span>@player.Tag @player.Name</span>
+                                                                </a>
+                                                            </td>
+                                                            <td class="text-center">
+                                                                @player.Score
+                                                            </td>
+                                                            <td class="text-center">
+                                                                <i class="btn btn-sm btn-outline-success bi bi-person-plus grow" @onclick="() => AddFriend(player.Pid)" title="Mark as friend"></i>
+                                                            </td>
+                                                        </tr>
+                                                    }
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <div class="col ps-5">
+                                                <!-- Scoreboard -->
+                                                <table id="scoreboard" class="table table-sm table-hover table-borderless">
+                                                    <thead>
                                                     <tr>
-                                                        <td>
-                                                            <a title="Open BF2Hub profile" class="link-light text-nowrap text-decoration-none" target="_blank"
-                                                               href="https://www.bf2hub.com/player/@player.Name">
-                                                                <span>@player.Tag @player.Name</span>
-                                                            </a>
-                                                        </td>
-                                                        <td class="text-center">
-                                                            @player.Score
-                                                        </td>
-                                                        <td class="text-center">
-                                                            <i class="btn btn-sm btn-outline-success bi bi-person-plus grow" @onclick="() => AddFriend(player.Pid)" title="Mark as friend"></i>
-                                                        </td>
+                                                        <th scope="col" class="align-middle text-truncate">@server.Team2 Player</th>
+                                                        <th style="width: 5%;" scope="col" class="align-middle text-center">Score</th>
+                                                        <th style="width: 0;"></th>
                                                     </tr>
-                                                }
-                                                </tbody>
-                                            </table>
+                                                    </thead>
+                                                    <tbody>
+                                                    @foreach (var player in server.Players
+                                                        .Where(p => p.IsHuman)
+                                                        .Where(p => p.TeamLabel == server.Team2)
+                                                        .OrderByDescending(p => p.Score)
+                                                        .ToList())
+                                                    {
+                                                        <tr>
+                                                            <td>
+                                                                <a title="Open BF2Hub profile" class="link-light text-nowrap text-decoration-none" target="_blank"
+                                                                   href="https://www.bf2hub.com/player/@player.Name">
+                                                                    <span>@player.Tag @player.Name</span>
+                                                                </a>
+                                                            </td>
+                                                            <td class="text-center">
+                                                                @player.Score
+                                                            </td>
+                                                            <td class="text-center">
+                                                                <i class="btn btn-sm btn-outline-success bi bi-person-plus grow" @onclick="() => AddFriend(player.Pid)" title="Mark as friend"></i>
+                                                            </td>
+                                                        </tr>
+                                                    }
+                                                    </tbody>
+                                                </table>
+                                            </div>
                                         </div>
-                                    </div>
+                                    }
                                 </div>
                             </div>
                         </div>
@@ -357,6 +363,17 @@ else
 
     private void AddFriend(int playerPid)
     {
+    }
+
+    private static string CalculateServerOpacityClass(Server server)
+    {
+        switch (server.NumPlayersWithoutBots)
+        {
+            case < 1:
+                return "opacity-50"; // empty
+            default:
+                return "opacity-100"; // full
+        }
     }
 
 }
