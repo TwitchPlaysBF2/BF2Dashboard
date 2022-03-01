@@ -6,11 +6,11 @@ namespace BF2Dashboard.UI.Store.FriendList;
 
 public class FriendListState
 {
-    public List<FriendModel>? FriendList { get; }
+    public List<FriendModel>? OnlineFriendList { get; }
 
-    public FriendListState(List<FriendModel>? friendList)
+    public FriendListState(List<FriendModel>? onlineFriendList)
     {
-        FriendList = friendList;
+        OnlineFriendList = onlineFriendList;
     }
 }
 

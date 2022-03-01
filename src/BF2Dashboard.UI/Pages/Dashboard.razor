@@ -17,11 +17,11 @@
 </h2>
 
 <div>
-    Friends:
-    @if (_friendListState.Value.FriendList != null)
+    Online friends:
+    @if (_friendListState.Value.OnlineFriendList != null)
     {
         <ul>
-            @foreach (var friend in _friendListState.Value.FriendList)
+            @foreach (var friend in _friendListState.Value.OnlineFriendList)
             {
                 <li>@friend.Player.Tag @friend.Player.Name (on @friend.ServerInfo.Name)</li>
             }

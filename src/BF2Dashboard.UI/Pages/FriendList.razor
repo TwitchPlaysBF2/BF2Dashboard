@@ -8,14 +8,14 @@
 
 <h3><span class="oi oi-people" aria-hidden="true"></span> Friends</h3>
 <div class="container">
-    @if (_friendListState.Value.FriendList == null)
+    @if (_friendListState.Value.OnlineFriendList == null)
     {
         <LoadingSpinner/>
     }
     else
     {
         <ul>
-            @foreach (var friend in _friendListState.Value.FriendList)
+            @foreach (var friend in _friendListState.Value.OnlineFriendList)
             {
                 <li>
                     @friend.FullName
