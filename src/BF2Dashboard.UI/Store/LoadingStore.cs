@@ -10,7 +10,7 @@ public record LoadingState
 public class LoadingReducers
 {
     [ReducerMethod(typeof(LoadingBeginAction))]
-    public LoadingState OnStart(IDispatcher dispatcher)
+    public LoadingState OnStart(LoadingState oldState)
     {
         return new LoadingState
         {
@@ -19,7 +19,7 @@ public class LoadingReducers
     }
 
     [ReducerMethod(typeof(LoadingEndAction))]
-    public LoadingState OnStop(IDispatcher dispatcher)
+    public LoadingState OnStop(LoadingState oldState)
     {
         return new LoadingState
         {
