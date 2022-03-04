@@ -100,7 +100,9 @@ public class FriendListEffects
     [EffectMethod]
     public async Task InitializeFriendList(SetFullServerListAction action, IDispatcher dispatcher)
     {
-        var pidList = await _localStorageService.GetItemAsync<List<int>>(Commons.FriendListKey);
+        var pidList = await _localStorageService.GetItemAsync<List<int>>(Commons.FriendListKey)
+                      ?? new List<int>();
+
         dispatcher.Dispatch(new ResolvePidListIntoFriendListAction(pidList, action.ServerList ?? new List<Server>()));
     }
 
