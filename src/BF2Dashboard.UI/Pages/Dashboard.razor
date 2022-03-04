@@ -138,7 +138,7 @@ else
                                                             @player.Score
                                                         </td>
                                                         <td class="text-center">
-                                                            <i class="btn btn-sm btn-outline-success bi bi-person-plus grow" @onclick="() => AddFriend(player.Pid)" title="Mark as friend"></i>
+                                                            <i class="btn btn-sm btn-outline-success bi bi-person-plus grow" @onclick="() => AddFriend(player)" title="Mark as friend"></i>
                                                         </td>
                                                     </tr>
                                                 }
@@ -173,7 +173,7 @@ else
                                                             @player.Score
                                                         </td>
                                                         <td class="text-center">
-                                                            <i class="btn btn-sm btn-outline-success bi bi-person-plus grow" @onclick="() => AddFriend(player.Pid)" title="Mark as friend"></i>
+                                                            <i class="btn btn-sm btn-outline-success bi bi-person-plus grow" @onclick="() => AddFriend(player)" title="Mark as friend"></i>
                                                         </td>
                                                     </tr>
                                                 }
@@ -292,7 +292,7 @@ else
                                                                 @player.Score
                                                             </td>
                                                             <td class="text-center">
-                                                                <i class="btn btn-sm btn-outline-success bi bi-person-plus grow" @onclick="() => AddFriend(player.Pid)" title="Mark as friend"></i>
+                                                                <i class="btn btn-sm btn-outline-success bi bi-person-plus grow" @onclick="() => AddFriend(player)" title="Mark as friend"></i>
                                                             </td>
                                                         </tr>
                                                     }
@@ -327,7 +327,7 @@ else
                                                                 @player.Score
                                                             </td>
                                                             <td class="text-center">
-                                                                <i class="btn btn-sm btn-outline-success bi bi-person-plus grow" @onclick="() => AddFriend(player.Pid)" title="Mark as friend"></i>
+                                                                <i class="btn btn-sm btn-outline-success bi bi-person-plus grow" @onclick="() => AddFriend(player)" title="Mark as friend"></i>
                                                             </td>
                                                         </tr>
                                                     }
@@ -344,7 +344,7 @@ else
             }
             else
             {
-                <span style="font-size: 10pt; color: #767676">(Empty)</span>
+                <span style="font-size: 10pt; color: #767676">No favorites yet. Add your favorite servers!</span>
             }
         </div>
     </div>
@@ -384,9 +384,16 @@ else
         _dispatcher.Dispatch(new ToggleFavoriteAction(server));
     }
 
-    private void AddFriend(int playerPid)
+    private void AddFriend(Player player)
     {
-        _dispatcher.Dispatch(new AddFriendAction(playerPid));
+        player.IsFriend = true;
+        _dispatcher.Dispatch(new AddFriendAction(player.Name));
+    }
+
+    private void RemoveFriend(Player player)
+    {
+        player.IsFriend = false;
+        _dispatcher.Dispatch(new RemoveFriendAction(player.Name));
     }
 
     private static string CalculateServerOpacityClass(Server server)

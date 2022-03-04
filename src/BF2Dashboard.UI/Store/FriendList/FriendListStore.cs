@@ -23,21 +23,21 @@ public class FriendListFeature : Feature<FriendListState>
 
 public class AddFriendAction
 {
-    public int Pid { get; }
+    public string Name { get; }
 
-    public AddFriendAction(int pid)
+    public AddFriendAction(string name)
     {
-        Pid = pid;
+        Name = name;
     }
 }
 
 public class RemoveFriendAction
 {
-    public int Pid { get; }
+    public string Name { get; }
 
-    public RemoveFriendAction(int pid)
+    public RemoveFriendAction(string name)
     {
-        Pid = pid;
+        Name = name;
     }
 }
 
@@ -55,15 +55,15 @@ public class InitializeFriendListAction
 {
 }
 
-public class ResolvePidListIntoFriendListAction
+public class ResolveFriendListAction
 {
-    public List<int> PidList { get; }
+    public List<string> FriendNameList { get; }
 
     public List<Server> ServerList { get; }
 
-    public ResolvePidListIntoFriendListAction(List<int> pidList, List<Server> serverList)
+    public ResolveFriendListAction(List<string> friendNameList, List<Server> serverList)
     {
-        PidList = pidList;
+        FriendNameList = friendNameList;
         ServerList = serverList;
     }
 }
@@ -71,54 +71,52 @@ public class ResolvePidListIntoFriendListAction
 public class FriendListEffects
 {
     private readonly ILocalStorageService _localStorageService;
-    private readonly IState<FullServerListState> _serverList;
 
-    public FriendListEffects(ILocalStorageService localStorageService, IState<FullServerListState> serverList)
+    public FriendListEffects(ILocalStorageService localStorageService)
     {
         _localStorageService = localStorageService;
-        _serverList = serverList;
     }
 
     [EffectMethod]
     public async Task AddFriendToPersistence(AddFriendAction action, IDispatcher _)
     {
-        var pidList = await _localStorageService.GetItemAsync<List<int>>(Commons.FriendListKey)
-                      ?? new List<int>();
+        var friendNameList = await _localStorageService.GetItemAsync<List<string>>(Commons.FriendListKey)
+                      ?? new List<string>();
 
-        pidList.Add(action.Pid);
-        await _localStorageService.SetItemAsync(Commons.FriendListKey, pidList);
+        friendNameList.Add(action.Name);
+        await _localStorageService.SetItemAsync(Commons.FriendListKey, friendNameList);
     }
 
     [EffectMethod]
     public async Task RemoveFriendFromPersistence(RemoveFriendAction action, IDispatcher _)
     {
-        var pidList = await _localStorageService.GetItemAsync<List<int>>(Commons.FriendListKey);
-        pidList.Remove(action.Pid);
-        await _localStorageService.SetItemAsync(Commons.FriendListKey, pidList);
+        var friendNameList = await _localStorageService.GetItemAsync<List<string>>(Commons.FriendListKey);
+        friendNameList.Remove(action.Name);
+        await _localStorageService.SetItemAsync(Commons.FriendListKey, friendNameList);
     }
 
     [EffectMethod]
     public async Task InitializeFriendList(SetFullServerListAction action, IDispatcher dispatcher)
     {
-        var pidList = await _localStorageService.GetItemAsync<List<int>>(Commons.FriendListKey)
-                      ?? new List<int>();
+        var friends = await _localStorageService.GetItemAsync<List<string>>(Commons.FriendListKey)
+                      ?? new List<string>();
 
-        dispatcher.Dispatch(new ResolvePidListIntoFriendListAction(pidList, action.ServerList ?? new List<Server>()));
+        dispatcher.Dispatch(new ResolveFriendListAction(friends, action.ServerList ?? new List<Server>()));
     }
 
     [EffectMethod]
-    public async Task OnResolvePidList(ResolvePidListIntoFriendListAction action, IDispatcher dispatcher)
+    public async Task OnResolveFriendList(ResolveFriendListAction action, IDispatcher dispatcher)
     {
-        var friendList = ResolveFriendList(action.PidList, action.ServerList).ToList();
+        var friendList = ResolveFriendList(action.FriendNameList, action.ServerList).ToList();
         dispatcher.Dispatch(new SetFriendListAction(friendList));
 
-        IEnumerable<FriendModel> ResolveFriendList(List<int> pidList, List<Server> serverList)
+        IEnumerable<FriendModel> ResolveFriendList(List<string> friendNameList, List<Server> serverList)
         {
-            foreach (var friendPid in pidList)
+            foreach (var friendName in friendNameList)
             {
                 foreach (var server in serverList)
                 {
-                    var player = server.Players.FirstOrDefault(p => p.Pid == friendPid);
+                    var player = server.Players.FirstOrDefault(p => p.Name == friendName);
                     if (player != null)
                     {
                         yield return FriendModel.Create(player, server);
