@@ -151,7 +151,7 @@ else
                                                             @player.Score
                                                         </td>
                                                         <td class="text-center">
-                                                            <i class="@GetClassForFriendButton(player.IsFriend)" @onclick="() => ToggleFriendState(player)" title="@GetTitleForFriendButton(player.IsFriend)"></i>
+                                                            <i class="@GetClassForFriendButton(player.IsFriend)" @onclick="() => AddOrRemoveFriend(player, server)" title="@GetTitleForFriendButton(player.IsFriend)"></i>
                                                         </td>
                                                     </tr>
                                                 }
@@ -186,7 +186,7 @@ else
                                                             @player.Score
                                                         </td>
                                                         <td class="text-center">
-                                                            <i class="@GetClassForFriendButton(player.IsFriend)" @onclick="() => ToggleFriendState(player)" title="@GetTitleForFriendButton(player.IsFriend)"></i>
+                                                            <i class="@GetClassForFriendButton(player.IsFriend)" @onclick="() => AddOrRemoveFriend(player, server)" title="@GetTitleForFriendButton(player.IsFriend)"></i>
                                                         </td>
                                                     </tr>
                                                 }
@@ -305,7 +305,7 @@ else
                                                                 @player.Score
                                                             </td>
                                                             <td class="text-center">
-                                                                <i class="@GetClassForFriendButton(player.IsFriend)" @onclick="() => ToggleFriendState(player)" title="@GetTitleForFriendButton(player.IsFriend)"></i>
+                                                                <i class="@GetClassForFriendButton(player.IsFriend)" @onclick="() => AddOrRemoveFriend(player, server)" title="@GetTitleForFriendButton(player.IsFriend)"></i>
                                                             </td>
                                                         </tr>
                                                     }
@@ -340,7 +340,7 @@ else
                                                                 @player.Score
                                                             </td>
                                                             <td class="text-center">
-                                                                <i class="@GetClassForFriendButton(player.IsFriend)" @onclick="() => ToggleFriendState(player)" title="@GetTitleForFriendButton(player.IsFriend)"></i>
+                                                                <i class="@GetClassForFriendButton(player.IsFriend)" @onclick="() => AddOrRemoveFriend(player, server)" title="@GetTitleForFriendButton(player.IsFriend)"></i>
                                                             </td>
                                                         </tr>
                                                     }
@@ -397,17 +397,18 @@ else
         _dispatcher.Dispatch(new ToggleFavoriteAction(server));
     }
 
-    private void ToggleFriendState(Player player)
+    private void AddOrRemoveFriend(Player player, Server server)
     {
         if (player.IsFriend)
         {
             player.IsFriend = false;
             _dispatcher.Dispatch(new RemoveFriendAction(player.FullName));
-            return;
         }
-
-        player.IsFriend = true;
-        _dispatcher.Dispatch(new AddFriendAction(player.FullName));
+        else
+        {
+            player.IsFriend = true;
+            _dispatcher.Dispatch(new AddFriendAction(player, server));
+        }
     }
 
     private static string CalculateServerOpacityClass(Server server)
