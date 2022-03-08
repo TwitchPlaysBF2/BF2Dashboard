@@ -6,6 +6,9 @@ namespace BF2Dashboard.UI.Store.FriendList;
 
 public class FriendListState
 {
+    public bool IsLoadedAndHasNoFriendsYet => OnlineFriendList != null && OfflineFriendList != null &&
+                                              OnlineFriendList.Count == 0 && OfflineFriendList.Count == 0;
+
     public List<FriendModel>? OnlineFriendList { get; }
 
     public List<FriendModel>? OfflineFriendList { get; }
@@ -114,7 +117,12 @@ public class FriendListEffects
     public async Task OnResolveFriendList(ResolveFriendListAction action, IDispatcher dispatcher)
     {
         var friendModels = CreateFriendModels(action.FriendNameList, action.ServerList).ToList();
-        var onlineFriendList = friendModels.Where(m => m.IsOnline).OrderBy(m => m.DisplayName).ToList();
+        var onlineFriendList = friendModels.Where(m => m.IsOnline)
+            .OrderBy(m => m.ServerInfo?.MapName)
+            .ThenBy(m => m.ServerInfo?.ServerName)
+            .ThenBy(m => m.DisplayName)
+            .ToList();
+
         var offlineFriendList = friendModels.Where(m => !m.IsOnline).OrderBy(m => m.DisplayName).ToList();
 
         dispatcher.Dispatch(new SetFriendListAction(onlineFriendList, offlineFriendList));

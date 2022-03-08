@@ -7,36 +7,43 @@
 @inject IState<LoadingState> _loadingState
 
 <h3><span class="oi oi-people" aria-hidden="true"></span> Friends</h3>
-<div class="container">
-    @if (_friendListState.Value.OnlineFriendList == null)
-    {
-        <LoadingSpinner/>
-    }
-    else
-    {
-        <span>Online:</span>
-        <ul>
+@if (_friendListState.Value.OnlineFriendList == null)
+{
+    <LoadingSpinner/>
+}
+else
+{
+    <span>Online:</span>
+    <div class="row p-2 ms-4">
+        <ul style="list-style-type: none;">
             @foreach (var friend in _friendListState.Value.OnlineFriendList)
             {
                 <li>
+                    <i class="bi bi-circle-fill" style="color: green; font-size: 11pt;"></i>
+                    @friend.DisplayName
+                    <span style="font-size: 10pt; color: #767676">
+                        @friend.ServerInfo.MapName @@ @friend.ServerInfo.ServerName
+                    </span>
+                </li>
+            }
+        </ul>
+    </div>
+}
+@if (_friendListState.Value.OfflineFriendList != null)
+{
+    <span>Offline:</span>
+    <div class="row p-2 ms-4">
+        <ul style="list-style-type: none;">
+            @foreach (var friend in _friendListState.Value.OfflineFriendList)
+            {
+                <li style="opacity: .5">
+                    <i class="bi bi-circle-fill" style="color: #767676; font-size: 11pt;"></i>
                     @friend.DisplayName
                 </li>
             }
         </ul>
-    }
-    @if (_friendListState.Value.OfflineFriendList != null)
-    {
-        <span>Offline:</span>
-        <ul>
-            @foreach (var friend in _friendListState.Value.OfflineFriendList)
-            {
-                <li>
-                    <span style="opacity: .5">@friend.DisplayName</span>
-                </li>
-            }
-        </ul>
-    }
-</div>
+    </div>
+}
 
 @code {
 
