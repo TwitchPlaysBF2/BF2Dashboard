@@ -9,7 +9,7 @@
 @inject IState<FriendListState> _friendListState
 @inject IState<LoadingState> _loadingState
 
-<h2>Personal Dashboard</h2>
+<h2>Your Personal BF2 Dashboard</h2>
 <div class="pt-3">
     <button class="btn btn-dark btn-sm" title="Refresh server data" @onclick="Refresh">
         <i class="bi bi-arrow-clockwise" style="font-size: 15pt;"></i> Reload server data
@@ -17,7 +17,7 @@
 </div>
 
 <div class="row pt-5 mt-2">
-    @if (_fullServerListState.Value.ServerList != null && _friendListState.Value.OnlineFriendList != null)
+    @if (_fullServerListState.Value.ServerList != null && _friendListState.Value.OnlineFriendList?.Any() == true)
     {
         <h3>Online Friends:</h3>
         <div class="row p-2 ms-4">
@@ -35,10 +35,13 @@
             </ul>
         </div>
     }
-    else if (_friendListState.Value.IsLoadedAndHasNoFriendsYet)
+    else if (_fullServerListState.Value.ServerList != null && _friendListState.Value.OnlineFriendList?.Count == 0 && _friendListState.Value.OfflineFriendList?.Count == 0)
     {
-        <p>No friends added yet.</p>
-        <p>Add friends from the server browser or <a>manually</a>, to see what server they are playing on!</p>
+        <h3>Online Friends:</h3>
+        <span style="font-size: 10pt; color: #767676">
+            <span>No friends yet.</span>
+            <p>Mark your BF2 friends in the server scoreboard, to see where they are playing!</p>
+        </span>
     }
 </div>
 
@@ -51,7 +54,7 @@ else
 {
     <div class="col-md-6">
         <div class="pt-2 pb-2">
-            <h3>Battlefield 2 Servers</h3>
+            <h3>All Battlefield 2 Servers:</h3>
         </div>
         <div class="accordion accordion-flush bg-dark" id="mainAccordion">
             @foreach (var server in _fullServerListState.Value.ServerList)
@@ -357,7 +360,7 @@ else
             }
             else
             {
-                <span style="font-size: 10pt; color: #767676">No favorites yet. Add your favorite servers!</span>
+                <span style="font-size: 10pt; color: #767676">No favorites yet. Click the heart on the servers you usually play on!</span>
             }
         </div>
     </div>
