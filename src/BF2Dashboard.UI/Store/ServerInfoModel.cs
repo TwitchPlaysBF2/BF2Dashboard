@@ -19,7 +19,7 @@ public class ServerInfoModel
             ServerName = server.Name,
             MapName = server.MapName,
             PlayerCountWithoutBots = server.NumPlayersWithoutBots,
-            MaxPlayerCount = server.MaxPlayers,
+            MaxPlayerCount = server.MaxPlayers ?? 0,
         };
     }
 }

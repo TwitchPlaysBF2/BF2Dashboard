@@ -69,7 +69,7 @@ else
                                 </div>
                                 <div id="serverIcons" class="row align-middle">
                                     <div class="col-1">
-                                        @if (server.Ranked)
+                                        @if (server.Ranked == true)
                                         {
                                             <img src="img/ranked.png" alt="Ranked" title="Ranked"/>
                                         }
@@ -79,7 +79,7 @@ else
                                         }
                                     </div>
                                     <div class="col-1">
-                                        @if (server.Battlerecorder)
+                                        @if (server.Battlerecorder == true)
                                         {
                                             <i class="bi bi-camera-video" style="font-size: 14px;" title="Battlerecorder is enabled"></i>
                                         }
@@ -89,7 +89,7 @@ else
                                         }
                                     </div>
                                     <div class="col-1">
-                                        @if (server.Password)
+                                        @if (server.Password == true)
                                         {
                                             <i class="bi bi-lock-fill" style="font-size: 14px;" title="Requires password"></i>
                                         }
@@ -223,7 +223,7 @@ else
                                     </div>
                                     <div id="serverIcons" class="row align-middle">
                                         <div class="col-1">
-                                            @if (server.Ranked)
+                                            @if (server.Ranked == true)
                                             {
                                                 <img src="img/ranked.png" alt="Ranked" title="Ranked"/>
                                             }
@@ -233,7 +233,7 @@ else
                                             }
                                         </div>
                                         <div class="col-1">
-                                            @if (server.Battlerecorder)
+                                            @if (server.Battlerecorder == true)
                                             {
                                                 <i class="bi bi-camera-video" style="font-size: 14px;" title="Battlerecorder is enabled"></i>
                                             }
@@ -243,7 +243,7 @@ else
                                             }
                                         </div>
                                         <div class="col-1">
-                                            @if (server.Password)
+                                            @if (server.Password == true)
                                             {
                                                 <i class="bi bi-lock-fill" style="font-size: 14px;" title="Requires password"></i>
                                             }

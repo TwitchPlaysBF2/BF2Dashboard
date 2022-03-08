@@ -6,14 +6,14 @@ namespace BF2Dashboard.Domain.BattlefieldApi;
 [Serializable]
 public class Player
 {
-    public bool IsHuman => !Aibot && (Ping > 0 || Score != 0 || Kills != 0 || Deaths != 0);
+    public bool IsHuman => Aibot != true && (Ping > 0 || Score != 0 || Kills != 0 || Deaths != 0);
 
     public bool IsFriend { get; set; } = false;
 
     public string FullName => Tag + " " + Name;
     
     [JsonPropertyName("pid")]
-    public int Pid { get; set; }
+    public int? Pid { get; set; }
 
     [JsonPropertyName("name")]
     public string Name { get; set; }
@@ -22,24 +22,24 @@ public class Player
     public string Tag { get; set; }
 
     [JsonPropertyName("score")]
-    public int Score { get; set; }
+    public int? Score { get; set; }
 
     [JsonPropertyName("kills")]
-    public int Kills { get; set; }
+    public int? Kills { get; set; }
 
     [JsonPropertyName("deaths")]
-    public int Deaths { get; set; }
+    public int? Deaths { get; set; }
 
     [JsonPropertyName("ping")]
-    public int Ping { get; set; }
+    public int? Ping { get; set; }
 
     [JsonPropertyName("team")]
-    public int Team { get; set; }
+    public int? Team { get; set; }
 
     [JsonPropertyName("teamLabel")]
     public string TeamLabel { get; set; }
 
     [JsonPropertyName("aibot")]
-    public bool Aibot { get; set; }
+    public bool? Aibot { get; set; }
 }
 #pragma warning restore CS8618
