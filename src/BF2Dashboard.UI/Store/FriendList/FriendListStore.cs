@@ -139,6 +139,7 @@ public class FriendListEffects
                 if (player != null)
                 {
                     wasPlayerFoundOnline = true;
+                    player.IsFriend = true; // sets UI
                     yield return FriendModel.CreateOnlineFriend(player, server);
                     break;
                 }
