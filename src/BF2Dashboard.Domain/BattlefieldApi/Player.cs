@@ -8,6 +8,10 @@ public class Player
 {
     public bool IsHuman => !Aibot && (Ping > 0 || Score != 0 || Kills != 0 || Deaths != 0);
 
+    public bool IsFriend { get; set; } = false;
+
+    public string FullName => Tag + " " + Name;
+    
     [JsonPropertyName("pid")]
     public int Pid { get; set; }
 
