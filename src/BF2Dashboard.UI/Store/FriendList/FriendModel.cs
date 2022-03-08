@@ -4,20 +4,39 @@ namespace BF2Dashboard.UI.Store.FriendList;
 
 public class FriendModel
 {
-    public string FullName => $"{Player.Tag} {Player.Name}";
+    public bool IsOnline { get; set; }
 
-    public override string ToString() => FullName;
+    public string DisplayName { get; private init; }
 
-    public Player Player { get; private init; }
+    public override string ToString() => DisplayName;
 
-    public ServerInfoModel ServerInfo { get; private init; }
+    public Player? Player { get; private init; }
 
-    public static FriendModel Create(Player player, Server server)
+    public ServerInfoModel? ServerInfo { get; private init; }
+
+    public static FriendModel CreateOnlineFriend(Player player, Server server)
     {
         return new FriendModel()
         {
+            IsOnline = true,
+            DisplayName = player.FullName,
             Player = player,
             ServerInfo = ServerInfoModel.FromServer(server),
         };
+    }
+
+    public static FriendModel CreateOfflineFriend(string displayName)
+    {
+        return new FriendModel()
+        {
+            IsOnline = false,
+            DisplayName = displayName,
+            Player = null,
+            ServerInfo = null,
+        };
+    }
+
+    private FriendModel()
+    {
     }
 }

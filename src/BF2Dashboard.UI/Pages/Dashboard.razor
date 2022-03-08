@@ -16,14 +16,28 @@
     </button>
 </h2>
 
-<div>
+<div class="row">
     Online friends:
     @if (_friendListState.Value.OnlineFriendList != null)
     {
         <ul>
             @foreach (var friend in _friendListState.Value.OnlineFriendList)
             {
-                <li>@friend.Player.Tag @friend.Player.Name (on @friend.ServerInfo.Name)</li>
+                <li>
+                    @friend.DisplayName <small>(on @friend.ServerInfo!.Name)</small>
+                </li>
+            }
+        </ul>
+    }
+</div>
+<div class="row">
+    Offline friends:
+    @if (_friendListState.Value.OfflineFriendList != null)
+    {
+        <ul>
+            @foreach (var friend in _friendListState.Value.OfflineFriendList)
+            {
+                <li style="opacity: .5">@friend.DisplayName</li>
             }
         </ul>
     }
@@ -131,7 +145,7 @@ else
                                                         <td style="vertical-align: center;">
                                                             <a title="Open BF2Hub profile" class="link-light text-nowrap text-decoration-none" target="_blank"
                                                                href="https://www.bf2hub.com/player/@player.Name">
-                                                                <span>@player.Tag @player.Name</span>
+                                                                <span>@player.FullName</span>
                                                             </a>
                                                         </td>
                                                         <td class="text-center">
@@ -166,7 +180,7 @@ else
                                                         <td>
                                                             <a title="Open BF2Hub profile" class="link-light text-nowrap text-decoration-none" target="_blank"
                                                                href="https://www.bf2hub.com/player/@player.Name">
-                                                                <span>@player.Tag @player.Name</span>
+                                                                <span>@player.FullName</span>
                                                             </a>
                                                         </td>
                                                         <td class="text-center">
@@ -285,7 +299,7 @@ else
                                                             <td>
                                                                 <a title="Open BF2Hub profile" class="link-light text-nowrap text-decoration-none" target="_blank"
                                                                    href="https://www.bf2hub.com/player/@player.Name">
-                                                                    <span>@player.Tag @player.Name</span>
+                                                                    <span>@player.FullName</span>
                                                                 </a>
                                                             </td>
                                                             <td class="text-center">
@@ -320,7 +334,7 @@ else
                                                             <td>
                                                                 <a title="Open BF2Hub profile" class="link-light text-nowrap text-decoration-none" target="_blank"
                                                                    href="https://www.bf2hub.com/player/@player.Name">
-                                                                    <span>@player.Tag @player.Name</span>
+                                                                    <span>@player.FullName</span>
                                                                 </a>
                                                             </td>
                                                             <td class="text-center">
@@ -387,13 +401,13 @@ else
     private void AddFriend(Player player)
     {
         player.IsFriend = true;
-        _dispatcher.Dispatch(new AddFriendAction(player.Name));
+        _dispatcher.Dispatch(new AddFriendAction(player.FullName));
     }
 
     private void RemoveFriend(Player player)
     {
         player.IsFriend = false;
-        _dispatcher.Dispatch(new RemoveFriendAction(player.Name));
+        _dispatcher.Dispatch(new RemoveFriendAction(player.FullName));
     }
 
     private static string CalculateServerOpacityClass(Server server)

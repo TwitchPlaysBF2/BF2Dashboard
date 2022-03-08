@@ -8,9 +8,12 @@ public class FriendListState
 {
     public List<FriendModel>? OnlineFriendList { get; }
 
-    public FriendListState(List<FriendModel>? onlineFriendList)
+    public List<FriendModel>? OfflineFriendList { get; }
+
+    public FriendListState(List<FriendModel>? onlineFriendList, List<FriendModel>? offlineFriendList)
     {
         OnlineFriendList = onlineFriendList;
+        OfflineFriendList = offlineFriendList;
     }
 }
 
@@ -18,7 +21,7 @@ public class FriendListFeature : Feature<FriendListState>
 {
     public override string GetName() => nameof(FriendListFeature);
 
-    protected override FriendListState GetInitialState() => new(null);
+    protected override FriendListState GetInitialState() => new(null, null);
 }
 
 public class AddFriendAction
@@ -43,11 +46,14 @@ public class RemoveFriendAction
 
 public class SetFriendListAction
 {
-    public List<FriendModel> FriendList { get; }
+    public List<FriendModel> OnlineFriendList { get; }
 
-    public SetFriendListAction(List<FriendModel> friendList)
+    public List<FriendModel> OfflineFriendList { get; }
+
+    public SetFriendListAction(List<FriendModel> onlineFriendList, List<FriendModel> offlineFriendList)
     {
-        FriendList = friendList;
+        OnlineFriendList = onlineFriendList;
+        OfflineFriendList = offlineFriendList;
     }
 }
 
@@ -81,7 +87,7 @@ public class FriendListEffects
     public async Task AddFriendToPersistence(AddFriendAction action, IDispatcher _)
     {
         var friendNameList = await _localStorageService.GetItemAsync<List<string>>(Commons.FriendListKey)
-                      ?? new List<string>();
+                             ?? new List<string>();
 
         friendNameList.Add(action.Name);
         await _localStorageService.SetItemAsync(Commons.FriendListKey, friendNameList);
@@ -107,22 +113,31 @@ public class FriendListEffects
     [EffectMethod]
     public async Task OnResolveFriendList(ResolveFriendListAction action, IDispatcher dispatcher)
     {
-        var friendList = ResolveFriendList(action.FriendNameList, action.ServerList).ToList();
-        dispatcher.Dispatch(new SetFriendListAction(friendList));
+        var friendModels = CreateFriendModels(action.FriendNameList, action.ServerList).ToList();
+        var onlineFriendList = friendModels.Where(m => m.IsOnline).OrderBy(m => m.DisplayName).ToList();
+        var offlineFriendList = friendModels.Where(m => !m.IsOnline).OrderBy(m => m.DisplayName).ToList();
 
-        IEnumerable<FriendModel> ResolveFriendList(List<string> friendNameList, List<Server> serverList)
+        dispatcher.Dispatch(new SetFriendListAction(onlineFriendList, offlineFriendList));
+    }
+
+    private static IEnumerable<FriendModel> CreateFriendModels(List<string> friendNameList, List<Server> serverList)
+    {
+        foreach (var friendName in friendNameList)
         {
-            foreach (var friendName in friendNameList)
+            var wasPlayerFoundOnline = false;
+            foreach (var server in serverList)
             {
-                foreach (var server in serverList)
+                var player = server.Players.FirstOrDefault(p => p.FullName == friendName);
+                if (player != null)
                 {
-                    var player = server.Players.FirstOrDefault(p => p.Name == friendName);
-                    if (player != null)
-                    {
-                        yield return FriendModel.Create(player, server);
-                    }
+                    wasPlayerFoundOnline = true;
+                    yield return FriendModel.CreateOnlineFriend(player, server);
+                    break;
                 }
             }
+
+            if (!wasPlayerFoundOnline)
+                yield return FriendModel.CreateOfflineFriend(friendName);
         }
     }
 }
@@ -132,6 +147,6 @@ public class FriendListReducers
     [ReducerMethod]
     public FriendListState OnSetFriendList(FriendListState oldState, SetFriendListAction action)
     {
-        return new FriendListState(action.FriendList);
+        return new FriendListState(action.OnlineFriendList, action.OfflineFriendList);
     }
 }

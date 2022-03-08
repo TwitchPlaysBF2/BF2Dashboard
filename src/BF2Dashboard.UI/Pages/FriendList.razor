@@ -14,11 +14,24 @@
     }
     else
     {
+        <span>Online:</span>
         <ul>
             @foreach (var friend in _friendListState.Value.OnlineFriendList)
             {
                 <li>
-                    @friend.FullName
+                    @friend.DisplayName
+                </li>
+            }
+        </ul>
+    }
+    @if (_friendListState.Value.OfflineFriendList != null)
+    {
+        <span>Offline:</span>
+        <ul>
+            @foreach (var friend in _friendListState.Value.OfflineFriendList)
+            {
+                <li>
+                    <span style="opacity: .5">@friend.DisplayName</span>
                 </li>
             }
         </ul>
