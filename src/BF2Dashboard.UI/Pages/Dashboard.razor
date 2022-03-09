@@ -20,16 +20,16 @@
     @if (_fullServerListState.Value.ServerList != null && _friendListState.Value.IsLoading == false && _friendListState.Value.IsInitialized)
     {
         <h3>Online Friends:</h3>
-        if (_friendListState.Value.IsEmpty)
-        {
-            <span style="font-size: 10pt; color: #767676">
-                <span>No friends yet.</span>
-                <p>Mark your BF2 friends in the server scoreboard, to see where they are playing!</p>
-            </span>
-        }
-        else
-        {
-            <div class="row p-2 ms-4">
+        <div class="row p-2 ms-4">
+            @if (_friendListState.Value.IsEmpty)
+            {
+                <span style="font-size: 10pt; color: #767676">
+                    <span>No friends yet.</span>
+                    <p>Mark your BF2 friends in the server scoreboard, to see where they are playing!</p>
+                </span>
+            }
+            else
+            {
                 <ul style="list-style-type: none;">
                     @if (_friendListState.Value.OnlineFriendList != null)
                     {
@@ -45,8 +45,8 @@
                         }
                     }
                 </ul>
-            </div>
-        }
+            }
+        </div>
     }
 </div>
 
