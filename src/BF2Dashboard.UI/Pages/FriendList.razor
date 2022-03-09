@@ -22,7 +22,8 @@ else
                     <i class="bi bi-circle-fill" style="color: green; font-size: 11pt;"></i>
                     @friend.DisplayName
                     <span style="font-size: 10pt; color: #767676">
-                        @friend.ServerInfo.MapName @@ @friend.ServerInfo.ServerName
+                        @friend.ServerInfo.MapName @@ @friend.ServerInfo.ServerName 
+                        (@friend.ServerInfo.CurrentPlayerCountWithoutBots/@friend.ServerInfo.MaxPlayerCount)
                     </span>
                 </li>
             }

@@ -8,7 +8,7 @@ public class ServerInfoModel
 
     public string MapName { get; private init; }
 
-    public int PlayerCountWithoutBots { get; private init; }
+    public int CurrentPlayerCountWithoutBots { get; private init; }
 
     public int MaxPlayerCount { get; private init; }
 
@@ -18,7 +18,7 @@ public class ServerInfoModel
         {
             ServerName = server.Name,
             MapName = server.MapName,
-            PlayerCountWithoutBots = server.NumPlayersWithoutBots,
+            CurrentPlayerCountWithoutBots = server.NumPlayersWithoutBots,
             MaxPlayerCount = server.MaxPlayers ?? 0,
         };
     }
