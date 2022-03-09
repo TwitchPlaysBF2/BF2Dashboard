@@ -48,7 +48,6 @@ else
 @code {
 
     private bool _isServerDataLoaded = false;
-    private bool _isFriendListLoaded = false;
 
     protected override void OnInitialized()
     {
@@ -56,12 +55,6 @@ else
         {
             _dispatcher.Dispatch(new InitializeServerListsAction());
             _isServerDataLoaded = true;
-        }
-
-        if (_isServerDataLoaded && !_isFriendListLoaded)
-        {
-            _dispatcher.Dispatch(new InitializeFriendListAction());
-            _isFriendListLoaded = true;
         }
 
         base.OnInitialized();

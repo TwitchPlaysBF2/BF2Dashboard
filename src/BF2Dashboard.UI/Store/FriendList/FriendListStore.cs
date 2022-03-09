@@ -4,27 +4,30 @@ using Fluxor;
 
 namespace BF2Dashboard.UI.Store.FriendList;
 
-public class FriendListState
+public record FriendListState
 {
-    public bool IsLoadedAndHasNoFriendsYet => OnlineFriendList != null && OfflineFriendList != null &&
-                                              OnlineFriendList.Count == 0 && OfflineFriendList.Count == 0;
+    public bool IsEmpty => OnlineFriendList?.Count == 0 && OfflineFriendList?.Count == 0;
+    
+    public bool IsInitialized { get; init; }
+
+    public bool IsLoading { get; init; }
 
     public List<FriendModel>? OnlineFriendList { get; set; }
 
     public List<FriendModel>? OfflineFriendList { get; set; }
-
-    public FriendListState(List<FriendModel>? onlineFriendList, List<FriendModel>? offlineFriendList)
-    {
-        OnlineFriendList = onlineFriendList;
-        OfflineFriendList = offlineFriendList;
-    }
 }
 
 public class FriendListFeature : Feature<FriendListState>
 {
     public override string GetName() => nameof(FriendListFeature);
 
-    protected override FriendListState GetInitialState() => new(null, null);
+    protected override FriendListState GetInitialState() => new()
+    {
+        IsInitialized = false,
+        IsLoading = false,
+        OnlineFriendList = null,
+        OfflineFriendList = null,
+    };
 }
 
 public class AddFriendAction
@@ -62,8 +65,18 @@ public class SetFriendListAction
     }
 }
 
-public class InitializeFriendListAction
+public class SetInitializedFriendListAction
 {
+}
+
+public class SetLoadingFriendListAction
+{
+    public bool IsLoading { get; }
+
+    public SetLoadingFriendListAction(bool isLoading)
+    {
+        IsLoading = isLoading;
+    }
 }
 
 public class ResolveFriendListAction
@@ -109,6 +122,7 @@ public class FriendListEffects
     [EffectMethod]
     public async Task InitializeFriendList(SetFullServerListAction action, IDispatcher dispatcher)
     {
+        dispatcher.Dispatch(new SetLoadingFriendListAction(true));
         var friends = await _localStorageService.GetItemAsync<List<string>>(Commons.FriendListKey)
                       ?? new List<string>();
 
@@ -128,6 +142,9 @@ public class FriendListEffects
         var offlineFriendList = friendModels.Where(m => !m.IsOnline).OrderBy(m => m.DisplayName).ToList();
 
         dispatcher.Dispatch(new SetFriendListAction(onlineFriendList, offlineFriendList));
+        dispatcher.Dispatch(new SetLoadingFriendListAction(false));
+        dispatcher.Dispatch(new SetInitializedFriendListAction());
+
     }
 
     private static IEnumerable<FriendModel> CreateFriendModels(List<string> friendNameList, List<Server> serverList)
@@ -158,7 +175,9 @@ public class FriendListReducers
     [ReducerMethod]
     public FriendListState OnSetFriendList(FriendListState oldState, SetFriendListAction action)
     {
-        return new FriendListState(action.OnlineFriendList, action.OfflineFriendList);
+        oldState.OnlineFriendList = action.OnlineFriendList;
+        oldState.OfflineFriendList = action.OfflineFriendList;
+        return oldState;
     }
 
     [ReducerMethod]
@@ -188,5 +207,23 @@ public class FriendListReducers
         }
 
         return oldState;
+    }
+
+    [ReducerMethod]
+    public static FriendListState OnSetLoading(FriendListState oldState, SetLoadingFriendListAction action)
+    {
+        return oldState with
+        {
+            IsLoading = action.IsLoading
+        };
+    }
+
+    [ReducerMethod(typeof(SetInitializedFriendListAction))]
+    public static FriendListState OnSetInitialized(FriendListState state)
+    {
+        return state with
+        {
+            IsInitialized = true
+        };
     }
 }

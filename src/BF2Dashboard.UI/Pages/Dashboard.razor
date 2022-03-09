@@ -17,31 +17,36 @@
 </div>
 
 <div class="row pt-5 mt-2">
-    @if (_fullServerListState.Value.ServerList != null && _friendListState.Value.OnlineFriendList?.Any() == true)
+    @if (_fullServerListState.Value.ServerList != null && _friendListState.Value.IsLoading == false && _friendListState.Value.IsInitialized)
     {
         <h3>Online Friends:</h3>
-        <div class="row p-2 ms-4">
-            <ul style="list-style-type: none;">
-                @foreach (var friend in _friendListState.Value.OnlineFriendList)
-                {
-                    <li>
-                        <i class="bi bi-circle-fill" style="color: green; font-size: 11pt;"></i>
-                        @friend.DisplayName
-                        <span style="font-size: 10pt; color: #767676">
-                            @friend.ServerInfo.MapName @@ @friend.ServerInfo.ServerName
-                        </span>
-                    </li>
-                }
-            </ul>
-        </div>
-    }
-    else if (_fullServerListState.Value.ServerList != null && _friendListState.Value.OnlineFriendList?.Count == 0 && _friendListState.Value.OfflineFriendList?.Count == 0)
-    {
-        <h3>Online Friends:</h3>
-        <span style="font-size: 10pt; color: #767676">
-            <span>No friends yet.</span>
-            <p>Mark your BF2 friends in the server scoreboard, to see where they are playing!</p>
-        </span>
+        if (_friendListState.Value.IsEmpty)
+        {
+            <span style="font-size: 10pt; color: #767676">
+                <span>No friends yet.</span>
+                <p>Mark your BF2 friends in the server scoreboard, to see where they are playing!</p>
+            </span>
+        }
+        else
+        {
+            <div class="row p-2 ms-4">
+                <ul style="list-style-type: none;">
+                    @if (_friendListState.Value.OnlineFriendList != null)
+                    {
+                        @foreach (var friend in _friendListState.Value.OnlineFriendList)
+                        {
+                            <li>
+                                <i class="bi bi-circle-fill" style="color: green; font-size: 11pt;"></i>
+                                @friend.DisplayName
+                                <span style="font-size: 10pt; color: #767676">
+                                    @friend.ServerInfo.MapName @@ @friend.ServerInfo.ServerName
+                                </span>
+                            </li>
+                        }
+                    }
+                </ul>
+            </div>
+        }
     }
 </div>
 
@@ -369,7 +374,6 @@ else
 
 @code {
     private bool _isServerDataLoaded = false;
-    private bool _isFriendListLoaded = false;
 
     protected override void OnInitialized()
     {
@@ -377,12 +381,6 @@ else
         {
             _dispatcher.Dispatch(new InitializeServerListsAction());
             _isServerDataLoaded = true;
-        }
-
-        if (_isServerDataLoaded && !_isFriendListLoaded)
-        {
-            _dispatcher.Dispatch(new InitializeFriendListAction());
-            _isFriendListLoaded = true;
         }
 
         base.OnInitialized();
