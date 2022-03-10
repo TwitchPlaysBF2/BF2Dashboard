@@ -25,6 +25,7 @@ else
                         @friend.ServerInfo.MapName @@ @friend.ServerInfo.ServerName 
                         (@friend.ServerInfo.CurrentPlayerCountWithoutBots/@friend.ServerInfo.MaxPlayerCount)
                     </span>
+                    <i class="btn btn-sm btn-outline-warning bi bi-person-dash grow" @onclick="() => RemoveFriend(friend)" title="Remove friend"></i>
                 </li>
             }
         </ul>
@@ -40,6 +41,7 @@ else
                 <li style="opacity: .5">
                     <i class="bi bi-circle-fill" style="color: #767676; font-size: 11pt;"></i>
                     @friend.DisplayName
+                    <i class="btn btn-sm btn-outline-warning bi bi-person-dash grow" @onclick="() => RemoveFriend(friend)" title="Remove friend"></i>
                 </li>
             }
         </ul>
@@ -59,6 +61,14 @@ else
         }
 
         base.OnInitialized();
+    }
+
+    private void RemoveFriend(FriendModel friend)
+    {
+        if (friend.Player != null)
+            friend.Player.IsFriend = false;
+
+        _dispatcher.Dispatch(new RemoveFriendAction(friend.DisplayName));
     }
 
 }
