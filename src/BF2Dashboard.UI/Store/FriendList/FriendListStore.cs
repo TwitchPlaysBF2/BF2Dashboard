@@ -185,10 +185,17 @@ public class FriendListReducers
     {
         var friend = FriendModel.CreateOnlineFriend(action.Player, action.Server);
 
-        oldState.OnlineFriendList ??= new List<FriendModel>();
-        oldState.OnlineFriendList.Add(friend);
+        var state = new FriendListState
+        {
+            OnlineFriendList = oldState.OnlineFriendList ?? new List<FriendModel>(),
+            OfflineFriendList = oldState.OfflineFriendList ?? new List<FriendModel>(),
+            IsInitialized = true,
+            IsLoading = false,
+        };
 
-        return oldState;
+        state.OnlineFriendList.Add(friend);
+
+        return state;
     }
 
     [ReducerMethod]
