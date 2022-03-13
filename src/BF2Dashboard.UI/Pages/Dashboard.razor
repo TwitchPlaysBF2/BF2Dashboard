@@ -76,38 +76,7 @@
                                     <div class="col" style="min-width: 73px;">
                                         <span class="badge bg-primary rounded-pill me-3" title="Number of players (not counting bots)">@server.NumPlayersWithoutBots / @server.MaxPlayers</span>
                                     </div>
-                                    <div id="serverIcons" class="row align-middle">
-                                        <div class="col-1">
-                                            @if (server.Ranked == true)
-                                            {
-                                                <img style="width: 16px;" src="img/ranked.png" alt="Ranked" title="Ranked"/>
-                                            }
-                                            else
-                                            {
-                                                <img style="width: 16px;" src="img/unranked.png" alt="Unranked" title="Unranked"/>
-                                            }
-                                        </div>
-                                        <div class="col-1">
-                                            @if (server.Battlerecorder == true)
-                                            {
-                                                <i class="bi bi-camera-video" style="font-size: 14px;" title="Battlerecorder is enabled"></i>
-                                            }
-                                            else
-                                            {
-                                                <i class="bi bi-camera-video-off opacity-25" style="font-size: 14px;" title="Battlerecorder not enabled"></i>
-                                            }
-                                        </div>
-                                        <div class="col-1">
-                                            @if (server.Password == true)
-                                            {
-                                                <i class="bi bi-lock-fill" style="font-size: 14px;" title="Requires password"></i>
-                                            }
-                                            else
-                                            {
-                                                <i class="bi bi-unlock" style="opacity: .1; font-size: 14px;" title="Has no password"></i>
-                                            }
-                                        </div>
-                                    </div>
+                                    <ServerIcons Server="@server"/>
                                     <div id="serverText" class="container">
                                         <div class="row dynamic-server-name-width-xs dynamic-server-name-width-sm dynamic-server-name-width-md dynamic-server-name-width-lg"
                                              style="display: inline-block; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">
@@ -161,38 +130,7 @@
                                         <div class="col" style="min-width: 73px;">
                                             <span class="badge bg-primary rounded-pill me-3" title="Number of players (not counting bots)">@server.NumPlayersWithoutBots / @server.MaxPlayers</span>
                                         </div>
-                                        <div id="serverIcons" class="row align-middle">
-                                            <div class="col-1">
-                                                @if (server.Ranked == true)
-                                                {
-                                                    <img style="width: 16px;" src="img/ranked.png" alt="Ranked" title="Ranked"/>
-                                                }
-                                                else
-                                                {
-                                                    <img style="width: 16px;" src="img/unranked.png" alt="Unranked" title="Unranked"/>
-                                                }
-                                            </div>
-                                            <div class="col-1">
-                                                @if (server.Battlerecorder == true)
-                                                {
-                                                    <i class="bi bi-camera-video" style="font-size: 14px;" title="Battlerecorder is enabled"></i>
-                                                }
-                                                else
-                                                {
-                                                    <i class="bi bi-camera-video-off opacity-25" style="font-size: 14px;" title="Battlerecorder not enabled"></i>
-                                                }
-                                            </div>
-                                            <div class="col-1">
-                                                @if (server.Password == true)
-                                                {
-                                                    <i class="bi bi-lock-fill" style="font-size: 14px;" title="Requires password"></i>
-                                                }
-                                                else
-                                                {
-                                                    <i class="bi bi-unlock" style="opacity: .1; font-size: 14px;" title="Has no password"></i>
-                                                }
-                                            </div>
-                                        </div>
+                                        <ServerIcons Server="@server"/>
                                         <div id="serverText" class="container">
                                             <div class="row dynamic-server-name-width-xs dynamic-server-name-width-sm dynamic-server-name-width-md dynamic-server-name-width-lg"
                                                  style="display: inline-block; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">

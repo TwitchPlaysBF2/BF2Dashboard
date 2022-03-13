@@ -1,0 +1,41 @@
+﻿@using BF2Dashboard.Domain.BattlefieldApi
+
+<div id="serverIcons" class="row align-middle">
+    <div class="col-1">
+        @if (Server.Ranked == true)
+        {
+            <img style="width: 16px;" src="img/ranked.png" alt="Ranked" title="Ranked"/>
+        }
+        else
+        {
+            <img style="width: 16px;" src="img/unranked.png" alt="Unranked" title="Unranked"/>
+        }
+    </div>
+    <div class="col-1">
+        @if (Server.Battlerecorder == true)
+        {
+            <i class="bi bi-camera-video" style="font-size: 14px;" title="Battlerecorder is enabled"></i>
+        }
+        else
+        {
+            <i class="bi bi-camera-video-off opacity-25" style="font-size: 14px;" title="Battlerecorder not enabled"></i>
+        }
+    </div>
+    <div class="col-1">
+        @if (Server.Password == true)
+        {
+            <i class="bi bi-lock-fill" style="font-size: 14px;" title="Requires password"></i>
+        }
+        else
+        {
+            <i class="bi bi-unlock" style="opacity: .1; font-size: 14px;" title="Has no password"></i>
+        }
+    </div>
+</div>
+
+@code {
+
+    [Parameter]
+    public Server Server { get; set; }
+
+}
