@@ -7,7 +7,7 @@ namespace BF2Dashboard.UI.Store.FriendList;
 public record FriendListState
 {
     public bool IsEmpty => OnlineFriendList?.Count == 0 && OfflineFriendList?.Count == 0;
-    
+
     public bool IsInitialized { get; init; }
 
     public bool IsLoading { get; init; }
@@ -33,12 +33,10 @@ public class FriendListFeature : Feature<FriendListState>
 public class AddFriendAction
 {
     public Player Player { get; }
-    public Server Server { get; }
 
-    public AddFriendAction(Player player, Server server)
+    public AddFriendAction(Player player)
     {
         Player = player;
-        Server = server;
     }
 }
 
@@ -83,22 +81,23 @@ public class ResolveFriendListAction
 {
     public List<string> FriendNameList { get; }
 
-    public List<Server> ServerList { get; }
-
-    public ResolveFriendListAction(List<string> friendNameList, List<Server> serverList)
+    public ResolveFriendListAction(List<string> friendNameList)
     {
         FriendNameList = friendNameList;
-        ServerList = serverList;
     }
 }
 
 public class FriendListEffects
 {
     private readonly ILocalStorageService _localStorageService;
+    private readonly IState<FullServerListState> _serverListState;
+    private readonly IState<FriendListState> _friendListState;
 
-    public FriendListEffects(ILocalStorageService localStorageService)
+    public FriendListEffects(ILocalStorageService localStorageService, IState<FullServerListState> serverListState, IState<FriendListState> friendListState)
     {
         _localStorageService = localStorageService;
+        _serverListState = serverListState;
+        _friendListState = friendListState;
     }
 
     [EffectMethod]
@@ -109,6 +108,25 @@ public class FriendListEffects
 
         friendNameList.Add(action.Player.FullName);
         await _localStorageService.SetItemAsync(Commons.FriendListKey, friendNameList);
+    }
+
+    [EffectMethod]
+    public async Task AddFriend(AddFriendAction action, IDispatcher dispatcher)
+    {
+        var newFriend = CreateFriendModels(
+                new List<string> {action.Player.FullName},
+                _serverListState.Value.ServerList ?? new List<Server>())
+            .ToList();
+     
+        var onlineFriendList = _friendListState.Value.OnlineFriendList ?? new List<FriendModel>();
+        var offlineFriendList = _friendListState.Value.OfflineFriendList ?? new List<FriendModel>();
+        
+        onlineFriendList.AddRange(newFriend.Where(f => f.IsOnline));
+        offlineFriendList.AddRange(newFriend.Where(f => !f.IsOnline));
+
+        dispatcher.Dispatch(new SetFriendListAction(onlineFriendList, offlineFriendList));
+        dispatcher.Dispatch(new SetLoadingFriendListAction(false));
+        dispatcher.Dispatch(new SetInitializedFriendListAction());
     }
 
     [EffectMethod]
@@ -126,25 +144,30 @@ public class FriendListEffects
         var friends = await _localStorageService.GetItemAsync<List<string>>(Commons.FriendListKey)
                       ?? new List<string>();
 
-        dispatcher.Dispatch(new ResolveFriendListAction(friends, action.ServerList ?? new List<Server>()));
+        dispatcher.Dispatch(new ResolveFriendListAction(friends));
     }
 
     [EffectMethod]
     public async Task OnResolveFriendList(ResolveFriendListAction action, IDispatcher dispatcher)
     {
-        var friendModels = CreateFriendModels(action.FriendNameList, action.ServerList).ToList();
+        var friendModels = CreateFriendModels(
+                action.FriendNameList,
+                _serverListState.Value.ServerList ?? new List<Server>())
+            .ToList();
+
         var onlineFriendList = friendModels.Where(m => m.IsOnline)
             .OrderBy(m => m.ServerInfo?.MapName)
             .ThenBy(m => m.ServerInfo?.ServerName)
             .ThenBy(m => m.DisplayName)
             .ToList();
 
-        var offlineFriendList = friendModels.Where(m => !m.IsOnline).OrderBy(m => m.DisplayName).ToList();
+        var offlineFriendList = friendModels.Where(m => !m.IsOnline)
+            .OrderBy(m => m.DisplayName)
+            .ToList();
 
         dispatcher.Dispatch(new SetFriendListAction(onlineFriendList, offlineFriendList));
         dispatcher.Dispatch(new SetLoadingFriendListAction(false));
         dispatcher.Dispatch(new SetInitializedFriendListAction());
-
     }
 
     private static IEnumerable<FriendModel> CreateFriendModels(List<string> friendNameList, List<Server> serverList)
@@ -154,7 +177,7 @@ public class FriendListEffects
             var wasPlayerFoundOnline = false;
             foreach (var server in serverList)
             {
-                var player = server.Players.FirstOrDefault(p => p.FullName == friendName);
+                var player = server.Players?.FirstOrDefault(p => p.FullName == friendName);
                 if (player != null)
                 {
                     wasPlayerFoundOnline = true;
@@ -181,39 +204,23 @@ public class FriendListReducers
     }
 
     [ReducerMethod]
-    public FriendListState OnAddFriend(FriendListState oldState, AddFriendAction action)
-    {
-        var friend = FriendModel.CreateOnlineFriend(action.Player, action.Server);
-
-        var state = new FriendListState
-        {
-            OnlineFriendList = oldState.OnlineFriendList ?? new List<FriendModel>(),
-            OfflineFriendList = oldState.OfflineFriendList ?? new List<FriendModel>(),
-            IsInitialized = true,
-            IsLoading = false,
-        };
-
-        state.OnlineFriendList.Add(friend);
-
-        return state;
-    }
-
-    [ReducerMethod]
     public FriendListState OnRemoveFriend(FriendListState oldState, RemoveFriendAction action)
     {
+        var state = oldState;
+        
         var onlineFriendToDelete = oldState.OnlineFriendList?.FirstOrDefault(f => f.DisplayName == action.Name);
         if (onlineFriendToDelete != null)
         {
-            oldState.OnlineFriendList?.Remove(onlineFriendToDelete);
+            state.OnlineFriendList?.Remove(onlineFriendToDelete);
         }
 
         var offlineFriendToDelete = oldState.OfflineFriendList?.FirstOrDefault(f => f.DisplayName == action.Name);
         if (offlineFriendToDelete != null)
         {
-            oldState.OfflineFriendList?.Remove(offlineFriendToDelete);
+            state.OfflineFriendList?.Remove(offlineFriendToDelete);
         }
 
-        return oldState;
+        return state;
     }
 
     [ReducerMethod]

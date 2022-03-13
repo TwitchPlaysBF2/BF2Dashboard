@@ -89,7 +89,7 @@
                                     @if (server.NumPlayersWithoutBots > 0)
                                     {
                                         <div class="row">
-                                            <Scoreboard Server="@server"/>
+                                            <Scoreboard TeamName1="@server.Team1" TeamName2="@server.Team2" Players="@server.Players?.ToArray()"/>
                                         </div>
                                     }
                                 </div>
@@ -131,7 +131,7 @@
                                         @if (server.NumPlayersWithoutBots > 0)
                                         {
                                             <div class="row">
-                                                <Scoreboard Server="@server"/>
+                                                <Scoreboard TeamName1="@server.Team1" TeamName2="@server.Team2" Players="@server.Players?.ToArray()"/>
                                             </div>
                                         }
                                     </div>

@@ -1,15 +1,21 @@
 ﻿@using BF2Dashboard.Domain.BattlefieldApi
 
 <div class="col ps-5">
-    <TeamList Server="@Server"/>
+    <TeamList TeamName="@TeamName1" Players="@Players"/>
 </div>
 <div class="col ps-5">
-    <TeamList Server="@Server"/>
+    <TeamList TeamName="@TeamName2" Players="@Players"/>
 </div>
 
 @code {
 
     [Parameter]
-    public Server Server { get; set; }
+    public string TeamName1 { get; set; }
+
+    [Parameter]
+    public string TeamName2 { get; set; }
+    
+    [Parameter]
+    public Player[] Players { get; set; }
 
 }

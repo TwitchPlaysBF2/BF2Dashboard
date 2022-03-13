@@ -5,15 +5,15 @@
 <table id="scoreboard" class="table table-sm table-hover table-borderless">
     <thead>
     <tr>
-        <th scope="col" class="align-middle text-truncate">@Server.Team2 Player</th>
+        <th scope="col" class="align-middle text-truncate">@TeamName Player</th>
         <th style="width: 5%;" scope="col" class="align-middle text-center">Score</th>
         <th style="width: 0;"></th>
     </tr>
     </thead>
     <tbody>
-    @foreach (var player in Server.Players
+    @foreach (var player in Players
         .Where(p => p.IsHuman)
-        .Where(p => p.TeamLabel == Server.Team2)
+        .Where(p => p.TeamLabel == TeamName)
         .OrderByDescending(p => p.Score)
         .ToList())
     {
@@ -28,7 +28,7 @@
                 @player.Score
             </td>
             <td class="text-center">
-                <i class="@GetClassForFriendButton(player.IsFriend)" @onclick="() => AddOrRemoveFriend(player, Server)" title="@GetTitleForFriendButton(player.IsFriend)"></i>
+                <i class="@GetClassForFriendButton(player.IsFriend)" @onclick="() => AddOrRemoveFriend(player)" title="@GetTitleForFriendButton(player.IsFriend)"></i>
             </td>
         </tr>
     }
@@ -38,9 +38,12 @@
 @code {
 
     [Parameter]
-    public Server Server { get; set; }
+    public string TeamName { get; set; }
 
-    private void AddOrRemoveFriend(Player player, Server server)
+    [Parameter]
+    public Player[] Players { get; set; }
+
+    private void AddOrRemoveFriend(Player player)
     {
         if (player.IsFriend)
         {
@@ -50,7 +53,7 @@
         else
         {
             player.IsFriend = true;
-            _dispatcher.Dispatch(new AddFriendAction(player, server));
+            _dispatcher.Dispatch(new AddFriendAction(player));
         }
     }
 

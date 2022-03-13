@@ -16,7 +16,7 @@ public class FriendModel
 
     public static FriendModel CreateOnlineFriend(Player player, Server server)
     {
-        return new FriendModel()
+        return new FriendModel
         {
             IsOnline = true,
             DisplayName = player.FullName,
@@ -34,9 +34,5 @@ public class FriendModel
             Player = null,
             ServerInfo = null,
         };
-    }
-
-    private FriendModel()
-    {
     }
 }
