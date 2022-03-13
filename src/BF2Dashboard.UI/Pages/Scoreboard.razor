@@ -1,106 +1,15 @@
 ﻿@using BF2Dashboard.Domain.BattlefieldApi
-@using BF2Dashboard.UI.Store.FriendList
-
-@inject IDispatcher _dispatcher
-
-<h3>Scoreboard</h3>
 
 <div class="col ps-5">
-    <!-- Scoreboard -->
-    <table id="scoreboard" class="table table-sm table-hover table-borderless">
-        <thead>
-        <tr>
-            <th scope="col" class="align-middle text-truncate">@Server.Team1 Player</th>
-            <th style="width: 5%;" scope="col" class="align-middle text-center">Score</th>
-            <th style="width: 0;"></th>
-        </tr>
-        </thead>
-        <tbody>
-        @foreach (var player in Server.Players
-            .Where(p => p.IsHuman)
-            .Where(p => p.TeamLabel == Server.Team1)
-            .OrderByDescending(p => p.Score)
-            .ToList())
-        {
-            <tr>
-                <td>
-                    <a title="Open BF2Hub profile" class="link-light text-nowrap text-decoration-none" target="_blank"
-                       href="https://www.bf2hub.com/player/@player.Name">
-                        <span>@player.FullName</span>
-                    </a>
-                </td>
-                <td class="text-center">
-                    @player.Score
-                </td>
-                <td class="text-center">
-                    <i class="@GetClassForFriendButton(player.IsFriend)" @onclick="() => AddOrRemoveFriend(player, Server)" title="@GetTitleForFriendButton(player.IsFriend)"></i>
-                </td>
-            </tr>
-        }
-        </tbody>
-    </table>
+    <TeamList Server="@Server"/>
 </div>
 <div class="col ps-5">
-    <!-- Scoreboard -->
-    <table id="scoreboard" class="table table-sm table-hover table-borderless">
-        <thead>
-        <tr>
-            <th scope="col" class="align-middle text-truncate">@Server.Team2 Player</th>
-            <th style="width: 5%;" scope="col" class="align-middle text-center">Score</th>
-            <th style="width: 0;"></th>
-        </tr>
-        </thead>
-        <tbody>
-        @foreach (var player in Server.Players
-            .Where(p => p.IsHuman)
-            .Where(p => p.TeamLabel == Server.Team2)
-            .OrderByDescending(p => p.Score)
-            .ToList())
-        {
-            <tr>
-                <td>
-                    <a title="Open BF2Hub profile" class="link-light text-nowrap text-decoration-none" target="_blank"
-                       href="https://www.bf2hub.com/player/@player.Name">
-                        <span>@player.FullName</span>
-                    </a>
-                </td>
-                <td class="text-center">
-                    @player.Score
-                </td>
-                <td class="text-center">
-                    <i class="@GetClassForFriendButton(player.IsFriend)" @onclick="() => AddOrRemoveFriend(player, Server)" title="@GetTitleForFriendButton(player.IsFriend)"></i>
-                </td>
-            </tr>
-        }
-        </tbody>
-    </table>
+    <TeamList Server="@Server"/>
 </div>
 
 @code {
 
     [Parameter]
     public Server Server { get; set; }
-
-    private void AddOrRemoveFriend(Player player, Server server)
-    {
-        if (player.IsFriend)
-        {
-            player.IsFriend = false;
-            _dispatcher.Dispatch(new RemoveFriendAction(player.FullName));
-        }
-        else
-        {
-            player.IsFriend = true;
-            _dispatcher.Dispatch(new AddFriendAction(player, server));
-        }
-    }
-
-    private static string GetTitleForFriendButton(bool isFriend) => isFriend ?
-        "Remove friend" :
-        "Mark as friend";
-
-    private static string GetClassForFriendButton(bool isFriend) => isFriend ?
-        "btn btn-sm btn-outline-warning bi bi-person-dash grow" :
-        "btn btn-sm btn-outline-success bi bi-person-plus grow";
 
 }
