@@ -71,7 +71,7 @@ public class Server
     public bool? Anticheat { get; set; }
 
     [JsonPropertyName("battlerecorder")]
-    public bool? Battlerecorder { get; set; }
+    public bool? BattleRecorder { get; set; }
 
     [JsonPropertyName("demoIndex")]
     public string DemoIndex { get; set; }

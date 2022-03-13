@@ -73,21 +73,9 @@
                                 </i>
                                 <button class="accordion-button collapsed btn @CalculateServerOpacityClass(server)" style="min-width: 500px;"
                                         type="button" data-bs-toggle="collapse" aria-expanded="false" data-bs-target="#collapsed_@server.Guid">
-                                    <div class="col" style="min-width: 73px;">
-                                        <span class="badge bg-primary rounded-pill me-3" title="Number of players (not counting bots)">@server.NumPlayersWithoutBots / @server.MaxPlayers</span>
-                                    </div>
-                                    <ServerIcons Server="@server"/>
-                                    <div id="serverText" class="container">
-                                        <div class="row dynamic-server-name-width-xs dynamic-server-name-width-sm dynamic-server-name-width-md dynamic-server-name-width-lg"
-                                             style="display: inline-block; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">
-                                            @server.Name
-                                        </div>
-                                        <div class="row">
-                                            <small>
-                                                @server.MapName
-                                            </small>
-                                        </div>
-                                    </div>
+                                    <PlayerCounter CurrentPlayers="@server.NumPlayersWithoutBots" MaxPlayers="@server.MaxPlayers"/>
+                                    <ServerIcons IsRanked="@server.Ranked" HasBattleRecorder="@server.BattleRecorder" HasPassword="@server.Password"/>
+                                    <ServerListItemBody ServerName="@server.Name" MapName="@server.MapName"/>
                                 </button>
                             </div>
 
@@ -127,21 +115,9 @@
                                     <i class="bi bi-trash grow p-3" style="font-size: 15pt" @onclick="() => ToggleFavorite(server)" title="Remove from favorites">
                                     </i>
                                     <button class="accordion-button collapsed btn @CalculateServerOpacityClass(server)" type="button" data-bs-toggle="collapse" aria-expanded="false" data-bs-target="#collapsed_favorite_@server.Guid">
-                                        <div class="col" style="min-width: 73px;">
-                                            <span class="badge bg-primary rounded-pill me-3" title="Number of players (not counting bots)">@server.NumPlayersWithoutBots / @server.MaxPlayers</span>
-                                        </div>
-                                        <ServerIcons Server="@server"/>
-                                        <div id="serverText" class="container">
-                                            <div class="row dynamic-server-name-width-xs dynamic-server-name-width-sm dynamic-server-name-width-md dynamic-server-name-width-lg"
-                                                 style="display: inline-block; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">
-                                                @server.Name
-                                            </div>
-                                            <div class="row">
-                                                <small>
-                                                    @server.MapName
-                                                </small>
-                                            </div>
-                                        </div>
+                                        <PlayerCounter CurrentPlayers="@server.NumPlayersWithoutBots" MaxPlayers="@server.MaxPlayers"/>
+                                        <ServerIcons IsRanked="@server.Ranked" HasBattleRecorder="@server.BattleRecorder" HasPassword="@server.Password"/>
+                                        <ServerListItemBody ServerName="@server.Name" MapName="@server.MapName"/>
                                     </button>
                                 </div>
 

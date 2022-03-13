@@ -1,0 +1,13 @@
+﻿<div class="col" style="min-width: 73px;">
+    <span class="badge bg-primary rounded-pill me-3" title="Number of players (not counting bots)">@(CurrentPlayers ?? -1) / @(MaxPlayers ?? -1)</span>
+</div>
+
+@code {
+
+    [Parameter]
+    public int? CurrentPlayers { get; set; }
+
+    [Parameter]
+    public int? MaxPlayers { get; set; }
+
+}

@@ -1,0 +1,21 @@
+﻿<div id="serverText" class="container">
+    <div class="row dynamic-server-name-width-xs dynamic-server-name-width-sm dynamic-server-name-width-md dynamic-server-name-width-lg"
+         style="display: inline-block; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">
+        @ServerName
+    </div>
+    <div class="row">
+        <small>
+            @MapName
+        </small>
+    </div>
+</div>
+
+@code {
+
+    [Parameter]
+    public string ServerName { get; set; }
+
+    [Parameter]
+    public string MapName { get; set; }
+
+}
