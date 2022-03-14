@@ -29,22 +29,22 @@ public class Server
     public string Ip { get; set; }
 
     [JsonPropertyName("port")]
-    public int? Port { get; set; }
+    public float? Port { get; set; }
 
     [JsonPropertyName("name")]
     public string Name { get; set; }
 
     [JsonPropertyName("numPlayers")]
-    private int? NumPlayers { get; set; }
+    private float? NumPlayers { get; set; }
 
     [JsonPropertyName("maxPlayers")]
-    public int? MaxPlayers { get; set; }
+    public float? MaxPlayers { get; set; }
 
     [JsonPropertyName("mapName")]
     public string MapName { get; set; }
 
     [JsonPropertyName("mapSize")]
-    public int? MapSize { get; set; }
+    public float? MapSize { get; set; }
 
     [JsonPropertyName("password")]
     public bool? Password { get; set; }
@@ -59,10 +59,10 @@ public class Server
     public string GameVariant { get; set; }
 
     [JsonPropertyName("timelimit")]
-    public int? Timelimit { get; set; }
+    public float? Timelimit { get; set; }
 
     [JsonPropertyName("roundsPerMap")]
-    public int? RoundsPerMap { get; set; }
+    public float? RoundsPerMap { get; set; }
 
     [JsonPropertyName("ranked")]
     public bool? Ranked { get; set; }
@@ -92,10 +92,10 @@ public class Server
     public string Tkmode { get; set; }
 
     [JsonPropertyName("startdelay")]
-    public int? Startdelay { get; set; }
+    public float? Startdelay { get; set; }
 
     [JsonPropertyName("spawntime")]
-    public int? Spawntime { get; set; }
+    public float? Spawntime { get; set; }
 
     [JsonPropertyName("sponsorText")]
     public string SponsorText { get; set; }
@@ -107,13 +107,13 @@ public class Server
     public string CommunityLogoUrl { get; set; }
 
     [JsonPropertyName("scorelimit")]
-    public int? Scorelimit { get; set; }
+    public float? Scorelimit { get; set; }
 
     [JsonPropertyName("ticketratio")]
-    public int? Ticketratio { get; set; }
+    public float? Ticketratio { get; set; }
 
     [JsonPropertyName("teamratio")]
-    public int? Teamratio { get; set; }
+    public float? Teamratio { get; set; }
 
     [JsonPropertyName("team1")]
     public string Team1 { get; set; }
@@ -128,7 +128,7 @@ public class Server
     public bool? GlobalUnlocks { get; set; }
 
     [JsonPropertyName("reservedSlots")]
-    public int? ReservedSlots { get; set; }
+    public float? ReservedSlots { get; set; }
 
     [JsonPropertyName("dedicated")]
     public bool? Dedicated { get; set; }
@@ -140,19 +140,19 @@ public class Server
     public bool? Bots { get; set; }
 
     [JsonPropertyName("fps")]
-    public int? Fps { get; set; }
+    public float? Fps { get; set; }
 
     [JsonPropertyName("plasma")]
     public bool? Plasma { get; set; }
 
     [JsonPropertyName("coopBotRatio")]
-    public int? CoopBotRatio { get; set; }
+    public float? CoopBotRatio { get; set; }
 
     [JsonPropertyName("coopBotCount")]
-    public int? CoopBotCount { get; set; }
+    public float? CoopBotCount { get; set; }
 
     [JsonPropertyName("coopBotDiff")]
-    public int? CoopBotDiff { get; set; }
+    public float? CoopBotDiff { get; set; }
 
     [JsonPropertyName("noVehicles")]
     public bool? NoVehicles { get; set; }
