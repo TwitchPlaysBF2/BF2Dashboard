@@ -12,6 +12,8 @@ public class ServerInfoModel
 
     public int MaxPlayerCount { get; private init; }
 
+    public string JoinLink { get; private init; }
+
     public static ServerInfoModel FromServer(Server server)
     {
         return new ServerInfoModel
@@ -20,6 +22,7 @@ public class ServerInfoModel
             MapName = server.MapName,
             CurrentPlayerCountWithoutBots = server.NumPlayersWithoutBots,
             MaxPlayerCount = (int?)server.MaxPlayers ?? 0,
+            JoinLink = server.JoinLink,
         };
     }
 }
