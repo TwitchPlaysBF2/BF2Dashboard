@@ -24,6 +24,10 @@ else
                     <span style="font-size: 10pt; color: #767676">
                         @friend.ServerInfo.MapName @@ @friend.ServerInfo.ServerName 
                         (@friend.ServerInfo.CurrentPlayerCountWithoutBots/@friend.ServerInfo.MaxPlayerCount)
+                        @if (friend.ServerInfo.JoinLink != null)
+                        {
+                            <a role="button" title="Join server (requires joinme.click launcher)" href="@friend.ServerInfo.JoinLink" class="btn btn-dark btn-sm mx-2">Join</a>
+                        }
                     </span>
                     <i class="btn btn-sm btn-outline-warning bi bi-person-dash grow" @onclick="() => RemoveFriend(friend)" title="Remove friend"></i>
                 </li>
