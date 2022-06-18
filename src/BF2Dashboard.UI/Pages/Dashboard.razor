@@ -289,9 +289,10 @@ else
                                     <div class="row d-flex justify-content-center text-center">
                                         <span class="mb-4">
                                             <small><strong>Server IP</strong>: @server.Ip:@server.Port</small>
-                                            <a title="Join server" target="_blank" href="https://joinme.click/g/bf2/@server.Ip:@server.Port">
-                                                Join
-                                            </a>
+                                            @if (server.JoinLink != null)
+                                            {
+                                                <a role="button" title="Join server (requires www.joinme.click/download)" href="@server.JoinLink" class="btn btn-dark btn-sm mx-2">Join</a>
+                                            }
                                         </span>
                                     </div>
                                     @if (server.NumPlayersWithoutBots > 0)
