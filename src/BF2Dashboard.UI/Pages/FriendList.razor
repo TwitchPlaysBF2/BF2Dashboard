@@ -26,7 +26,7 @@ else
                         (@friend.ServerInfo.CurrentPlayerCountWithoutBots/@friend.ServerInfo.MaxPlayerCount)
                         @if (friend.ServerInfo.JoinLink != null)
                         {
-                            <a role="button" title="Join server (requires joinme.click launcher)" href="@friend.ServerInfo.JoinLink" class="btn btn-dark btn-sm mx-2">Join</a>
+                            <a role="button" title="Join server (requires www.joinme.click/download)" href="@friend.ServerInfo.JoinLink" class="btn btn-dark btn-sm mx-2">Join</a>
                         }
                     </span>
                     <i class="btn btn-sm btn-outline-warning bi bi-person-dash grow" @onclick="() => RemoveFriend(friend)" title="Remove friend"></i>

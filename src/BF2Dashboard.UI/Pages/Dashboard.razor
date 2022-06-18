@@ -43,7 +43,7 @@
                                     (@friend.ServerInfo.CurrentPlayerCountWithoutBots/@friend.ServerInfo.MaxPlayerCount)
                                     @if (friend.ServerInfo.JoinLink != null)
                                     {
-                                        <a role="button" title="Join server (requires joinme.click launcher)" href="@friend.ServerInfo.JoinLink" class="btn btn-dark btn-sm mx-2">Join</a>
+                                        <a role="button" title="Join server (requires www.joinme.click/download)" href="@friend.ServerInfo.JoinLink" class="btn btn-dark btn-sm mx-2">Join</a>
                                     }
                                 </span>
                             </li>
@@ -133,7 +133,7 @@ else
                                         <small><strong>Server IP</strong>: @server.Ip:@server.Port</small>
                                         @if (server.JoinLink != null)
                                         {
-                                            <a role="button" title="Join server (requires joinme.click launcher)" href="@server.JoinLink" class="btn btn-dark btn-sm mx-2">Join</a>
+                                            <a role="button" title="Join server (requires www.joinme.click/download)" href="@server.JoinLink" class="btn btn-dark btn-sm mx-2">Join</a>
                                         }
                                     </span>
                                 </div>
