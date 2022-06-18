@@ -157,6 +157,12 @@ public class Server
     [JsonPropertyName("noVehicles")]
     public bool? NoVehicles { get; set; }
 
+    [JsonPropertyName("joinLink")]
+    public string? JoinLink { get; set; }
+
+    [JsonPropertyName("joinLinkWeb")]
+    public string? JoinLinkWeb { get; set; }
+
     [JsonPropertyName("teams")]
     public List<Team>? Teams { get; set; }
 
