@@ -39,7 +39,7 @@
                                 <i class="bi bi-circle-fill" style="color: green; font-size: 11pt;"></i>
                                 @friend.DisplayName
                                 <span style="font-size: 10pt; color: #767676">
-                                    @friend.ServerInfo.MapName @@ <span style="color: slategrey">@friend.ServerInfo.ServerName</span>
+                                    @friend.ServerInfo.MapName @@ <a href="servers/@friend.ServerInfo.IpAndPort" style="color: slategrey">@friend.ServerInfo.ServerName</a>
                                     (@friend.ServerInfo.CurrentPlayerCountWithoutBots/@friend.ServerInfo.MaxPlayerCount)
                                     @if (friend.ServerInfo.JoinLink != null)
                                     {
@@ -129,8 +129,11 @@ else
                         <div id="collapsed_@server.Guid" class="accordion-collapse collapse">
                             <div class="accordion-body ps-5 pe-3 pb-5">
                                 <div class="row d-flex justify-content-center text-center">
+                                    <span>
+                                        <a role="button" href="servers/@server.IpAndPort" class="btn btn-dark btn-sm mx-2">Server Details</a>
+                                    </span>
                                     <span class="mb-4">
-                                        <small><strong>Server IP</strong>: @server.Ip:@server.Port</small>
+                                        <small><strong>Server IP</strong>: @server.IpAndPort</small>
                                         @if (server.JoinLink != null)
                                         {
                                             <a role="button" title="Join server (requires www.joinme.click/download)" href="@server.JoinLink" class="btn btn-dark btn-sm mx-2">Join</a>
@@ -287,8 +290,11 @@ else
                             <div id="collapsed_favorite_@server.Guid" class="accordion-collapse collapse">
                                 <div class="accordion-body ps-5 pe-3 pb-5">
                                     <div class="row d-flex justify-content-center text-center">
+                                        <span>
+                                            <a role="button" href="servers/@server.IpAndPort" class="btn btn-dark btn-sm mx-2">Server Details</a>
+                                        </span>
                                         <span class="mb-4">
-                                            <small><strong>Server IP</strong>: @server.Ip:@server.Port</small>
+                                            <small><strong>Server IP</strong>: @server.IpAndPort</small>
                                             @if (server.JoinLink != null)
                                             {
                                                 <a role="button" title="Join server (requires www.joinme.click/download)" href="@server.JoinLink" class="btn btn-dark btn-sm mx-2">Join</a>
