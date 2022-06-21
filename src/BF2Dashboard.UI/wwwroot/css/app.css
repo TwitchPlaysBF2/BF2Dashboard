@@ -18,6 +18,12 @@ a, .btn-link {
     border-color: #1861ac;
 }
 
+.icon-in-a-button {
+    font-size: 15pt;
+    vertical-align: middle;
+    margin-right: 5px;
+}
+
 .content {
     padding-top: 1.1rem;
 }

@@ -9,12 +9,9 @@
 @inject IState<FriendListState> _friendListState
 @inject IState<LoadingState> _loadingState
 
-<h2>Your Personal BF2 Dashboard</h2>
-<div class="pt-3">
-    <button class="btn btn-dark btn-sm" title="Refresh server data" @onclick="Refresh">
-        <i class="bi bi-arrow-clockwise" style="font-size: 15pt;"></i> Refresh server data
-    </button>
-</div>
+<a role="button" class="btn btn-dark" title="Refresh all server data" @onclick="Refresh">
+    <i class="bi bi-arrow-clockwise icon-in-a-button"></i> Refresh your personal BF2.TV Dashboard
+</a>
 
 <div class="col-md-6 pt-5 mt-2">
     @if (_fullServerListState.Value.ServerList != null && _friendListState.Value.IsLoading == false && _friendListState.Value.IsInitialized)
