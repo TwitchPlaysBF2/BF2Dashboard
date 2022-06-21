@@ -18,7 +18,13 @@ a, .btn-link {
     border-color: #1861ac;
 }
 
-.icon-in-a-button {
+.icon-in-a-button-small {
+    font-size: 11pt;
+    vertical-align: middle;
+    margin-right: 3px;
+}
+
+.icon-in-a-button-big {
     font-size: 15pt;
     vertical-align: middle;
     margin-right: 5px;

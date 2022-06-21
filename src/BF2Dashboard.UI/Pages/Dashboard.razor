@@ -10,7 +10,7 @@
 @inject IState<LoadingState> _loadingState
 
 <a role="button" class="btn btn-dark" title="Refresh all server data" @onclick="Refresh">
-    <i class="bi bi-arrow-clockwise icon-in-a-button"></i> Refresh your personal BF2.TV Dashboard
+    <i class="bi bi-arrow-clockwise icon-in-a-button-big"></i> Refresh your personal BF2.TV Dashboard
 </a>
 
 <div class="col-md-6 pt-5 mt-2">
@@ -40,7 +40,9 @@
                                     (@friend.ServerInfo.CurrentPlayerCountWithoutBots/@friend.ServerInfo.MaxPlayerCount)
                                     @if (friend.ServerInfo.JoinLink != null)
                                     {
-                                        <a role="button" title="Join server (requires www.joinme.click/download)" href="@friend.ServerInfo.JoinLink" class="btn btn-dark btn-sm mx-2">Join</a>
+                                        <a role="button" title="Join server (requires www.joinme.click/download)" href="@friend.ServerInfo.JoinLink" class="btn btn-dark btn-sm mx-2">
+                                            <i class="bi bi-play-btn icon-in-a-button-small"></i> Join
+                                        </a>
                                     }
                                 </span>
                             </li>
@@ -133,7 +135,9 @@ else
                                         <small><strong>Server IP</strong>: @server.IpAndPort</small>
                                         @if (server.JoinLink != null)
                                         {
-                                            <a role="button" title="Join server (requires www.joinme.click/download)" href="@server.JoinLink" class="btn btn-dark btn-sm mx-2">Join</a>
+                                            <a role="button" title="Join server (requires www.joinme.click/download)" href="@server.JoinLink" class="btn btn-dark btn-sm mx-2">
+                                                <i class="bi bi-play-btn icon-in-a-button-small"></i> Join
+                                            </a>
                                         }
                                     </span>
                                 </div>
@@ -294,7 +298,9 @@ else
                                             <small><strong>Server IP</strong>: @server.IpAndPort</small>
                                             @if (server.JoinLink != null)
                                             {
-                                                <a role="button" title="Join server (requires www.joinme.click/download)" href="@server.JoinLink" class="btn btn-dark btn-sm mx-2">Join</a>
+                                                <a role="button" title="Join server (requires www.joinme.click/download)" href="@server.JoinLink" class="btn btn-dark btn-sm mx-2">
+                                                    <i class="bi bi-play-btn icon-in-a-button-small"></i> Join
+                                                </a>
                                             }
                                         </span>
                                     </div>

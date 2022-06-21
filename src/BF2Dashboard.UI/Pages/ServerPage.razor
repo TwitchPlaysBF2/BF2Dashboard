@@ -7,15 +7,15 @@
 @inherits FluxorComponent
 
 <a role="button" class="btn btn-dark" href="/">
-    <i class="bi bi-arrow-return-left icon-in-a-button"></i> Back to dashboard
+    <i class="bi bi-arrow-return-left icon-in-a-button-big"></i> Back to dashboard
 </a>
 <a role="button" class="btn btn-dark ms-1" title="Refresh server data" @onclick="LoadData">
-    <i class="bi bi-arrow-clockwise icon-in-a-button"></i> Refresh
+    <i class="bi bi-arrow-clockwise icon-in-a-button-big"></i> Refresh
 </a>
 @if (Server?.JoinLink != null)
 {
     <a role="button" title="Join server (requires www.joinme.click/download)" href="@Server.JoinLink" class="btn btn-primary btn-dark ms-2">
-        <i class="bi bi-play-btn icon-in-a-button"></i> Join server now
+        <i class="bi bi-play-btn icon-in-a-button-big"></i> Join server now
     </a>
 }
 
