@@ -105,7 +105,11 @@
             }
 
             <div class="m-4 text-center">
-                <img src="@Server.CommunityLogoUrl" alt="Server"/><br/>
+                @if (!string.IsNullOrWhiteSpace(Server.CommunityLogoUrl))
+                {
+                    <img src="@Server.CommunityLogoUrl" alt="Server"/>
+                    <br/>
+                }
                 @if (Uri.IsWellFormedUriString(Server.SponsorText, UriKind.Absolute))
                 {
                     <a href="@Server.SponsorText" target="_blank">@Server.SponsorText</a>
