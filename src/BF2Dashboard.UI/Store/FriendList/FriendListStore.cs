@@ -42,6 +42,16 @@ public class AddFriendAction
     }
 }
 
+public class AddFriendByNameAction
+{
+    public string FullPlayerName { get; }
+
+    public AddFriendByNameAction(string fullPlayerName)
+    {
+        FullPlayerName = fullPlayerName;
+    }
+}
+
 public class RemoveFriendAction
 {
     public string Name { get; }
@@ -108,6 +118,16 @@ public class FriendListEffects
                              ?? new List<string>();
 
         friendNameList.Add(action.Player.FullName);
+        await _localStorageService.SetItemAsync(Commons.FriendListKey, friendNameList);
+    }
+
+    [EffectMethod]
+    public async Task AddFriendByNameToPersistence(AddFriendByNameAction action, IDispatcher _)
+    {
+        var friendNameList = await _localStorageService.GetItemAsync<List<string>>(Commons.FriendListKey)
+                             ?? new List<string>();
+
+        friendNameList.Add(action.FullPlayerName);
         await _localStorageService.SetItemAsync(Commons.FriendListKey, friendNameList);
     }
 
