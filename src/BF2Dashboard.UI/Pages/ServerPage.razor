@@ -22,12 +22,12 @@
 <div class="m-5">
 @if (Server == null && !_serverDetailState.Value.IsLoading)
 {
-    <b>Error loading server</b>
+    <b>Error loading server details. See console.</b>
 }
 @if (Server != null)
 {
     <div class="row">
-        <div class="col-6">
+        <div class="col-xxl-6">
             <h3>
                 Server: @Server.Name
                 @if (Server.MaxPlayers != null)
@@ -116,7 +116,7 @@
                 }
             </div>
         </div>
-        <div class="col-6">
+        <div class="col-xxl-6">
             <div class="mx-3 pb-3">
                 <h3>Server Details</h3>
             </div>
