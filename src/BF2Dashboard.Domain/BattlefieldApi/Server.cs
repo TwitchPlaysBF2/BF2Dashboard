@@ -1,4 +1,5 @@
 ﻿using System.Text.Json.Serialization;
+using BF2Dashboard.Domain.GeoApi;
 
 namespace BF2Dashboard.Domain.BattlefieldApi;
 
@@ -11,6 +12,8 @@ public class Server
     public int NumPlayersWithoutBots => Players?.Count(p => p.IsHuman) ?? 0;
 
     public string IpAndPort => Ip + ":" + Port;
+
+    public GeoLocation? GeoLocation { get; set; }
 
     [JsonPropertyName("guid")]
     public string Guid { get; set; }

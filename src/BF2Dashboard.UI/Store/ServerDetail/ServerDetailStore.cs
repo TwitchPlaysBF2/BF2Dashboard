@@ -1,4 +1,5 @@
 ﻿using BF2Dashboard.Domain.BattlefieldApi;
+using BF2Dashboard.Domain.GeoApi;
 using BF2Dashboard.Domain.Repositories;
 using BF2Dashboard.UI.Store.FriendList;
 using Fluxor;
@@ -10,6 +11,11 @@ public record ServerDetailState
     public Server? LoadedServer { get; init; }
 
     public bool IsLoading { get; init; }
+}
+
+public record ServerGeoLocationState
+{
+    public GeoLocation? GeoLocation { get; set; }
 }
 
 public class ServerDetailReducers
@@ -24,12 +30,21 @@ public class ServerDetailReducers
     }
 
     [ReducerMethod]
-    public ServerDetailState OnStop(ServerDetailState oldState, SetLoadedServerAction action)
+    public ServerDetailState OnServerLoaded(ServerDetailState oldState, SetLoadedServerAction action)
     {
         return new ServerDetailState
         {
             LoadedServer = action.LoadedServer,
             IsLoading = false,
+        };
+    }
+
+    [ReducerMethod]
+    public ServerGeoLocationState OnGeoLocationLoaded(ServerGeoLocationState oldState, SetServerGeoLocationAction action)
+    {
+        return new ServerGeoLocationState
+        {
+            GeoLocation = action.GeoLocation,
         };
     }
 }
@@ -49,6 +64,13 @@ public class ServerDetailEffects
         var server = await ServerDetailRepository.GetServerDetailForIpAndPort(action.IpAndPort);
         dispatcher.Dispatch(new SetLoadedServerAction {LoadedServer = server});
     }
+
+    [EffectMethod]
+    public async Task LoadServerGeoLocation(SetLoadedServerAction action, IDispatcher dispatcher)
+    {
+        var geoLocation = await ServerDetailRepository.GetServerGeoLocation(action.LoadedServer.Ip);
+        dispatcher.Dispatch(new SetServerGeoLocationAction {GeoLocation = geoLocation});
+    }
 }
 
 public class ServerDetailFeature : Feature<ServerDetailState>
@@ -56,6 +78,13 @@ public class ServerDetailFeature : Feature<ServerDetailState>
     public override string GetName() => nameof(ServerDetailFeature);
 
     protected override ServerDetailState GetInitialState() => new() {IsLoading = false};
+}
+
+public class ServerGeoLocationFeature : Feature<ServerGeoLocationState>
+{
+    public override string GetName() => nameof(ServerGeoLocationState);
+
+    protected override ServerGeoLocationState GetInitialState() => new();
 }
 
 public class BeginLoadingServerDetailAction
@@ -66,4 +95,9 @@ public class BeginLoadingServerDetailAction
 public class SetLoadedServerAction
 {
     public Server LoadedServer { get; set; }
+}
+
+public class SetServerGeoLocationAction
+{
+    public GeoLocation? GeoLocation { get; set; }
 }

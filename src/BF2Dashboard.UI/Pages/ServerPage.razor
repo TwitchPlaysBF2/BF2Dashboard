@@ -2,8 +2,10 @@
 @using BF2Dashboard.UI.Store.ServerDetail
 @using Newtonsoft.Json
 @using BF2Dashboard.Domain.BattlefieldApi
+@using BF2Dashboard.Domain.GeoApi
 @inject IDispatcher _dispatcher
 @inject IState<ServerDetailState> _serverDetailState
+@inject IState<ServerGeoLocationState> _serverGeoLocationState
 @inherits FluxorComponent
 
 <a role="button" class="btn btn-dark" href="/">
@@ -201,6 +203,15 @@
                     VoIP: <input class="form-check-input state-info-box" type="checkbox" value="" checked="@Server.Voip" disabled>
                 </div>
                 <div class="row">
+                    Server Continent: @(ServerLocation?.ContinentCode ?? "-")
+                </div>
+                <div class="row">
+                    Server Country: @(ServerLocation?.CountryName ?? "-")
+                </div>
+                <div class="row">
+                    Server City: @(ServerLocation?.City ?? "-")
+                </div>
+                <div class="row">
                     Battlerecorder enabled: <input class="form-check-input state-info-box" type="checkbox" value="" checked="@Server.Battlerecorder" disabled>
                 </div>
                 <div class="row">
@@ -235,6 +246,7 @@
 @code {
 
     Server? Server => _serverDetailState.Value.LoadedServer;
+    GeoLocation? ServerLocation => _serverGeoLocationState.Value.GeoLocation;
 
     [Parameter]
     public string ServerIdAndPort { get; set; }
