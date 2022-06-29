@@ -21,7 +21,7 @@
             @if (_friendListState.Value.IsEmpty)
             {
                 <span style="font-size: 10pt; color: #767676">
-                    <span>No friends yet.</span>
+                    <span>No friends added yet.</span>
                     <p>Mark your BF2 friends in the server scoreboard, to always see where they are playing!</p>
                 </span>
             }
@@ -397,15 +397,14 @@ else
 @code {
     private bool _isServerDataLoaded = false;
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
         if (!_isServerDataLoaded)
         {
             _dispatcher.Dispatch(new InitializeServerListsAction());
             _isServerDataLoaded = true;
         }
-
-        base.OnInitialized();
+        await base.OnInitializedAsync();
     }
 
     private void Refresh()
