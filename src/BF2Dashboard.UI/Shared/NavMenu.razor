@@ -1,9 +1,21 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
-    <div class="container-fluid">
-        <a class="navbar-brand" href=""><img style="width: 25px" src="favicon.ico?03" alt="BF2.TV" /> BF2.TV</a>
-        <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
-            <span class="navbar-toggler-icon"></span>   
-        </button>
+﻿@using BF2Dashboard.UI.Store
+@inject IDispatcher _dispatcher
+
+<div class="top-row ps-3 navbar-dark">
+    <div class="container">
+        <div class="row pt-2">
+            <div class="col-auto me-auto pt-1">
+                <a class="navbar-brand" href=""><img style="width: 25px" src="favicon.ico?03" alt="BF2.TV"/> BF2.TV</a>
+                <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+            </div>
+            <div class="col-auto pt-1">
+                <a role="button" class="btn btn-sm btn-dark" title="Refresh all server data" @onclick="Refresh">
+                    <i class="bi bi-arrow-clockwise img-fluid"></i>
+                </a>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -58,6 +70,13 @@
     private void ToggleNavMenu()
     {
         _shouldCollapseMenuOnMobile = !_shouldCollapseMenuOnMobile;
+    }
+
+    private void Refresh()
+    {
+        _dispatcher.Dispatch(new SetFullServerListAction(null));
+        _dispatcher.Dispatch(new SetFavoriteServerListAction(null));
+        _dispatcher.Dispatch(new InitializeServerListsAction());
     }
 
 }
