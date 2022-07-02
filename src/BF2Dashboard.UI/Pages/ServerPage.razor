@@ -217,23 +217,23 @@
                 <div class="row">
                     Battlerecorder URL: <a href="@Server.DemoDownload" target="_blank">@Server.DemoDownload</a>
                 </div>
-                <div class="row mt-5">
-                    <div class="accordion accordion-flush bg-dark" id="mainAccordion">
-                        <div class="accordion-item">
-                            <div class="accordion-header">
-                                <div class="col">
-                                    <button class="accordion-button collapsed btn" type="button" data-bs-toggle="collapse" aria-expanded="false" data-bs-target="#collapsed_raw">
-                                        View raw server data
-                                    </button>
-                                </div>
-                                <div id="collapsed_raw" class="accordion-collapse collapse">
-                                    <div class="accordion-body ps-5 pe-3 pb-5">
-                                        <pre>
-                                            @JsonConvert.SerializeObject(Server, Formatting.Indented)
-                                        </pre>
-                                    </div>
-                                </div>
-                            </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-5">
+        <div class="accordion accordion-flush bg-dark" id="mainAccordion">
+            <div class="accordion-item">
+                <div class="accordion-header">
+                    <div class="col">
+                        <button class="accordion-button collapsed btn" type="button" data-bs-toggle="collapse" aria-expanded="false" data-bs-target="#collapsed_raw">
+                            View raw server data
+                        </button>
+                    </div>
+                    <div id="collapsed_raw" class="accordion-collapse collapse">
+                        <div class="accordion-body ps-5 pe-3 pb-5">
+                            <pre>
+                                @JsonConvert.SerializeObject(Server, Formatting.Indented)
+                            </pre>
                         </div>
                     </div>
                 </div>
