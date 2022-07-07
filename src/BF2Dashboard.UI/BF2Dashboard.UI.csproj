@@ -13,6 +13,7 @@
         <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="6.0.1" />
         <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="6.0.1" PrivateAssets="all" />
         <PackageReference Include="PublishSPAforGitHubPages.Build" Version="1.3.6" />
+        <PackageReference Include="Refit.HttpClientFactory" Version="6.3.2" />
     </ItemGroup>
 
     <ItemGroup>
