@@ -28,28 +28,30 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.label1 = new System.Windows.Forms.Label();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(LaunchForm));
+            this.InfoLabel = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
-            // label1
+            // InfoLabel
             // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Segoe UI", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.label1.Location = new System.Drawing.Point(22, 28);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(637, 54);
-            this.label1.TabIndex = 1;
-            this.label1.Text = "This is the BF2.TV App placeholder";
+            this.InfoLabel.AutoSize = true;
+            this.InfoLabel.Font = new System.Drawing.Font("Bahnschrift", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.InfoLabel.ForeColor = System.Drawing.Color.MediumSlateBlue;
+            this.InfoLabel.Location = new System.Drawing.Point(69, 81);
+            this.InfoLabel.Size = new System.Drawing.Size(448, 48);
+            this.InfoLabel.Text = "BF2.TV App Placeholder";
+            this.InfoLabel.TabIndex = 1;
             // 
             // LaunchForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(13F, 32F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.ClientSize = new System.Drawing.Size(675, 118);
-            this.Controls.Add(this.label1);
+            this.BackColor = System.Drawing.SystemColors.Desktop;
+            this.ClientSize = new System.Drawing.Size(578, 226);
+            this.Controls.Add(this.InfoLabel);
+            this.Text = "BF2.TV App";
             this.Name = "LaunchForm";
-            this.Text = "BF2.TV";
+            this.Icon = Properties.Resources.favicon;
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -57,6 +59,6 @@
 
         #endregion
 
-        private Label label1;
+        private Label InfoLabel;
     }
 }
