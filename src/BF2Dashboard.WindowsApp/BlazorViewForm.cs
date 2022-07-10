@@ -18,6 +18,14 @@ namespace BF2Dashboard.WindowsApp
     {
         public BlazorViewForm()
         {
+            // TODO add blazor side runtime detection
+            // https://stackoverflow.com/a/72194120
+
+            // TODO Introduce notifyIcon
+            // https://github.com/hardcodet/wpf-notifyicon
+
+            // TODO test webview2 runtime dependencies (ship installer with setup?)
+
             InitializeComponent();
             var services = new ServiceCollection();
             services.AddWindowsFormsBlazorWebView();
