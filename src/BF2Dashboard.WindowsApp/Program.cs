@@ -11,7 +11,7 @@ namespace BF2Dashboard.WindowsApp
             // To customize application configuration such as set high DPI settings or default font,
             // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
-            Application.Run(new LaunchForm());
+            Application.Run(new BlazorViewForm());
         }
     }
 }
