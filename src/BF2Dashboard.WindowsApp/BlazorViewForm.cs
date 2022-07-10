@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using AutoUpdaterDotNET;
 using BF2Dashboard.WindowsApp.Infrastructure;
 using Microsoft.AspNetCore.Components.WebView.WindowsForms;
 using Microsoft.Extensions.DependencyInjection;
@@ -25,6 +26,9 @@ namespace BF2Dashboard.WindowsApp
             // https://github.com/hardcodet/wpf-notifyicon
 
             // TODO test webview2 runtime dependencies (ship installer with setup?)
+
+            // TODO set up AutoUpdater
+            AutoUpdater.Start("https://rbsoft.org/updates/AutoUpdaterTest.xml");
 
             InitializeComponent();
             var services = new ServiceCollection();
