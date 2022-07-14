@@ -1,7 +1,7 @@
 ; Inno Setup Script
 
 #define MyAppName "BF2.TV"
-#define MyAppVersion "1.0.0"
+#define MyAppVersion "0.0.1"
 #define MyAppPublisher "TwitchPlaysBF2"
 #define MyAppURL "https://www.github.com/TwitchPlaysBF2"
 #define MyAppExeName "BF2Dashboard.WindowsApp.exe"
@@ -10,15 +10,13 @@
 AppId={{160D7F45-1026-4216-8CCD-217D7A40C1B2}
 AppName={#MyAppName}
 AppVersion={#MyAppVersion}
-;AppVerName={#MyAppName} {#MyAppVersion}
+AppVerName={#MyAppName} {#MyAppVersion}
 AppPublisher={#MyAppPublisher}
 AppPublisherURL={#MyAppURL}
 AppSupportURL={#MyAppURL}
 AppUpdatesURL={#MyAppURL}
 DefaultDirName={autopf}\BF2.TV
 DisableProgramGroupPage=yes
-; Uncomment the following line to run in non administrative install mode (install for current user only.)
-;PrivilegesRequired=lowest
 OutputDir=/bin
 OutputBaseFilename=BF2.TV_App_Setup
 SetupIconFile=..\src\BF2Dashboard.UI\wwwroot\favicon.ico
