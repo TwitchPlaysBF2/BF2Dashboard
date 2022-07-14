@@ -27,8 +27,8 @@ namespace BF2Dashboard.WindowsApp
 
             // TODO test webview2 runtime dependencies (ship installer with setup?)
 
-            // TODO set up AutoUpdater
-            AutoUpdater.Start("https://rbsoft.org/updates/AutoUpdaterTest.xml");
+            // Checks for version update & prompts a dialog, if available
+            AutoUpdater.Start("https://raw.githubusercontent.com/TwitchPlaysBF2/BF2Dashboard/main/build/AutoUpdater.xml");
 
             InitializeComponent();
             var services = new ServiceCollection();
