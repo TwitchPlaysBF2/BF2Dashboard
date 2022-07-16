@@ -1,7 +1,7 @@
 ; Inno Setup Script
 
 #define MyAppName "BF2.TV"
-#define MyAppVersion "0.0.0.2"
+#define MyAppVersion "0.0.0.3"
 #define MyAppPublisher "TwitchPlaysBF2"
 #define MyAppURL "https://www.github.com/TwitchPlaysBF2"
 #define MyAppExeName "BF2Dashboard.WindowsApp.exe"
@@ -21,11 +21,9 @@ DisableProgramGroupPage=yes
 OutputDir=/bin
 OutputBaseFilename=BF2.TV_App_Setup
 SetupIconFile=..\src\BF2Dashboard.UI\wwwroot\favicon.ico
-UninstallDisplayIcon={app}\{#MyAppName}.exe
-UninstallDisplayName=_Uninstaller
-Compression=lzma
+Compression=lzma2/max
 SolidCompression=yes
-WizardStyle=modern
+WizardStyle=classic
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
@@ -43,6 +41,6 @@ Name: "{autoprograms}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"
 Name: "{autodesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: desktopicon
 
 [Run]
-Filename: "{app}\_external\joinme.click-launcher.exe"; Flags: "-quiet"
+Filename: "{app}\_external\joinme.click-launcher.exe"; Parameters: "-quiet"
 Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent
 
