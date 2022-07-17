@@ -6,7 +6,7 @@
 #define MyAppURL "https://www.github.com/TwitchPlaysBF2"
 #define MyAppExeName "BF2Dashboard.WindowsApp.exe"
 
-[Setup]
+[Setup]       
 AppId={{160D7F45-1026-4216-8CCD-217D7A40C1B2}
 AppName={#MyAppName}
 VersionInfoVersion={#MyAppVersion}
@@ -23,7 +23,12 @@ OutputBaseFilename=BF2.TV_App_Setup
 SetupIconFile=..\src\BF2Dashboard.UI\wwwroot\favicon.ico
 Compression=lzma2/max
 SolidCompression=yes
-WizardStyle=classic
+WizardStyle=classic   
+; Remove the SignTool line if you have no configured certificate for signing the binaries.
+; If you have access to the BF2.TV PFX file then go to [Tools -> Configure Sign Tools] and configure this:
+; Name: BF2TV_Cert
+; Command: "C:\Program Files (x86)\Windows Kits\10\bin\10.0.17763.0\x64\signtool.exe" sign /v /f "D:\Projects\BF2.TV\cert\BF2TV_Cert.pfx" /t http://timestamp.sectigo.com $f
+SignTool=BF2TV_Cert     
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
