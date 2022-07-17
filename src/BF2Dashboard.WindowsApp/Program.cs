@@ -17,8 +17,7 @@ namespace BF2Dashboard.WindowsApp
             // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
 
-            var host = CreateHostBuilder().Build();
-            ServiceProvider = host.Services;
+            ServiceProvider = CreateHostBuilder().Build().Services;
             Application.Run(ServiceProvider.GetRequiredService<BlazorViewForm>());
         }
 
@@ -27,6 +26,7 @@ namespace BF2Dashboard.WindowsApp
             return Host.CreateDefaultBuilder()
                 .ConfigureServices((context, services) =>
                 {
+                    services.AddWindowsFormsBlazorWebView();
                     services.AddTransient<BlazorViewForm>();
                 });
         }
