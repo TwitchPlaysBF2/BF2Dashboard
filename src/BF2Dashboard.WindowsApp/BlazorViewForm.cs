@@ -17,7 +17,7 @@ namespace BF2Dashboard.WindowsApp
 {
     public partial class BlazorViewForm : Form
     {
-        public BlazorViewForm()
+        public BlazorViewForm(IServiceProvider serviceProvider)
         {
             // TODO add blazor side runtime detection
             // https://stackoverflow.com/a/72194120
@@ -25,16 +25,12 @@ namespace BF2Dashboard.WindowsApp
             // TODO Introduce notifyIcon
             // https://github.com/hardcodet/wpf-notifyicon
 
-            // TODO test webview2 runtime dependencies (ship installer with setup?)
-
             // Checks for version update & prompts a dialog, if available
             AutoUpdater.Start("https://raw.githubusercontent.com/TwitchPlaysBF2/BF2Dashboard/main/build/AutoUpdater.xml");
 
             InitializeComponent();
-            var services = new ServiceCollection();
-            services.AddWindowsFormsBlazorWebView();
             blazorWebView1.HostPage = "wwwroot\\index.html";
-            blazorWebView1.Services = services.BuildServiceProvider();
+            blazorWebView1.Services = serviceProvider;
             blazorWebView1.RootComponents.Add<UI.Pages.Dashboard>("#app");
         }
 
