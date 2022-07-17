@@ -27,6 +27,7 @@ namespace BF2Dashboard.WindowsApp
                 .ConfigureServices((context, services) =>
                 {
                     services.AddWindowsFormsBlazorWebView();
+                    services.AddBlazorWebViewDeveloperTools();
                     services.AddTransient<BlazorViewForm>();
                 });
         }
