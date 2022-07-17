@@ -33,7 +33,7 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 
 [Files]
 Source: "..\src\BF2Dashboard.WindowsApp\bin\Release\net6.0-windows\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "redistributables\joinme.click-launcher.exe"; DestDir: "{app}\_external"; Flags: ignoreversion
+Source: "redistributables\*"; DestDir: "{app}\_external"; Flags: ignoreversion
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]
