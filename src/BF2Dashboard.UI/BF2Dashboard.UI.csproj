@@ -24,4 +24,10 @@
       <Folder Include="wwwroot\lib\bootstrap-icons" />
     </ItemGroup>
 
+    <ItemGroup>
+        <Content Update="wwwroot\**\*.*">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+    </ItemGroup>
+
 </Project>
