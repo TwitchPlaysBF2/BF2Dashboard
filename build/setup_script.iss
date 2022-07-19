@@ -1,7 +1,7 @@
 ; Inno Setup Script
 
 #define MyAppName "BF2.TV"
-#define MyAppVersion "0.0.0.5"
+#define MyAppVersion "0.0.0.7"
 #define MyAppPublisher "TwitchPlaysBF2"
 #define MyAppURL "https://www.github.com/TwitchPlaysBF2"
 #define MyAppExeName "BF2Dashboard.WindowsApp.exe"
@@ -19,8 +19,8 @@ AppUpdatesURL={#MyAppURL}
 DefaultDirName={autopf}\BF2.TV
 DisableProgramGroupPage=yes
 OutputDir=/bin
-OutputBaseFilename=BF2.TV_App_Setup
-SetupIconFile=..\src\BF2Dashboard.UI\wwwroot\favicon.ico
+OutputBaseFilename=BF2.TV_App_Setup_v{#MyAppVersion}
+;SetupIconFile=..\src\BF2Dashboard.UI\wwwroot\favicon.ico
 Compression=lzma2/max
 SolidCompression=yes
 WizardStyle=classic   
