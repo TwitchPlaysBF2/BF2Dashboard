@@ -29,9 +29,9 @@ namespace BF2Dashboard.WindowsApp
             AutoUpdater.Start("https://raw.githubusercontent.com/TwitchPlaysBF2/BF2Dashboard/main/build/AutoUpdater.xml");
 
             InitializeComponent();
-            blazorWebView1.HostPage = "wwwroot\\index.html";
-            blazorWebView1.Services = serviceProvider;
-            blazorWebView1.RootComponents.Add<UI.Pages.Dashboard>("#app");
+            blazorWebView.HostPage = "wwwroot\\index.html";
+            blazorWebView.Services = serviceProvider;
+            blazorWebView.RootComponents.Add<UI.Pages.Dashboard>("#app");
         }
 
         protected override void OnHandleCreated(EventArgs e) => DarkMode.Enable(Handle);

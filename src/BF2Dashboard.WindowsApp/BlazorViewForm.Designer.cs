@@ -28,25 +28,28 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.blazorWebView1 = new Microsoft.AspNetCore.Components.WebView.WindowsForms.BlazorWebView();
+            this.blazorWebView = new Microsoft.AspNetCore.Components.WebView.WindowsForms.BlazorWebView();
             this.SuspendLayout();
             // 
             // blazorWebView1
             // 
-            this.blazorWebView1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.blazorWebView1.Location = new System.Drawing.Point(0, 0);
-            this.blazorWebView1.Name = "blazorWebView1";
-            this.blazorWebView1.Size = new System.Drawing.Size(1871, 1188);
-            this.blazorWebView1.TabIndex = 0;
-            this.blazorWebView1.Text = "If you see this, you might be missing the Evergreen WebView2 Runtime";
+            this.blazorWebView.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(39)))), ((int)(((byte)(43)))), ((int)(((byte)(48)))));
+            this.blazorWebView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.blazorWebView.Location = new System.Drawing.Point(0, 0);
+            this.blazorWebView.Margin = new System.Windows.Forms.Padding(2, 1, 2, 1);
+            this.blazorWebView.Name = "blazorWebView";
+            this.blazorWebView.Size = new System.Drawing.Size(1694, 971);
+            this.blazorWebView.TabIndex = 0;
             // 
             // BlazorViewForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(13F, 32F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1871, 1188);
-            this.Controls.Add(this.blazorWebView1);
+            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(39)))), ((int)(((byte)(43)))), ((int)(((byte)(48)))));
+            this.ClientSize = new System.Drawing.Size(1694, 971);
+            this.Controls.Add(this.blazorWebView);
             this.Icon = global::BF2Dashboard.WindowsApp.Properties.Resources.favicon;
+            this.Margin = new System.Windows.Forms.Padding(2, 1, 2, 1);
             this.Name = "BlazorViewForm";
             this.Text = "BF2.TV App";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
@@ -56,6 +59,6 @@
 
         #endregion
 
-        private Microsoft.AspNetCore.Components.WebView.WindowsForms.BlazorWebView blazorWebView1;
+        private Microsoft.AspNetCore.Components.WebView.WindowsForms.BlazorWebView blazorWebView;
     }
 }
