@@ -1,16 +1,29 @@
 @page "/live"
+@inject IEnvironment _environment
+
 <h3>Live Streams</h3>
 
-<div style="height: 45vw">
-    <iframe
-        src="https://player.twitch.tv/?channel=bf2tv&parent=bf2.tv"
-        frameborder="0"
-        allowfullscreen="true"
-        scrolling="no"
-        height="100%"
-        width="100%">
-    </iframe>
-</div>
+@if (_environment.IsWeb())
+{
+    <div style="height: 45vw">
+        <iframe src="https://player.twitch.tv/?channel=bf2tv&parent=bf2.tv"
+                frameborder="0"
+                allowfullscreen="true"
+                scrolling="no"
+                height="100%"
+                width="100%">
+        </iframe>
+    </div>
+}
+else
+{
+    <div class="m-5">
+        <span>Embedding streams isn't supported <a href="https://github.com/TwitchPlaysBF2/BF2Dashboard/issues/14" target="_blank">yet</a> in the BF2.TV App.</span><br/>
+        <small><i>The Twitch API doesn't allow (local) IPs as parent URL, so Twitch blocks it unfortunately.</i></small>
+        <p class="mt-4">For now, here's a link instead:</p>
+        <a role="button" class="btn btn-dark" href="https://twitch.tv/BF2tv" target="_blank">Open Live Stream</a>
+    </div>
+}
 
 @code {
 
