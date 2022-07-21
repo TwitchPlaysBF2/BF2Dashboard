@@ -1,0 +1,39 @@
+﻿@page "/chat"
+@using BF2TV.Domain.DiscordApi
+@inject IDiscordRepository _discordRepository
+
+
+@if (_loadedMessages != null)
+{
+    <div class="container-fluid bg-secondary bg-opacity-10 text-white-50 rounded-3 p-3">
+        @foreach (var msg in _loadedMessages)
+        {
+            <div class="row m-1">
+                <div class="col-auto">
+                    <img class="rounded-circle" src="https://cdn.discordapp.com/avatars/@(msg.Author.Id)/@(msg.Author.Avatar).webp?size=40" alt="User avatar of @msg.Author.Username">
+                </div>
+                <div class="col-auto">
+                    <strong>@msg.Author.Username:</strong>
+                </div>
+                <div class="col">
+                    @msg.Content
+                </div>
+            </div>
+        }
+    </div>
+}
+else
+{
+    <LoadingSpinner/>
+}
+
+@code {
+    private DiscordMessage[]? _loadedMessages;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _loadedMessages = await _discordRepository.GetDiscordMessages();
+        await base.OnInitializedAsync();
+    }
+
+}

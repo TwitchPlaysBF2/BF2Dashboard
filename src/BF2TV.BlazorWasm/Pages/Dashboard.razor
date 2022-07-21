@@ -1,0 +1,455 @@
+@page "/"
+@inherits FluxorComponent
+@using BF2TV.Domain.BattlefieldApi
+@using BF2TV.BlazorWasm.Store
+@using BF2TV.BlazorWasm.Store.FriendList
+@inject IDispatcher _dispatcher
+@inject IState<FavoriteServerListState> _favoriteServerListState
+@inject IState<FullServerListState> _fullServerListState
+@inject IState<FriendListState> _friendListState
+@inject IState<LoadingState> _loadingState
+
+<a role="button" class="btn btn-dark" title="Refresh all server data" @onclick="Refresh">
+    <i class="bi bi-arrow-clockwise icon-in-a-button-big"></i> Refresh your personal BF2.TV Dashboard
+</a>
+
+<div class="col-md-6 pt-5 mt-2">
+    @if (_fullServerListState.Value.ServerList != null && _friendListState.Value.IsLoading == false && _friendListState.Value.IsInitialized)
+    {
+        <h3>Online Friends</h3>
+        <div class="row p-2 ms-4">
+            @if (_friendListState.Value.IsEmpty)
+            {
+                <span style="font-size: 10pt; color: #767676">
+                    <span>No friends added yet.</span>
+                    <p>Mark your BF2 friends in the server scoreboard, to always see where they are playing!</p>
+                </span>
+            }
+            else
+            {
+                <ul style="list-style-type: none;">
+                    @if (_friendListState.Value.OnlineFriendList != null)
+                    {
+                        @foreach (var friend in _friendListState.Value.OnlineFriendList)
+                        {
+                            <li class="m-2">
+                                <i class="bi bi-circle-fill" style="color: green; font-size: 11pt;"></i>
+                                @friend.DisplayName
+                                <span style="font-size: 10pt; color: #767676">
+                                    @friend.ServerInfo.MapName @@ <a href="servers/@friend.ServerInfo.IpAndPort" style="color: slategrey">@friend.ServerInfo.ServerName</a>
+                                    (@friend.ServerInfo.CurrentPlayerCountWithoutBots/@friend.ServerInfo.MaxPlayerCount)
+                                    @if (friend.ServerInfo.JoinLink != null)
+                                    {
+                                        <a role="button" title="Join server (requires joinme.click/download)" href="@friend.ServerInfo.JoinLink" class="btn btn-dark btn-sm mx-2">
+                                            <i class="bi bi-play-circle icon-in-a-button-small"></i> Join
+                                        </a>
+                                    }
+                                </span>
+                            </li>
+                        }
+                    }
+                </ul>
+            }
+        </div>
+    }
+</div>
+
+<div class="row pt-5 mt-2">
+@if (_fullServerListState.Value.ServerList == null || _favoriteServerListState.Value.ServerList == null)
+{
+    <LoadingSpinner/>
+}
+else
+{
+    <div class="col-xxl-6 order-2 order-xxl-1">
+        <div class="pt-2 pb-2">
+            <h3>All Battlefield 2 Servers</h3>
+        </div>
+        <div class="accordion accordion-flush bg-dark" id="mainAccordion">
+            @foreach (var server in _fullServerListState.Value.ServerList)
+            {
+                <!-- All Servers -->
+                <div class="accordion-item">
+                    <div class="accordion-header" style="min-width: 300px;">
+                        <div class="accordion-item d-flex justify-content-between align-items-center text-nowrap @server.IsPinned ? 'active' : ''">
+                            <i class="bi @(server.IsPinned ? "bi-heart-fill" : "bi-heart") grow p-3" style="font-size: 20pt; @(server.IsPinned ? "color: indianred;" : "color: grey;")" @onclick="() => ToggleFavorite(server)" title="Add or remove from favorites">
+                            </i>
+                            <button class="accordion-button collapsed btn @CalculateServerOpacityClass(server)" style="min-width: 500px;"
+                                    type="button" data-bs-toggle="collapse" aria-expanded="false" data-bs-target="#collapsed_@server.Guid">
+                                <div class="col" style="min-width: 73px;">
+                                    <span class="badge bg-primary rounded-pill me-3" title="Number of players (not counting bots)">@server.NumPlayersWithoutBots / @server.MaxPlayers</span>
+                                </div>
+                                <div id="serverIcons" class="row align-middle">
+                                    <div class="col-1">
+                                        @if (server.Ranked == true)
+                                        {
+                                            <img style="width: 16px;" src="img/ranked.png" alt="Ranked" title="Ranked"/>
+                                        }
+                                        else
+                                        {
+                                            <img style="width: 16px;" src="img/unranked.png" alt="Unranked" title="Unranked"/>
+                                        }
+                                    </div>
+                                    <div class="col-1">
+                                        @if (server.Battlerecorder == true)
+                                        {
+                                            <i class="bi bi-camera-video" style="font-size: 14px;" title="Battlerecorder is enabled"></i>
+                                        }
+                                        else
+                                        {
+                                            <i class="bi bi-camera-video-off opacity-25" style="font-size: 14px;" title="Battlerecorder not enabled"></i>
+                                        }
+                                    </div>
+                                    <div class="col-1">
+                                        @if (server.Password == true)
+                                        {
+                                            <i class="bi bi-lock-fill" style="font-size: 14px;" title="Requires password"></i>
+                                        }
+                                        else
+                                        {
+                                            <i class="bi bi-unlock" style="opacity: .1; font-size: 14px;" title="Has no password"></i>
+                                        }
+                                    </div>
+                                </div>
+                                <div id="serverText" class="container">
+                                    <div class="row dynamic-server-name-width-xs dynamic-server-name-width-sm dynamic-server-name-width-md dynamic-server-name-width-lg"
+                                         style="display: inline-block; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">
+                                        @server.Name
+                                    </div>
+                                    <div class="row">
+                                        <small>
+                                            <span style="color: #747474">@server.MapName</span>
+                                        </small>
+                                    </div>
+                                </div>
+                            </button>
+                        </div>
+
+                        <div id="collapsed_@server.Guid" class="accordion-collapse collapse">
+                            <div class="accordion-body ps-5 pe-3 pb-5">
+                                <div class="row d-flex justify-content-center text-center">
+                                    <span>
+                                        <a role="button" href="servers/@server.IpAndPort" class="btn btn-dark btn-sm mx-2">Server Details</a>
+                                    </span>
+                                    <span class="mb-4">
+                                        <small><strong>Server IP</strong>: @server.IpAndPort</small>
+                                        @if (server.JoinLink != null)
+                                        {
+                                            <a role="button" title="Join server (requires joinme.click/download)" href="@server.JoinLink" class="btn btn-dark btn-sm mx-2">
+                                                <i class="bi bi-play-circle icon-in-a-button-small"></i> Join
+                                            </a>
+                                        }
+                                    </span>
+                                </div>
+                                @if (server.NumPlayersWithoutBots > 0)
+                                {
+                                    <div class="row">
+                                        <div class="col ps-5">
+                                            <!-- Scoreboard -->
+                                            <table id="scoreboard" class="table table-sm table-hover table-borderless">
+                                                <thead class="mb-1">
+                                                <tr>
+                                                    <th scope="col" class="align-middle text-truncate">@server.Team1 Player</th>
+                                                    <th style="width: 5%;" scope="col" class="align-middle text-center">Score</th>
+                                                    <th style="width: 0;"></th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                @foreach (var player in server.Players
+                                                    .Where(p => p.IsHuman)
+                                                    .Where(p => p.TeamLabel == server.Team1)
+                                                    .OrderByDescending(p => p.Score)
+                                                    .ToList())
+                                                {
+                                                    <tr>
+                                                        <td style="vertical-align: center;">
+                                                            <a title="Open BF2Hub profile" class="link-light text-nowrap text-decoration-none" target="_blank"
+                                                               href="https://www.bf2hub.com/player/@player.Name">
+                                                                <span style="color: @(player.IsFriend ? "darkseagreen" : "")">@player.FullName</span>
+                                                            </a>
+                                                        </td>
+                                                        <td class="text-center">
+                                                            @player.Score
+                                                        </td>
+                                                        <td class="text-center">
+                                                            <i class="@GetClassForFriendButton(player.IsFriend)" @onclick="() => AddOrRemoveFriend(player, server)" title="@GetTitleForFriendButton(player.IsFriend)"></i>
+                                                        </td>
+                                                    </tr>
+                                                }
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div class="col ps-5">
+                                            <!-- Scoreboard -->
+                                            <table id="scoreboard" class="table table-sm table-hover table-borderless">
+                                                <thead>
+                                                <tr>
+                                                    <th scope="col" class="align-middle text-truncate">@server.Team2 Player</th>
+                                                    <th style="width: 5%;" scope="col" class="align-middle text-center">Score</th>
+                                                    <th style="width: 0;"></th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                @foreach (var player in server.Players
+                                                    .Where(p => p.IsHuman)
+                                                    .Where(p => p.TeamLabel == server.Team2)
+                                                    .OrderByDescending(p => p.Score)
+                                                    .ToList())
+                                                {
+                                                    <tr>
+                                                        <td>
+                                                            <a title="Open BF2Hub profile" class="link-light text-nowrap text-decoration-none" target="_blank"
+                                                               href="https://www.bf2hub.com/player/@player.Name">
+                                                                <span style="color: @(player.IsFriend ? "darkseagreen" : "")">@player.FullName</span>
+                                                            </a>
+                                                        </td>
+                                                        <td class="text-center">
+                                                            @player.Score
+                                                        </td>
+                                                        <td class="text-center">
+                                                            <i class="@GetClassForFriendButton(player.IsFriend)" @onclick="() => AddOrRemoveFriend(player, server)" title="@GetTitleForFriendButton(player.IsFriend)"></i>
+                                                        </td>
+                                                    </tr>
+                                                }
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+    <div class="col-xxl-6 order-1 order-xxl-2 mb-5">
+        <div class="pt-2 pb-2">
+            <h3>Your favorites</h3>
+        </div>
+        <div class="accordion accordion-flush bg-dark" id="favoritesAccordion">
+            @if (_favoriteServerListState.Value.ServerList?.Any() == true)
+            {
+                foreach (var server in _favoriteServerListState.Value.ServerList)
+                {
+                    <!-- Favorites -->
+                    <div class="accordion-item">
+                        <div class="accordion-header" style="min-width: 300px;">
+                            <div class="accordion-item d-flex justify-content-between align-items-center text-nowrap @server.IsPinned ? 'active' : ''">
+                                <i class="bi bi-trash grow p-3" style="font-size: 15pt" @onclick="() => ToggleFavorite(server)" title="Remove from favorites">
+                                </i>
+                                <button class="accordion-button collapsed btn @CalculateServerOpacityClass(server)" type="button" data-bs-toggle="collapse" aria-expanded="false" data-bs-target="#collapsed_favorite_@server.Guid">
+                                    <div class="col" style="min-width: 73px;">
+                                        <span class="badge bg-primary rounded-pill me-3" title="Number of players (not counting bots)">@server.NumPlayersWithoutBots / @server.MaxPlayers</span>
+                                    </div>
+                                    <div id="serverIcons" class="row align-middle">
+                                        <div class="col-1">
+                                            @if (server.Ranked == true)
+                                            {
+                                                <img style="width: 16px;" src="img/ranked.png" alt="Ranked" title="Ranked"/>
+                                            }
+                                            else
+                                            {
+                                                <img style="width: 16px;" src="img/unranked.png" alt="Unranked" title="Unranked"/>
+                                            }
+                                        </div>
+                                        <div class="col-1">
+                                            @if (server.Battlerecorder == true)
+                                            {
+                                                <i class="bi bi-camera-video" style="font-size: 14px;" title="Battlerecorder is enabled"></i>
+                                            }
+                                            else
+                                            {
+                                                <i class="bi bi-camera-video-off opacity-25" style="font-size: 14px;" title="Battlerecorder not enabled"></i>
+                                            }
+                                        </div>
+                                        <div class="col-1">
+                                            @if (server.Password == true)
+                                            {
+                                                <i class="bi bi-lock-fill" style="font-size: 14px;" title="Requires password"></i>
+                                            }
+                                            else
+                                            {
+                                                <i class="bi bi-unlock" style="opacity: .1; font-size: 14px;" title="Has no password"></i>
+                                            }
+                                        </div>
+                                    </div>
+                                    <div id="serverText" class="container">
+                                        <div class="row dynamic-server-name-width-xs dynamic-server-name-width-sm dynamic-server-name-width-md dynamic-server-name-width-lg"
+                                             style="display: inline-block; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">
+                                            @server.Name
+                                        </div>
+                                        <div class="row">
+                                            <small>
+                                                <span style="color: #747474">@server.MapName</span>
+                                            </small>
+                                        </div>
+                                    </div>
+                                </button>
+                            </div>
+
+                            <div id="collapsed_favorite_@server.Guid" class="accordion-collapse collapse">
+                                <div class="accordion-body ps-5 pe-3 pb-5">
+                                    <div class="row d-flex justify-content-center text-center">
+                                        <span>
+                                            <a role="button" href="servers/@server.IpAndPort" class="btn btn-dark btn-sm mx-2">Server Details</a>
+                                        </span>
+                                        <span class="mb-4">
+                                            <small><strong>Server IP</strong>: @server.IpAndPort</small>
+                                            @if (server.JoinLink != null)
+                                            {
+                                                <a role="button" title="Join server (requires joinme.click/download)" href="@server.JoinLink" class="btn btn-dark btn-sm mx-2">
+                                                    <i class="bi bi-joystick-btn icon-in-a-button-small"></i> Join
+                                                </a>
+                                            }
+                                        </span>
+                                    </div>
+                                    @if (server.NumPlayersWithoutBots > 0)
+                                    {
+                                        <div class="row">
+                                            <div class="col ps-5">
+                                                <!-- Scoreboard -->
+                                                <table id="scoreboard" class="table table-sm table-hover table-borderless">
+                                                    <thead>
+                                                    <tr>
+                                                        <th scope="col" class="align-middle text-truncate">@server.Team1 Player</th>
+                                                        <th style="width: 5%;" scope="col" class="align-middle text-center">Score</th>
+                                                        <th style="width: 0;"></th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    @foreach (var player in server.Players
+                                                        .Where(p => p.IsHuman)
+                                                        .Where(p => p.TeamLabel == server.Team1)
+                                                        .OrderByDescending(p => p.Score)
+                                                        .ToList())
+                                                    {
+                                                        <tr>
+                                                            <td>
+                                                                <a title="Open BF2Hub profile" class="link-light text-nowrap text-decoration-none" target="_blank"
+                                                                   href="https://www.bf2hub.com/player/@player.Name">
+                                                                    <span style="color: @(player.IsFriend ? "darkseagreen" : "")">@player.FullName</span>
+                                                                </a>
+                                                            </td>
+                                                            <td class="text-center">
+                                                                @player.Score
+                                                            </td>
+                                                            <td class="text-center">
+                                                                <i class="@GetClassForFriendButton(player.IsFriend)" @onclick="() => AddOrRemoveFriend(player, server)" title="@GetTitleForFriendButton(player.IsFriend)"></i>
+                                                            </td>
+                                                        </tr>
+                                                    }
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <div class="col ps-5">
+                                                <!-- Scoreboard -->
+                                                <table id="scoreboard" class="table table-sm table-hover table-borderless">
+                                                    <thead>
+                                                    <tr>
+                                                        <th scope="col" class="align-middle text-truncate">@server.Team2 Player</th>
+                                                        <th style="width: 5%;" scope="col" class="align-middle text-center">Score</th>
+                                                        <th style="width: 0;"></th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    @foreach (var player in server.Players
+                                                        .Where(p => p.IsHuman)
+                                                        .Where(p => p.TeamLabel == server.Team2)
+                                                        .OrderByDescending(p => p.Score)
+                                                        .ToList())
+                                                    {
+                                                        <tr>
+                                                            <td>
+                                                                <a title="Open BF2Hub profile" class="link-light text-nowrap text-decoration-none" target="_blank"
+                                                                   href="https://www.bf2hub.com/player/@player.Name">
+                                                                    <span style="color: @(player.IsFriend ? "darkseagreen" : "")">@player.FullName</span>
+                                                                </a>
+                                                            </td>
+                                                            <td class="text-center">
+                                                                @player.Score
+                                                            </td>
+                                                            <td class="text-center">
+                                                                <i class="@GetClassForFriendButton(player.IsFriend)" @onclick="() => AddOrRemoveFriend(player, server)" title="@GetTitleForFriendButton(player.IsFriend)"></i>
+                                                            </td>
+                                                        </tr>
+                                                    }
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <span style="font-size: 10pt; color: #767676">No favorites yet. Click the heart on the servers you usually play on!</span>
+            }
+        </div>
+    </div>
+}
+</div>
+
+@code {
+    private bool _isServerDataLoaded = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (!_isServerDataLoaded)
+        {
+            _dispatcher.Dispatch(new InitializeServerListsAction());
+            _isServerDataLoaded = true;
+        }
+        await base.OnInitializedAsync();
+    }
+
+    private void Refresh()
+    {
+        _dispatcher.Dispatch(new SetFullServerListAction(null));
+        _dispatcher.Dispatch(new SetFavoriteServerListAction(null));
+        _dispatcher.Dispatch(new InitializeServerListsAction());
+    }
+
+    private void ToggleFavorite(Server server)
+    {
+        _dispatcher.Dispatch(new ToggleFavoriteAction(server));
+    }
+
+    private void AddOrRemoveFriend(Player player, Server server)
+    {
+        if (player.IsFriend)
+        {
+            player.IsFriend = false;
+            _dispatcher.Dispatch(new RemoveFriendAction(player.FullName));
+        }
+        else
+        {
+            player.IsFriend = true;
+            _dispatcher.Dispatch(new AddFriendAction(player, server));
+        }
+    }
+
+    private static string CalculateServerOpacityClass(Server server)
+    {
+        switch (server.NumPlayersWithoutBots)
+        {
+            case < 1:
+                return "opacity-50"; // empty
+            default:
+                return "opacity-100"; // full
+        }
+    }
+
+    private static string GetTitleForFriendButton(bool isFriend) => isFriend ?
+        "Remove friend" :
+        "Mark as friend";
+
+    private static string GetClassForFriendButton(bool isFriend) => isFriend ?
+        "btn btn-sm btn-outline-warning bi bi-person-dash grow" :
+        "btn btn-sm btn-outline-success bi bi-person-plus grow";
+
+}

@@ -1,0 +1,265 @@
+﻿@page "/servers/{ServerIdAndPort}"
+@using Newtonsoft.Json
+@using BF2TV.Domain.BattlefieldApi
+@using BF2TV.Domain.GeoApi
+@using BF2TV.BlazorWasm.Store.ServerDetail
+@inject IDispatcher _dispatcher
+@inject IState<ServerDetailState> _serverDetailState
+@inject IState<ServerGeoLocationState> _serverGeoLocationState
+@inherits FluxorComponent
+
+<a role="button" class="btn btn-dark" href="/">
+    <i class="bi bi-arrow-return-left icon-in-a-button-big"></i> Back to dashboard
+</a>
+<a role="button" class="btn btn-dark ms-1" title="Refresh server data" @onclick="LoadData">
+    <i class="bi bi-arrow-clockwise icon-in-a-button-big"></i> Refresh
+</a>
+@if (Server?.JoinLink != null)
+{
+    <a role="button" title="Join server (requires joinme.click/download)" href="@Server.JoinLink" class="btn btn-primary btn-dark ms-2">
+        <i class="bi bi-play-circle icon-in-a-button-big"></i> Join server now
+    </a>
+}
+
+<div class="m-5">
+@if (Server == null && !_serverDetailState.Value.IsLoading)
+{
+    <b>Error loading server details. See console.</b>
+}
+@if (Server != null)
+{
+    <div class="row">
+        <div class="col-xxl-6">
+            <h3>
+                Server: @Server.Name
+                @if (Server.MaxPlayers != null)
+                {
+                    <span> (@Server.NumPlayersWithoutBots/@Server.MaxPlayers)</span>
+                }
+            </h3>
+
+            @if (Server.NumPlayersWithoutBots > 0)
+            {
+                <div class="row m-5 text-center">
+                    <div class="col ps-5">
+                        <!-- Scoreboard -->
+                        <table id="scoreboard" class="table table-sm table-hover table-borderless">
+                            <thead>
+                            <tr>
+                                <th scope="col" class="align-middle text-truncate">@Server.Team1 Player</th>
+                                <th style="width: 5%;" scope="col" class="align-middle text-center">Score</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            @foreach (var player in Server.Players
+                                .Where(p => p.IsHuman)
+                                .Where(p => p.TeamLabel == Server.Team1)
+                                .OrderByDescending(p => p.Score)
+                                .ToList())
+                            {
+                                <tr>
+                                    <td>
+                                        <a title="Open BF2Hub profile" class="link-light text-nowrap text-decoration-none" target="_blank"
+                                           href="https://www.bf2hub.com/player/@player.Name">
+                                            <span style="color: @(player.IsFriend ? "darkseagreen" : "")">@player.FullName</span>
+                                        </a>
+                                    </td>
+                                    <td class="text-center">
+                                        @player.Score
+                                    </td>
+                                </tr>
+                            }
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col ps-5">
+                        <!-- Scoreboard -->
+                        <table id="scoreboard" class="table table-sm table-hover table-borderless">
+                            <thead>
+                            <tr>
+                                <th scope="col" class="align-middle text-truncate">@Server.Team2 Player</th>
+                                <th style="width: 5%;" scope="col" class="align-middle text-center">Score</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            @foreach (var player in Server.Players
+                                .Where(p => p.IsHuman)
+                                .Where(p => p.TeamLabel == Server.Team2)
+                                .OrderByDescending(p => p.Score)
+                                .ToList())
+                            {
+                                <tr>
+                                    <td>
+                                        <a title="Open BF2Hub profile" class="link-light text-nowrap text-decoration-none" target="_blank"
+                                           href="https://www.bf2hub.com/player/@player.Name">
+                                            <span style="color: @(player.IsFriend ? "darkseagreen" : "")">@player.FullName</span>
+                                        </a>
+                                    </td>
+                                    <td class="text-center">
+                                        @player.Score
+                                    </td>
+                                </tr>
+                            }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            }
+
+            <div class="m-4 text-center">
+                @if (!string.IsNullOrWhiteSpace(Server.CommunityLogoUrl))
+                {
+                    <img src="@Server.CommunityLogoUrl" alt="Server"/>
+                    <br/>
+                }
+                @if (Uri.IsWellFormedUriString(Server.SponsorText, UriKind.Absolute))
+                {
+                    <a href="@Server.SponsorText" target="_blank">@Server.SponsorText</a>
+                }
+                else
+                {
+                    <div class="m-2">@Server.SponsorText</div>
+                }
+            </div>
+        </div>
+        <div class="col-xxl-6">
+            <div class="mx-3 pb-3">
+                <h3>Server Details</h3>
+            </div>
+            <div class="mx-5 px-5">
+                <div class="row">
+                    Current Map: @Server.MapName
+                </div>
+                <div class="row">
+                    Current Players (excluding bots): @Server.NumPlayersWithoutBots
+                </div>
+                <div class="row">
+                    Maximum Players: @Server.MaxPlayers
+                </div>
+                <div class="row">
+                    Reserved Slots: @Server.ReservedSlots
+                </div>
+                <div class="row">
+                    Ranked: <input class="form-check-input state-info-box" type="checkbox" value="" checked="@Server.Ranked" disabled>
+                </div>
+                <div class="row">
+                    Password: <input class="form-check-input state-info-box" type="checkbox" value="" checked="@Server.Password" disabled>
+                </div>
+                <div class="row">
+                    Friendly Fire: <input class="form-check-input state-info-box" type="checkbox" value="" checked="@Server.Friendlyfire" disabled>
+                </div>
+                <div class="row">
+                    Autobalance: <input class="form-check-input state-info-box" type="checkbox" value="" checked="@Server.Autobalance" disabled>
+                </div>
+                <div class="row">
+                    Allow Global Unlocks: <input class="form-check-input state-info-box" type="checkbox" value="" checked="@Server.GlobalUnlocks" disabled>
+                </div>
+                <div class="row">
+                    No Vehicles: <input class="form-check-input state-info-box" type="checkbox" value="" checked="@Server.NoVehicles" disabled>
+                </div>
+                <div class="row">
+                    Teamkill Mode: @Server.Tkmode
+                </div>
+                <div class="row">
+                    Map Size: @Server.MapSize
+                </div>
+                <div class="row">
+                    Rounds per Map: @Server.RoundsPerMap
+                </div>
+                <div class="row">
+                    Spawn Time: @Server.Spawntime
+                </div>
+                <div class="row">
+                    Time Limit: @Server.Timelimit
+                </div>
+                <div class="row">
+                    Ticket Ratio: @Server.Ticketratio
+                </div>
+                <div class="row">
+                    Team Ratio: @Server.Teamratio
+                </div>
+                <div class="row">
+                    Game Variant: @Server.GameVariant
+                </div>
+                <div class="row">
+                    Game Mode: @Server.GameType
+                </div>
+                <div class="row">
+                    Operating System: @Server.Os
+                </div>
+                <div class="row">
+                    Server FPS: @Server.Fps
+                </div>
+                <div class="row">
+                    Server IP: @Server.Ip
+                </div>
+                <div class="row">
+                    Server Port: @Server.Port
+                </div>
+                <div class="row">
+                    Dedicated Server: <input class="form-check-input state-info-box" type="checkbox" value="" checked="@Server.Dedicated" disabled>
+                </div>
+                <div class="row">
+                    VoIP: <input class="form-check-input state-info-box" type="checkbox" value="" checked="@Server.Voip" disabled>
+                </div>
+                <div class="row">
+                    Server Continent: @(ServerLocation?.ContinentCode ?? "-")
+                </div>
+                <div class="row">
+                    Server Country: @(ServerLocation?.CountryName ?? "-")
+                </div>
+                <div class="row">
+                    Server City: @(ServerLocation?.City ?? "-")
+                </div>
+                <div class="row">
+                    Battlerecorder enabled: <input class="form-check-input state-info-box" type="checkbox" value="" checked="@Server.Battlerecorder" disabled>
+                </div>
+                <div class="row">
+                    Battlerecorder URL: <a href="@Server.DemoDownload" target="_blank">@Server.DemoDownload</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-5">
+        <div class="accordion accordion-flush bg-dark" id="mainAccordion">
+            <div class="accordion-item">
+                <div class="accordion-header">
+                    <div class="col">
+                        <button class="accordion-button collapsed btn" type="button" data-bs-toggle="collapse" aria-expanded="false" data-bs-target="#collapsed_raw">
+                            View raw server data
+                        </button>
+                    </div>
+                    <div id="collapsed_raw" class="accordion-collapse collapse">
+                        <div class="accordion-body ps-5 pe-3 pb-5">
+                            <pre>
+                                @JsonConvert.SerializeObject(Server, Formatting.Indented)
+                            </pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+</div>
+
+@code {
+
+    Server? Server => _serverDetailState.Value.LoadedServer;
+    GeoLocation? ServerLocation => _serverGeoLocationState.Value.GeoLocation;
+
+    [Parameter]
+    public string ServerIdAndPort { get; set; }
+
+    protected override void OnInitialized()
+    {
+        LoadData();
+        base.OnInitialized();
+    }
+
+    private void LoadData()
+    {
+        _dispatcher.Dispatch(new BeginLoadingServerDetailAction {IpAndPort = ServerIdAndPort});
+    }
+
+}
