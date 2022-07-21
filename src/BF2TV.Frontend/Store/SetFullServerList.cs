@@ -1,7 +1,7 @@
 ﻿using BF2TV.Domain.BattlefieldApi;
 using Fluxor;
 
-namespace BF2TV.BlazorWasm.Store;
+namespace BF2TV.Frontend.Store;
 
 public class SetFullServerListAction
 {

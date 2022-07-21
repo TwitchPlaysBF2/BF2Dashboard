@@ -1,6 +1,6 @@
 ﻿using BF2TV.Domain.BattlefieldApi;
 
-namespace BF2TV.BlazorWasm.Store;
+namespace BF2TV.Frontend.Store;
 
 public class FavoriteServerListState
 {

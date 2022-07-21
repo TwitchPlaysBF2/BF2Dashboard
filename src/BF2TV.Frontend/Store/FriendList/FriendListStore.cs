@@ -1,8 +1,11 @@
-﻿using BF2TV.Domain.BattlefieldApi;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using BF2TV.Domain.BattlefieldApi;
 using Blazored.LocalStorage;
 using Fluxor;
 
-namespace BF2TV.BlazorWasm.Store.FriendList;
+namespace BF2TV.Frontend.Store.FriendList;
 
 public record FriendListState
 {

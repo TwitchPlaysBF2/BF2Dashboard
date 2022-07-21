@@ -1,6 +1,6 @@
 ﻿using Fluxor;
 
-namespace BF2TV.BlazorWasm.Store;
+namespace BF2TV.Frontend.Store;
 
 public record LoadingState
 {

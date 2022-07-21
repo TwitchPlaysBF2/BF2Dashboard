@@ -1,4 +1,4 @@
-﻿namespace BF2TV.BlazorWasm.Store;
+﻿namespace BF2TV.Frontend.Store;
 
 public static class Commons
 {

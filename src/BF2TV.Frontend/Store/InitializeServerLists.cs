@@ -3,7 +3,7 @@ using BF2TV.Domain.Services;
 using Blazored.LocalStorage;
 using Fluxor;
 
-namespace BF2TV.BlazorWasm.Store;
+namespace BF2TV.Frontend.Store;
 
 public class InitializeServerListsAction
 {

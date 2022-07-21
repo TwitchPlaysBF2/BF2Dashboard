@@ -1,26 +1,29 @@
 ﻿using AutoUpdaterDotNET;
 using BF2TV.WindowsApp.Infrastructure;
 using Microsoft.AspNetCore.Components.WebView.WindowsForms;
+using Microsoft.Extensions.DependencyInjection;
+using BF2TV.Frontend.Infrastructure;
 
 namespace BF2TV.WindowsApp
 {
     public partial class BlazorViewForm : Form
     {
-        public BlazorViewForm(IServiceProvider serviceProvider)
+        public BlazorViewForm()
         {
-            // TODO add blazor side runtime detection
-            // https://stackoverflow.com/a/72194120
+            var services = new ServiceCollection();
+            services.AddWindowsFormsBlazorWebView();
+            services.AddBlazorWebViewDeveloperTools();
+            // TODO: Might have to pass according assemblies here for Fluxor to work properly
+            services.RegisterFrontendServices(typeof(Program).Assembly);
 
-            // TODO Introduce notifyIcon
-            // https://github.com/hardcodet/wpf-notifyicon
+            InitializeComponent();
+
+            blazorWebView.HostPage = "wwwroot\\index.html";
+            blazorWebView.Services = services.BuildServiceProvider();
+            blazorWebView.RootComponents.Add<Frontend.App>("#app");
 
             // Checks for version update & prompts a dialog, if available
             AutoUpdater.Start("https://raw.githubusercontent.com/TwitchPlaysBF2/BF2Dashboard/main/build/AutoUpdater.xml");
-
-            InitializeComponent();
-            blazorWebView.HostPage = "wwwroot\\index.html";
-            blazorWebView.Services = serviceProvider;
-            blazorWebView.RootComponents.Add<BlazorWasm.Pages.Dashboard>("#app");
         }
 
         protected override void OnHandleCreated(EventArgs e) => DarkMode.Enable(Handle);

@@ -1,8 +1,8 @@
 @page "/"
 @inherits FluxorComponent
 @using BF2TV.Domain.BattlefieldApi
-@using BF2TV.BlazorWasm.Store
-@using BF2TV.BlazorWasm.Store.FriendList
+@using BF2TV.Frontend.Store
+@using BF2TV.Frontend.Store.FriendList
 @inject IDispatcher _dispatcher
 @inject IState<FavoriteServerListState> _favoriteServerListState
 @inject IState<FullServerListState> _fullServerListState
@@ -83,11 +83,11 @@ else
                                     <div class="col-1">
                                         @if (server.Ranked == true)
                                         {
-                                            <img style="width: 16px;" src="img/ranked.png" alt="Ranked" title="Ranked"/>
+                                            <img style="width: 16px;" src="_content/BF2TV.Frontend/img/ranked.png" alt="Ranked" title="Ranked"/>
                                         }
                                         else
                                         {
-                                            <img style="width: 16px;" src="img/unranked.png" alt="Unranked" title="Unranked"/>
+                                            <img style="width: 16px;" src="_content/BF2TV.Frontend/img/unranked.png" alt="Unranked" title="Unranked"/>
                                         }
                                     </div>
                                     <div class="col-1">
@@ -246,11 +246,11 @@ else
                                         <div class="col-1">
                                             @if (server.Ranked == true)
                                             {
-                                                <img style="width: 16px;" src="img/ranked.png" alt="Ranked" title="Ranked"/>
+                                                <img style="width: 16px;" src="_content/BF2TV.Frontend/img/ranked.png" alt="Ranked" title="Ranked"/>
                                             }
                                             else
                                             {
-                                                <img style="width: 16px;" src="img/unranked.png" alt="Unranked" title="Unranked"/>
+                                                <img style="width: 16px;" src="_content/BF2TV.Frontend/img/unranked.png" alt="Unranked" title="Unranked"/>
                                             }
                                         </div>
                                         <div class="col-1">
