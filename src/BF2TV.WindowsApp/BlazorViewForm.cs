@@ -15,6 +15,7 @@ namespace BF2TV.WindowsApp
             services.AddBlazorWebViewDeveloperTools();
             // TODO: Might have to pass according assemblies here for Fluxor to work properly
             services.RegisterSharedServices(typeof(Program).Assembly);
+            services.RegisterWinFormsServices();
 
             InitializeComponent();
 
