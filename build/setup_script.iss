@@ -1,7 +1,7 @@
 ; Inno Setup Script
 
 #define MyAppName "BF2.TV"
-#define MyAppVersion "0.0.0.8"
+#define MyAppVersion "0.0.0.9"
 #define MyAppPublisher "TwitchPlaysBF2"
 #define MyAppURL "https://www.github.com/TwitchPlaysBF2"
 #define MyAppExeName "BF2TV.WindowsApp.exe"
@@ -20,7 +20,8 @@ DefaultDirName={autopf}\BF2.TV
 DisableProgramGroupPage=yes
 OutputDir=/bin
 OutputBaseFilename=BF2.TV_App_Setup_v{#MyAppVersion}
-;SetupIconFile=..\src\BF2TV.BlazorWasm\wwwroot\favicon.ico
+SetupIconFile=..\src\BF2TV.WindowsApp\Resources\favicon.ico
+UninstallDisplayIcon={app}\Resources\favicon.ico
 Compression=lzma2/max
 SolidCompression=yes
 WizardStyle=classic   
@@ -42,8 +43,8 @@ Source: "redistributables\*"; DestDir: "{app}\_external"; Flags: ignoreversion
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]
-Name: "{autoprograms}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"
-Name: "{autodesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: desktopicon
+Name: "{autoprograms}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; IconFilename: "{app}\Resources\favicon.ico"
+Name: "{autodesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; IconFilename: "{app}\Resources\favicon.ico"; Tasks: desktopicon
 
 [Run]
 Filename: "{app}\_external\joinme.click-launcher.exe"; Parameters: "-quiet"
