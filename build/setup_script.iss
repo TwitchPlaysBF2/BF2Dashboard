@@ -4,7 +4,7 @@
 #define MyAppVersion "0.0.0.8"
 #define MyAppPublisher "TwitchPlaysBF2"
 #define MyAppURL "https://www.github.com/TwitchPlaysBF2"
-#define MyAppExeName "BF2Dashboard.WindowsApp.exe"
+#define MyAppExeName "BF2TV.WindowsApp.exe"
 
 [Setup]       
 AppId={{160D7F45-1026-4216-8CCD-217D7A40C1B2}
@@ -20,7 +20,7 @@ DefaultDirName={autopf}\BF2.TV
 DisableProgramGroupPage=yes
 OutputDir=/bin
 OutputBaseFilename=BF2.TV_App_Setup_v{#MyAppVersion}
-;SetupIconFile=..\src\BF2Dashboard.UI\wwwroot\favicon.ico
+;SetupIconFile=..\src\BF2TV.BlazorWasm\wwwroot\favicon.ico
 Compression=lzma2/max
 SolidCompression=yes
 WizardStyle=classic   

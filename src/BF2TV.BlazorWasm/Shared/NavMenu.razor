@@ -1,0 +1,82 @@
+﻿@using BF2TV.BlazorWasm.Store
+@inject IDispatcher _dispatcher
+
+<div class="top-row ps-3 navbar-dark">
+    <div class="container">
+        <div class="row pt-2">
+            <div class="col-auto me-auto pt-1">
+                <a class="navbar-brand" href=""><img style="width: 25px" src="favicon.ico?03" alt="BF2.TV"/> BF2.TV</a>
+                <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+            </div>
+            <div class="col-auto pt-1">
+                <a role="button" class="btn btn-sm btn-dark" title="Refresh all server data" @onclick="Refresh">
+                    <i class="bi bi-arrow-clockwise img-fluid"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@* Browse icons on: https://useiconic.com/open *@
+
+<div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
+    <nav class="flex-column">
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
+                <span class="oi oi-home" aria-hidden="true"></span> Dashboard
+            </NavLink>
+        </div>
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="friends" Match="NavLinkMatch.All">
+                <span class="oi oi-people" aria-hidden="true"></span> Friends
+            </NavLink>
+        </div>
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="live" Match="NavLinkMatch.All">
+                <span class="oi oi-media-record" aria-hidden="true"></span> Live Streams
+            </NavLink>
+        </div>
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="faq" Match="NavLinkMatch.All">
+                <span class="oi oi-question-mark" aria-hidden="true"></span> FAQ
+            </NavLink>
+        </div>
+    </nav>
+
+    <style>
+        .footer {
+            position: fixed;
+            bottom: 5px;
+            left: 10px;
+            width: 230px;
+            background-color: transparent;
+        }
+    </style>
+
+    <div class="footer">
+        <div class="d-none d-sm-none d-lg-block embed-responsive">
+            <iframe src="https://discord.com/widget?id=988930069210730506&theme=dark" width="230" height="500" allowtransparency="true" frameborder="0" sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"></iframe>
+        </div>
+    </div>
+</div>
+
+@code {
+    private bool _shouldCollapseMenuOnMobile = true;
+
+    private string? NavMenuCssClass => _shouldCollapseMenuOnMobile ? "collapse" : null;
+
+    private void ToggleNavMenu()
+    {
+        _shouldCollapseMenuOnMobile = !_shouldCollapseMenuOnMobile;
+    }
+
+    private void Refresh()
+    {
+        _dispatcher.Dispatch(new SetFullServerListAction(null));
+        _dispatcher.Dispatch(new SetFavoriteServerListAction(null));
+        _dispatcher.Dispatch(new InitializeServerListsAction());
+    }
+
+}

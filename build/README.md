@@ -1,6 +1,6 @@
 # How to manually build the BF2.TV App
 
-1. Publish the project `BF2Dashboard.WindowsApp` using the existing "PUBLISH" profile or run the script `_CreateAppRelease.ps1`
+1. Publish the project `BF2TV.WindowsApp` using the existing "PUBLISH" profile or run the script `_CreateAppRelease.ps1`
 2. Ensure the binaries got created here:
    1. `\build\bin\publish\`
 3. Ensure the same path is configured in the `setup_script.iss` file below the [Files] section
