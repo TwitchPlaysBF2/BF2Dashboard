@@ -10,7 +10,7 @@ namespace BF2TV.Frontend.Infrastructure;
 
 public static class DependencyInjection
 {
-    public static void RegisterFrontendServices(this IServiceCollection services, params Assembly[] additionalFluxorAssemblies)
+    public static void RegisterSharedServices(this IServiceCollection services, params Assembly[] additionalFluxorAssemblies)
     {
         services.AddBlazoredLocalStorage();
         services.AddScoped<IServerListService, ServerListService>();

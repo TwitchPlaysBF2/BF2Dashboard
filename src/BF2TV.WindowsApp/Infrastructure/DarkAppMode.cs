@@ -5,7 +5,7 @@ namespace BF2TV.WindowsApp.Infrastructure;
 /// <summary>
 /// Black magic to make the form title bar go dark, from https://stackoverflow.com/a/64927217
 /// </summary>
-public static class DarkMode
+public static class DarkAppMode
 {
     [DllImport("DwmApi")]
     private static extern int DwmSetWindowAttribute(IntPtr hwnd, int attr, int[] attrValue, int attrSize);

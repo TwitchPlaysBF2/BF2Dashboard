@@ -14,7 +14,7 @@ namespace BF2TV.WindowsApp
             services.AddWindowsFormsBlazorWebView();
             services.AddBlazorWebViewDeveloperTools();
             // TODO: Might have to pass according assemblies here for Fluxor to work properly
-            services.RegisterFrontendServices(typeof(Program).Assembly);
+            services.RegisterSharedServices(typeof(Program).Assembly);
 
             InitializeComponent();
 
@@ -26,6 +26,6 @@ namespace BF2TV.WindowsApp
             AutoUpdater.Start("https://raw.githubusercontent.com/TwitchPlaysBF2/BF2Dashboard/main/build/AutoUpdater.xml");
         }
 
-        protected override void OnHandleCreated(EventArgs e) => DarkMode.Enable(Handle);
+        protected override void OnHandleCreated(EventArgs e) => DarkAppMode.Enable(Handle);
     }
 }
