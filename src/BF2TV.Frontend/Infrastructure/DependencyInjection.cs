@@ -1,5 +1,4 @@
-﻿using System.Reflection;
-using BF2TV.Domain.DiscordApi;
+﻿using BF2TV.Domain.DiscordApi;
 using BF2TV.Domain.Services;
 using Blazored.LocalStorage;
 using Fluxor;
@@ -10,14 +9,14 @@ namespace BF2TV.Frontend.Infrastructure;
 
 public static class DependencyInjection
 {
-    public static void RegisterSharedServices(this IServiceCollection services, params Assembly[] additionalFluxorAssemblies)
+    public static void RegisterSharedServices(this IServiceCollection services)
     {
         services.AddBlazoredLocalStorage();
         services.AddScoped<IServerListService, ServerListService>();
         services.AddFluxor(options =>
         {
             options
-                .ScanAssemblies(typeof(DependencyInjection).Assembly, additionalFluxorAssemblies)
+                .ScanAssemblies(typeof(DependencyInjection).Assembly)
                 .UseRouting()
                 .UseReduxDevTools();
         });
