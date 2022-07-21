@@ -1,8 +1,8 @@
 ﻿using AutoUpdaterDotNET;
+using BF2TV.Frontend.Infrastructure;
 using BF2TV.WindowsApp.Infrastructure;
 using Microsoft.AspNetCore.Components.WebView.WindowsForms;
 using Microsoft.Extensions.DependencyInjection;
-using BF2TV.Frontend.Infrastructure;
 
 namespace BF2TV.WindowsApp
 {
@@ -13,8 +13,7 @@ namespace BF2TV.WindowsApp
             var services = new ServiceCollection();
             services.AddWindowsFormsBlazorWebView();
             services.AddBlazorWebViewDeveloperTools();
-            // TODO: Might have to pass according assemblies here for Fluxor to work properly
-            services.RegisterSharedServices(typeof(Program).Assembly);
+            services.RegisterSharedServices();
             services.RegisterWinFormsServices();
 
             InitializeComponent();
