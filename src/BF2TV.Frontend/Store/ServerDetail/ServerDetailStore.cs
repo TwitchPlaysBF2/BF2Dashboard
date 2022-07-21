@@ -1,10 +1,11 @@
-﻿using BF2TV.Domain.BattlefieldApi;
+﻿using System.Threading.Tasks;
+using BF2TV.Domain.BattlefieldApi;
 using BF2TV.Domain.GeoApi;
 using BF2TV.Domain.Repositories;
-using BF2TV.BlazorWasm.Store.FriendList;
+using BF2TV.Frontend.Store.FriendList;
 using Fluxor;
 
-namespace BF2TV.BlazorWasm.Store.ServerDetail;
+namespace BF2TV.Frontend.Store.ServerDetail;
 
 public record ServerDetailState
 {

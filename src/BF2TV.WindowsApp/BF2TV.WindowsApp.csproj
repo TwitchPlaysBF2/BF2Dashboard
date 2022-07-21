@@ -20,11 +20,11 @@
   <ItemGroup>
     <PackageReference Include="Autoupdater.NET.Official" Version="1.7.4" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebView.WindowsForms" Version="6.0.408" />
-    <PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.1" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\BF2TV.BlazorWasm\BF2TV.BlazorWasm.csproj" />
+    <ProjectReference Include="..\BF2TV.Domain\BF2TV.Domain.csproj" />
+    <ProjectReference Include="..\BF2TV.Frontend\BF2TV.Frontend.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -40,6 +40,12 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="wwwroot\**\*.*">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
 </Project>

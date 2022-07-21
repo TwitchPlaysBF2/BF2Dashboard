@@ -1,36 +1,23 @@
-using BF2TV.WindowsApp;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-
 namespace BF2TV.WindowsApp
 {
     internal static class Program
     {
-        private static IServiceProvider ServiceProvider { get; set; }
-
         /// <summary>
         ///  The main entry point for the application.
         /// </summary>
         [STAThread]
         static void Main()
         {
-            // To customize application configuration such as set high DPI settings or default font,
-            // see https://aka.ms/applicationconfiguration.
-            ApplicationConfiguration.Initialize();
+            AppDomain.CurrentDomain.UnhandledException += (sender, error) =>
+            {
+                MessageBox.Show(error.ExceptionObject.ToString(), @"Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            };
 
-            ServiceProvider = CreateHostBuilder().Build().Services;
-            Application.Run(ServiceProvider.GetRequiredService<BlazorViewForm>());
-        }
-
-        private static IHostBuilder CreateHostBuilder()
-        {
-            return Host.CreateDefaultBuilder()
-                .ConfigureServices((context, services) =>
-                {
-                    services.AddWindowsFormsBlazorWebView();
-                    services.AddBlazorWebViewDeveloperTools();
-                    services.AddTransient<BlazorViewForm>();
-                });
+            Application.SetHighDpiMode(HighDpiMode.SystemAware);
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
+            Application.Run(new BlazorViewForm());
         }
     }
 }
