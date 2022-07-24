@@ -6,7 +6,8 @@
 3. Ensure the same path is configured in the `setup_script.iss` file below the [Files] section
 4. (OPTIONAL: When creating a GitHub release)
    1. Raise version number in `setup_script.iss` file
-   2. Commit & push to main/master branch (don't raise the `AutoUpdate.xml` version yet)
+   2. Raise version number in `src\BF2TV.WindowsApp\BF2TV.WindowsApp.csproj` file
+   3. Commit & push to main/master branch (don't raise the `AutoUpdate.xml` version yet)
 5. Assuming you have https://jrsoftware.org/isdl.php installed
    1. Open the .iss file with Inno Setup Compiler
    2. Hit CTRL+F9 to compile the installer file (or compile it in the menu)
