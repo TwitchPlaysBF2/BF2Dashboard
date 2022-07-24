@@ -9,6 +9,7 @@ namespace BF2TV.WindowsApp
 {
     public partial class BlazorViewForm : Form
     {
+        public FormWindowState? CachedWindowStateBeforeMinimizing;
         private readonly ServiceProvider _serviceProvider;
         private TrayService? _trayService;
 
@@ -35,7 +36,15 @@ namespace BF2TV.WindowsApp
         {
             _trayService = _serviceProvider.GetService<TrayService>()
                            ?? throw new InvalidOperationException($"Failed to resolve {nameof(TrayService)}");
-            _trayService.Initialize();
+            _trayService.Initialize(this);
+        }
+
+        private void BlazorViewForm_Resize(object sender, EventArgs e)
+        {
+            if (WindowState == FormWindowState.Minimized)
+                Hide();
+            else
+                CachedWindowStateBeforeMinimizing = WindowState;
         }
 
         protected override void OnHandleCreated(EventArgs e) => DarkAppMode.Enable(Handle);
