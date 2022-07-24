@@ -34,6 +34,7 @@
             // blazorWebView1
             // 
             this.blazorWebView.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(39)))), ((int)(((byte)(43)))), ((int)(((byte)(48)))));
+            this.blazorWebView.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(39)))), ((int)(((byte)(43)))), ((int)(((byte)(48)))));
             this.blazorWebView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.blazorWebView.Location = new System.Drawing.Point(0, 0);
             this.blazorWebView.Margin = new System.Windows.Forms.Padding(2, 1, 2, 1);

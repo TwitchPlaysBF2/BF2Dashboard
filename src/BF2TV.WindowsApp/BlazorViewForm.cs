@@ -19,8 +19,8 @@ namespace BF2TV.WindowsApp
             InitializeComponent();
 
             blazorWebView.HostPage = "wwwroot\\index.html";
-            blazorWebView.Services = services.BuildServiceProvider();
             blazorWebView.RootComponents.Add<Frontend.App>("#app");
+            blazorWebView.Services = services.BuildServiceProvider();
 
             UpdateService.PromptForUpdateIfThereIsOneAvailable();
         }
