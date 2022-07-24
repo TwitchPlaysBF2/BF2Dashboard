@@ -19,7 +19,7 @@
 
   <ItemGroup>
     <PackageReference Include="Autoupdater.NET.Official" Version="1.7.4" />
-    <PackageReference Include="Microsoft.AspNetCore.Components.WebView.WindowsForms" Version="6.0.408" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebView.WindowsForms" Version="6.0.419" />
   </ItemGroup>
 
   <ItemGroup>
