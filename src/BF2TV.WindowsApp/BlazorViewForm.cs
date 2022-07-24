@@ -22,13 +22,7 @@ namespace BF2TV.WindowsApp
             blazorWebView.Services = services.BuildServiceProvider();
             blazorWebView.RootComponents.Add<Frontend.App>("#app");
 
-            PromptForUpdateIfThereIsOneAvailable();
-        }
-
-        private static void PromptForUpdateIfThereIsOneAvailable()
-        {
-            AutoUpdater.ShowSkipButton = false;
-            AutoUpdater.Start("https://raw.githubusercontent.com/TwitchPlaysBF2/BF2Dashboard/main/build/AutoUpdater.xml");
+            UpdateService.PromptForUpdateIfThereIsOneAvailable();
         }
 
         protected override void OnHandleCreated(EventArgs e) => DarkAppMode.Enable(Handle);
