@@ -1,6 +1,7 @@
-﻿using AutoUpdaterDotNET;
+﻿using System.ComponentModel;
 using BF2TV.Frontend.Infrastructure;
 using BF2TV.WindowsApp.Infrastructure;
+using BF2TV.WindowsApp.Infrastructure.Tray;
 using Microsoft.AspNetCore.Components.WebView.WindowsForms;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -8,6 +9,9 @@ namespace BF2TV.WindowsApp
 {
     public partial class BlazorViewForm : Form
     {
+        private readonly ServiceProvider _serviceProvider;
+        private TrayService? _trayService;
+
         public BlazorViewForm()
         {
             var services = new ServiceCollection();
@@ -15,16 +19,31 @@ namespace BF2TV.WindowsApp
             services.AddBlazorWebViewDeveloperTools();
             services.RegisterSharedServices();
             services.RegisterWinFormsServices();
+            _serviceProvider = services.BuildServiceProvider();
 
+            InitializeTrayIcon();
             InitializeComponent();
 
             blazorWebView.HostPage = "wwwroot\\index.html";
             blazorWebView.RootComponents.Add<Frontend.App>("#app");
-            blazorWebView.Services = services.BuildServiceProvider();
+            blazorWebView.Services = _serviceProvider;
 
             UpdateService.PromptForUpdateIfThereIsOneAvailable();
         }
 
+        private void InitializeTrayIcon()
+        {
+            _trayService = _serviceProvider.GetService<TrayService>()
+                           ?? throw new InvalidOperationException($"Failed to resolve {nameof(TrayService)}");
+            _trayService.Initialize();
+        }
+
         protected override void OnHandleCreated(EventArgs e) => DarkAppMode.Enable(Handle);
+
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            _trayService?.Dispose();
+            base.OnClosing(e);
+        }
     }
 }
