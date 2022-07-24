@@ -1,7 +1,9 @@
-﻿using BF2TV.Domain.DiscordApi;
+﻿using System.Reflection;
+using BF2TV.Domain.DiscordApi;
 using BF2TV.Domain.Services;
 using Blazored.LocalStorage;
 using Fluxor;
+using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using Refit;
 
@@ -24,5 +26,7 @@ public static class DependencyInjection
         services
             .AddRefitClient<IDiscordRepository>()
             .ConfigureHttpClient(c => c.BaseAddress = new Uri("https://d26vco2td5wtt4.cloudfront.net"));
+        
+        services.AddMediatR(Assembly.GetExecutingAssembly());
     }
 }

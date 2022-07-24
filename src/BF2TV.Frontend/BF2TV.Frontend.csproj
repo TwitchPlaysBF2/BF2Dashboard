@@ -15,6 +15,8 @@
     <ItemGroup>
       <PackageReference Include="Fluxor.Blazor.Web" Version="5.4.0" />
       <PackageReference Include="Fluxor.Blazor.Web.ReduxDevTools" Version="5.4.0" />
+      <PackageReference Include="JetBrains.Annotations" Version="2022.1.0" />
+      <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="10.0.1" />
       <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="6.0.7" />
       <PackageReference Include="Refit.HttpClientFactory" Version="6.3.2" />
     </ItemGroup>
