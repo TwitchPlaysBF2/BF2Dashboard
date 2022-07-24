@@ -22,7 +22,12 @@ namespace BF2TV.WindowsApp
             blazorWebView.Services = services.BuildServiceProvider();
             blazorWebView.RootComponents.Add<Frontend.App>("#app");
 
-            // Checks for version update & prompts a dialog, if available
+            PromptForUpdateIfThereIsOneAvailable();
+        }
+
+        private static void PromptForUpdateIfThereIsOneAvailable()
+        {
+            AutoUpdater.ShowSkipButton = false;
             AutoUpdater.Start("https://raw.githubusercontent.com/TwitchPlaysBF2/BF2Dashboard/main/build/AutoUpdater.xml");
         }
 
