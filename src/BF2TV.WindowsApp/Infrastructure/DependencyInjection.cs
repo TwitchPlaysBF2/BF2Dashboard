@@ -1,6 +1,8 @@
 ﻿using System.Reflection;
+using BF2TV.Domain.Services;
 using BF2TV.Frontend.Infrastructure;
 using BF2TV.WindowsApp.Infrastructure.Tray;
+using BF2TV.WindowsApp.Services;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -12,6 +14,7 @@ public static class DependencyInjection
     {
         services.AddMediatR(Assembly.GetExecutingAssembly());
         services.AddTransient<IEnvironment, WinFormsEnvironment>();
+        services.AddTransient<IGameLauncher, JoinmeGameLauncher>();
         services.AddSingleton<TrayService>();
     }
 }

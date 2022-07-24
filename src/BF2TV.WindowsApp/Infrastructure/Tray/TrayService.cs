@@ -1,12 +1,20 @@
 using BF2TV.Domain.BattlefieldApi;
+using BF2TV.WindowsApp.Commands;
+using MediatR;
 
 namespace BF2TV.WindowsApp.Infrastructure.Tray;
 
 public class TrayService : IDisposable
 {
+    private readonly IMediator _mediator;
     private NotifyIcon _trayIcon = null!;
     private BlazorViewForm _form = null!;
     private readonly ToolStripMenuItem _trayItemFavorites = new("Join Favorite Server");
+
+    public TrayService(IMediator mediator)
+    {
+        _mediator = mediator;
+    }
 
     public void Initialize(BlazorViewForm form)
     {
@@ -29,7 +37,7 @@ public class TrayService : IDisposable
         _trayItemFavorites.DropDownItems.Clear();
         if (serverList.Length == 0)
         {
-            _trayItemFavorites.DropDown.Items.Add(new ToolStripMenuItem("No servers loaded"));
+            _trayItemFavorites.DropDown.Items.Add(new ToolStripMenuItem("No servers available"));
             return;
         }
 
@@ -69,7 +77,9 @@ public class TrayService : IDisposable
 
     private void OnJoinServer(Server server)
     {
-        MessageBox.Show($@"Joining a server is not implemented yet.", server.Name);
+        var args = server.JoinLink;
+
+        _mediator.Send(new GameLaunchCommand(args));
     }
 
     private void OnClickExit(object? sender, EventArgs e)
