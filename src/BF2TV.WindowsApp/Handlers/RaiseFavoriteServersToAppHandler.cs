@@ -20,6 +20,6 @@ public class RaiseFavoriteServersToAppHandler : RequestHandler<RaiseFavoriteServ
         var serversToShowInApp = request.ServerList
             .Where(s => s.NumPlayersWithoutBots > 0);
 
-        _trayService.SetFavorites(serversToShowInApp.ToArray());
+        _trayService.GenerateFavorites(serversToShowInApp.ToArray());
     }
 }

@@ -32,13 +32,12 @@ public class TrayService : IDisposable
             => OnTrayClick(sender, new MouseEventArgs(MouseButtons.Left, 2, 0, 0, 0));
     }
 
-    public void SetFavorites(params Server[] serverList)
+    public void GenerateFavorites(params Server[] serverList)
     {
         _trayItemFavorites.DropDownItems.Clear();
         if (serverList.Length == 0)
         {
-            _trayItemFavorites.DropDown.Items.Add(new ToolStripMenuItem("No servers available"));
-            return;
+            _trayItemFavorites.DropDown.Items.Add(new ToolStripMenuItem("No favorites added yet", null, ShowApp));
         }
 
         foreach (var server in serverList)
@@ -48,16 +47,21 @@ public class TrayService : IDisposable
             item.ToolTipText = $@"Map: {server.MapName}";
             _trayItemFavorites.DropDown.Items.Add(item);
         }
+
+        _trayItemFavorites.DropDown.Items.Add(new ToolStripSeparator());
+        _trayItemFavorites.DropDown.Items.Add(new ToolStripMenuItem("(Open the app to add more favorites)", null, ShowApp));
     }
 
     private ContextMenuStrip CreateMenu()
     {
-        SetFavorites();
+        GenerateFavorites();
 
         return new ContextMenuStrip
         {
             Items =
             {
+                new ToolStripMenuItem("Show", null, ShowApp),
+                new ToolStripSeparator(),
                 _trayItemFavorites,
                 new ToolStripSeparator(),
                 new ToolStripMenuItem("Exit", null, OnClickExit, "Exit"),
@@ -70,6 +74,11 @@ public class TrayService : IDisposable
         if (e.Button != MouseButtons.Left)
             return;
 
+        ShowApp(sender, e);
+    }
+
+    private void ShowApp(object? sender, EventArgs e)
+    {
         _form.Show();
         _form.WindowState = _form.CachedWindowStateBeforeMinimizing ?? FormWindowState.Maximized;
         _form.Activate();
