@@ -14,7 +14,7 @@ public static class DependencyInjection
     {
         services.AddMediatR(Assembly.GetExecutingAssembly());
         services.AddTransient<IEnvironment, WinFormsEnvironment>();
-        services.AddTransient<IGameLauncher, JoinmeGameLauncher>();
+        services.AddTransient<IGameLauncher, JoinmeUriProtocolGameLauncher>();
         services.AddSingleton<TrayService>();
     }
 }
