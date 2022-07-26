@@ -10,4 +10,16 @@ public class GlobalConfigFile : ConfigFile<GlobalConfigFile>
             return $@"{userDocuments}\Battlefield 2\Profiles\Global.con";
         }
     }
+    
+    public string GetCurrentlyActiveProfileNumber()
+    {
+        var profileNumber = GetSettingValue("GlobalSettings.setDefaultUser");
+        if (!int.TryParse(profileNumber, out _))
+            throw new ArgumentException(message:
+                $"Couldn't parse profile number from config file: {FilePath}" +
+                $"Illegal format, expected only numbers in profile number string: {profileNumber}");
+
+        // Don't return int otherwise we lose leading zeros
+        return profileNumber;
+    }
 }

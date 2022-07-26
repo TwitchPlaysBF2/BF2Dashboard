@@ -17,4 +17,6 @@ public class ProfileConfigFile : ConfigFile<ProfileConfigFile>
             return $@"{userDocuments}\Battlefield 2\Profiles\{_profileNumber}\Profile.con";
         }
     }
+    
+    public string GetPlayerName() => GetSettingValue("LocalProfile.setGamespyNick");
 }

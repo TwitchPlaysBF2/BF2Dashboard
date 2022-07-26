@@ -1,6 +1,5 @@
 ﻿using System.Diagnostics;
 using BF2TV.Domain.Services;
-using BF2TV.WindowsApp.Services.GameDataLookup.Battlefield2;
 using BF2TV.WindowsApp.Services.GameDataLookup.Battlefield2.Files;
 
 namespace BF2TV.WindowsApp.Services.GameDataLookup;

@@ -14,7 +14,9 @@
 
 @if (_environment.IsApp() && _activePlayerName != null)
 {
-    <p>Welcome to duty, <strong>@_activePlayerName</strong>!</p>
+    <div class="mb-3">
+        <small>Welcome to duty, <strong>@_activePlayerName</strong>!</small>
+    </div>
 }
 
 <a role="button" class="btn btn-dark" title="Refresh all server data" @onclick="Refresh">
