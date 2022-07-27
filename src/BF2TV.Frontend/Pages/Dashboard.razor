@@ -1,6 +1,7 @@
 @page "/"
 @inherits FluxorComponent
 @using BF2TV.Domain.BattlefieldApi
+@using BF2TV.Domain.Services
 @using BF2TV.Frontend.Store
 @using BF2TV.Frontend.Store.FriendList
 @inject IDispatcher _dispatcher
@@ -8,6 +9,15 @@
 @inject IState<FullServerListState> _fullServerListState
 @inject IState<FriendListState> _friendListState
 @inject IState<LoadingState> _loadingState
+@inject IEnvironment _environment
+@inject IActivePlayerLookupService _activePlayerLookupService
+
+@if (_environment.IsApp() && _activePlayerName != null)
+{
+    <div class="mb-3">
+        <small>Welcome to duty, <strong>@_activePlayerName</strong>!</small>
+    </div>
+}
 
 <a role="button" class="btn btn-dark" title="Refresh all server data" @onclick="Refresh">
     <i class="bi bi-arrow-clockwise icon-in-a-button-big"></i> Refresh your personal BF2.TV Dashboard
@@ -396,6 +406,7 @@ else
 
 @code {
     private bool _isServerDataLoaded = false;
+    private string? _activePlayerName;
 
     protected override async Task OnInitializedAsync()
     {
@@ -403,6 +414,9 @@ else
         {
             _dispatcher.Dispatch(new InitializeServerListsAction());
             _isServerDataLoaded = true;
+
+            if (_environment.IsApp())
+                _activePlayerName = _activePlayerLookupService.GetPlayerName();
         }
         await base.OnInitializedAsync();
     }
