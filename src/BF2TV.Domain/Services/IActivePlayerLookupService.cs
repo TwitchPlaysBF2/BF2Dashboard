@@ -1,6 +1,8 @@
-﻿namespace BF2TV.Domain.Services;
+﻿using BF2TV.Domain.Models;
+
+namespace BF2TV.Domain.Services;
 
 public interface IActivePlayerLookupService
 {
-    string? GetPlayerName();
+    BasicPlayerModel? GetPlayer();
 }

@@ -1,4 +1,5 @@
-﻿using BF2TV.Domain.Services;
+﻿using BF2TV.Domain.Models;
+using BF2TV.Domain.Services;
 
 namespace BF2TV.BlazorWasm.Services;
 
@@ -9,7 +10,7 @@ public class WebBasedActivePlayerLookupService : IActivePlayerLookupService
     /// Web: Since websites cannot read the local game files, it's not possible to automatically detect their player name.
     /// App: See other implementation of <see cref="IActivePlayerLookupService"/>
     /// </summary>
-    public string? GetPlayerName()
+    public BasicPlayerModel GetPlayer()
     {
         throw new NotImplementedException();
     }

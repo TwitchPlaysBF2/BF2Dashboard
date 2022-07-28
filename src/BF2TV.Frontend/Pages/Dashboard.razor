@@ -416,7 +416,7 @@ else
             _isServerDataLoaded = true;
 
             if (_environment.IsApp())
-                _activePlayerName = _activePlayerLookupService.GetPlayerName();
+                _activePlayerName = _activePlayerLookupService.GetPlayer()?.ToString();
         }
         await base.OnInitializedAsync();
     }
