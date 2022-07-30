@@ -11,6 +11,7 @@
 @inject IState<LoadingState> _loadingState
 @inject IEnvironment _environment
 @inject IActivePlayerLookupService _activePlayerLookupService
+@inject IGameLauncher _gameLauncher
 
 @if (_environment.IsApp() && _activePlayerName != null)
 {
@@ -50,7 +51,7 @@
                                     (@friend.ServerInfo.CurrentPlayerCountWithoutBots/@friend.ServerInfo.MaxPlayerCount)
                                     @if (friend.ServerInfo.JoinLink != null)
                                     {
-                                        <a role="button" title="Join server (requires joinme.click/download)" href="@friend.ServerInfo.JoinLink" class="btn btn-dark btn-sm mx-2">
+                                        <a role="button" title="Join server (requires joinme.click/download)" @onclick="() => _gameLauncher.LaunchGame(friend.ServerInfo.JoinLink)" class="btn btn-dark btn-sm mx-2">
                                             <i class="bi bi-play-circle icon-in-a-button-small"></i> Join
                                         </a>
                                     }
@@ -145,7 +146,7 @@ else
                                         <small><strong>Server IP</strong>: @server.IpAndPort</small>
                                         @if (server.JoinLink != null)
                                         {
-                                            <a role="button" title="Join server (requires joinme.click/download)" href="@server.JoinLink" class="btn btn-dark btn-sm mx-2">
+                                            <a role="button" title="Join server (requires joinme.click/download)" @onclick="() => _gameLauncher.LaunchGame(server.JoinLink)" class="btn btn-dark btn-sm mx-2">
                                                 <i class="bi bi-play-circle icon-in-a-button-small"></i> Join
                                             </a>
                                         }
@@ -308,7 +309,7 @@ else
                                             <small><strong>Server IP</strong>: @server.IpAndPort</small>
                                             @if (server.JoinLink != null)
                                             {
-                                                <a role="button" title="Join server (requires joinme.click/download)" href="@server.JoinLink" class="btn btn-dark btn-sm mx-2">
+                                                <a role="button" title="Join server (requires joinme.click/download)" @onclick="() => _gameLauncher.LaunchGame(server.JoinLink)" class="btn btn-dark btn-sm mx-2">
                                                     <i class="bi bi-joystick-btn icon-in-a-button-small"></i> Join
                                                 </a>
                                             }

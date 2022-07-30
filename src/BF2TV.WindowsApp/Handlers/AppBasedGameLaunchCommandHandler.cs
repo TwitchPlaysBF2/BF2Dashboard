@@ -6,11 +6,11 @@ using MediatR;
 namespace BF2TV.WindowsApp.Handlers;
 
 [UsedImplicitly]
-public class GameLaunchHandler : RequestHandler<GameLaunchCommand>
+public class AppBasedGameLaunchCommandHandler : RequestHandler<GameLaunchCommand>
 {
     private readonly IGameLauncher _gameLauncher;
 
-    public GameLaunchHandler(IGameLauncher gameLauncher)
+    public AppBasedGameLaunchCommandHandler(IGameLauncher gameLauncher)
     {
         _gameLauncher = gameLauncher;
     }

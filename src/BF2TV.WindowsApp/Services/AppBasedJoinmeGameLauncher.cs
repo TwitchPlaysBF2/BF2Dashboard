@@ -6,11 +6,11 @@ namespace BF2TV.WindowsApp.Services;
 /// <summary>
 /// Thanks to @cetteup for providing his game launcher.
 /// The launcher gets installed within the BF2.TV App setup.
-/// The Uri protocol gets registed upon first execution of the launcher.
+/// The Uri protocol gets registered upon first execution of the launcher (step of setup procedure).
 /// https://joinme.click/
 /// https://github.com/cetteup/joinme.click-launcher
 /// </summary>
-public class JoinmeUriProtocolGameLauncher : IGameLauncher
+public class AppBasedJoinmeGameLauncher : IGameLauncher
 {
     public void LaunchGame(string args)
     {

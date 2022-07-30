@@ -2,10 +2,12 @@
 @using Newtonsoft.Json
 @using BF2TV.Domain.BattlefieldApi
 @using BF2TV.Domain.GeoApi
+@using BF2TV.Domain.Services
 @using BF2TV.Frontend.Store.ServerDetail
 @inject IDispatcher _dispatcher
 @inject IState<ServerDetailState> _serverDetailState
 @inject IState<ServerGeoLocationState> _serverGeoLocationState
+@inject IGameLauncher _gameLauncher
 @inherits FluxorComponent
 
 <a role="button" class="btn btn-dark" href="/">
@@ -16,7 +18,7 @@
 </a>
 @if (Server?.JoinLink != null)
 {
-    <a role="button" title="Join server (requires joinme.click/download)" href="@Server.JoinLink" class="btn btn-primary btn-dark ms-2">
+    <a role="button" title="Join server (requires joinme.click/download)" @onclick="() => _gameLauncher.LaunchGame(Server.JoinLink)" class="btn btn-primary btn-dark ms-2">
         <i class="bi bi-play-circle icon-in-a-button-big"></i> Join server now
     </a>
 }

@@ -10,5 +10,6 @@ public static class DependencyInjection
     {
         services.AddTransient<IEnvironment, BlazorWasmEnvironment>();
         services.AddTransient<IActivePlayerLookupService, WebBasedActivePlayerLookupService>();
+        services.AddTransient<IGameLauncher, WebBasedGameLauncher>();
     }
 }

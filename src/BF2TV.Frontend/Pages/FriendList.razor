@@ -1,10 +1,12 @@
 ﻿@page "/friends"
 @using BF2TV.Frontend.Store.FriendList
 @using BF2TV.Frontend.Store
+@using BF2TV.Domain.Services
 @inherits FluxorComponent
 @inject IDispatcher _dispatcher
 @inject IState<FriendListState> _friendListState
 @inject IState<LoadingState> _loadingState
+@inject IGameLauncher _gameLauncher
 
 <h3><span class="oi oi-people" aria-hidden="true"></span> Friends</h3>
 <div class="m-5">
@@ -27,7 +29,7 @@
                             (@friend.ServerInfo.CurrentPlayerCountWithoutBots/@friend.ServerInfo.MaxPlayerCount)
                             @if (friend.ServerInfo.JoinLink != null)
                             {
-                                <a role="button" title="Join server (requires joinme.click/download)" href="@friend.ServerInfo.JoinLink" class="btn btn-dark btn-sm mx-2">
+                                <a role="button" title="Join server (requires joinme.click/download)" @onclick="() => _gameLauncher.LaunchGame(friend.ServerInfo.JoinLink)" class="btn btn-dark btn-sm mx-2">
                                     <i class="bi bi-play-circle icon-in-a-button-small"></i> Join
                                 </a>
                             }
