@@ -1,6 +1,7 @@
 ﻿@page "/servers/{ServerIdAndPort}"
 @using Newtonsoft.Json
 @using BF2TV.Domain.BattlefieldApi
+@using BF2TV.Domain.Extensions
 @using BF2TV.Domain.GeoApi
 @using BF2TV.Frontend.Store.ServerDetail
 @inject IDispatcher _dispatcher
@@ -119,6 +120,14 @@
                 else
                 {
                     <div class="m-2">@Server.SponsorText</div>
+                }
+                @if (Server.SponsorText.TryGetDiscordUrl(out var discordUrl))
+                {
+                    <div class="m-3">
+                        <a role="button" class="btn btn-dark" target="_blank" href="@discordUrl">
+                            <i class="bi bi-discord text-light pe-1"></i> Join Discord
+                        </a>
+                    </div>
                 }
             </div>
         </div>
