@@ -28,5 +28,6 @@ public static class DependencyInjection
             .ConfigureHttpClient(c => c.BaseAddress = new Uri("https://d26vco2td5wtt4.cloudfront.net"));
         
         services.AddMediatR(Assembly.GetExecutingAssembly());
+        services.AddSingleton<DiscordUrlParser>();
     }
 }

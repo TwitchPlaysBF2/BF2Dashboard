@@ -1,13 +1,13 @@
 ﻿using System.Text.RegularExpressions;
 
-namespace BF2TV.Domain.Extensions;
+namespace BF2TV.Domain.Services;
 
-public static class StringExtensions
+public class DiscordUrlParser
 {
-    public static bool TryGetDiscordUrl(this string text, out string discordUrl)
+    public bool TryGetDiscordUrl(string textToParse, out string discordUrl)
     {
         var regex = new Regex(@"(https?:\/\/)?(www\.)?(discord\.(gg|io|me|li)|discordapp\.com\/invite)\/.+[a-z0-9]", RegexOptions.IgnoreCase);
-        var match = regex.Match(text);
+        var match = regex.Match(textToParse);
         if (match.Success)
         {
             discordUrl = match.Value;
