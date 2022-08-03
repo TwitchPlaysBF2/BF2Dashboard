@@ -13,14 +13,32 @@ public class DiscordUrlParserTests
     [TestCase("https://discord.gg/YUkd6RKa6e", ExpectedResult = "https://discord.gg/YUkd6RKa6e")]
     [TestCase("http://discord.gg/YUkd6RKa6e", ExpectedResult = "http://discord.gg/YUkd6RKa6e")]
     [TestCase("discord.gg/YUkd6RKa6e", ExpectedResult = "discord.gg/YUkd6RKa6e")]
-    [TestCase("Join Discord https://discord.gg/YUkd6RKa6e and visit www.bf2.tv",
-         ExpectedResult = "https://discord.gg/YUkd6RKa6e"),
-     Ignore("Currently broken, GitHub issue: #37")]
     public string TryGetDiscordUrl_ShouldRecognizeDiscordUrl_WhenTextHasDiscordUrl(string textToParse)
     {
         var success = _sut.TryGetDiscordUrl(textToParse, out var discordUrl);
 
-        success.Should().BeTrue();
+        success.Should().BeTrue(because: "regex is matching the rule");
+        return discordUrl;
+    }
+
+    [Ignore("Ignored until GitHub Issue #37 is fixed")]
+    [TestCase("Join Discord https://discord.gg/YUkd6RKa6e and visit www.bf2.tv",
+        ExpectedResult = "https://discord.gg/YUkd6RKa6e")]
+    public string TryGetDiscordUrl_ShouldRecognizeDiscordUrl_WhenTextHasDiscordUrlWithTrailingText(string textToParse)
+    {
+        var success = _sut.TryGetDiscordUrl(textToParse, out var discordUrl);
+
+        success.Should().BeTrue(because: "regex is matching the rule");
+        return discordUrl;
+    }
+
+    [Ignore("Ignored until GitHub Issue #37 is fixed")]
+    [TestCase("https://discord.com/invite/RB7PjBk", ExpectedResult = "https://discord.com/invite/RB7PjBk")]
+    public string TryGetDiscordUrl_ShouldRecognizeDiscordUrl_WhenTextHasDotComSlashInviteDiscordUrl(string textToParse)
+    {
+        var success = _sut.TryGetDiscordUrl(textToParse, out var discordUrl);
+
+        success.Should().BeTrue(because: "regex is matching the rule");
         return discordUrl;
     }
 }
