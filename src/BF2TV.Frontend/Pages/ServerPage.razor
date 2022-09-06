@@ -22,6 +22,18 @@
         <i class="bi bi-play-circle icon-in-a-button-big"></i> Join server now
     </a>
 }
+@if (Server?.SponsorText != null && _discordUrlParser.TryGetDiscordUrl(Server.SponsorText, out var discordUrl))
+{
+    <a role="button" class="btn btn-dark ms-2" target="_blank" href="@discordUrl">
+        <i class="bi bi-discord icon-in-a-button-big"></i> Join Discord
+    </a>
+}
+@if (Server?.Battlerecorder == true && !string.IsNullOrWhiteSpace(Server.DemoIndex) && Uri.IsWellFormedUriString(Server.DemoIndex, UriKind.Absolute))
+{
+    <a role="button" class="btn btn-dark ms-2" target="_blank" href="@Server.DemoIndex">
+        <i class="bi bi-camera-video icon-in-a-button-big"></i> Demos
+    </a>
+}
 
 <div class="m-5">
 @if (Server == null && !_serverDetailState.Value.IsLoading)
@@ -121,14 +133,6 @@
                 else
                 {
                     <div class="m-2">@Server.SponsorText</div>
-                }
-                @if (_discordUrlParser.TryGetDiscordUrl(Server.SponsorText, out var discordUrl))
-                {
-                    <div class="m-3">
-                        <a role="button" class="btn btn-dark" target="_blank" href="@discordUrl">
-                            <i class="bi bi-discord text-light pe-1"></i> Join Discord
-                        </a>
-                    </div>
                 }
             </div>
         </div>
