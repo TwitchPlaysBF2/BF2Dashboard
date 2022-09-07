@@ -18,6 +18,7 @@ public static class DependencyInjection
         services.AddTransient<IGameLauncher, JoinmeUriProtocolGameLauncher>();
         services.AddTransient<IActivePlayerLookupService, AppBasedActivePlayerLookupService>();
         services.AddSingleton<TrayService>();
+        services.AddSingleton<SettingsMenu>();
         services.AddBf2DataReader();
     }
 }

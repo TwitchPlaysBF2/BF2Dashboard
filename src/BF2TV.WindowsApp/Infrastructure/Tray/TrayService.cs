@@ -7,13 +7,15 @@ namespace BF2TV.WindowsApp.Infrastructure.Tray;
 public class TrayService : IDisposable
 {
     private readonly IMediator _mediator;
+    private readonly SettingsMenu _settingsMenu;
     private NotifyIcon _trayIcon = null!;
     private BlazorViewForm _form = null!;
     private readonly ToolStripMenuItem _trayItemFavorites = new("Join Favorite Server");
 
-    public TrayService(IMediator mediator)
+    public TrayService(IMediator mediator, SettingsMenu settingsMenu)
     {
         _mediator = mediator;
+        _settingsMenu = settingsMenu;
     }
 
     public void Initialize(BlazorViewForm form)
@@ -63,6 +65,8 @@ public class TrayService : IDisposable
                 new ToolStripMenuItem("Show", null, ShowApp),
                 new ToolStripSeparator(),
                 _trayItemFavorites,
+                new ToolStripSeparator(),
+                _settingsMenu.Create(),
                 new ToolStripSeparator(),
                 new ToolStripMenuItem("Exit", null, OnClickExit, "Exit"),
             },

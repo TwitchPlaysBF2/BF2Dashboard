@@ -35,6 +35,11 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Update="Properties\UserConfiguration.Designer.cs">
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>UserConfiguration.settings</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
@@ -52,6 +57,13 @@
     <Content Include="Resources\favicon.ico">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Properties\UserConfiguration.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>UserConfiguration.Designer.cs</LastGenOutput>
+    </None>
   </ItemGroup>
 
 </Project>
