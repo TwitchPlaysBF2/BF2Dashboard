@@ -15,6 +15,8 @@ public class Server
 
     public string IpAndPort => Ip + ":" + Port;
 
+    public string MapNameAndSize => $"{MapName} ({MapSize})";
+
     public GeoLocation? GeoLocation { get; set; }
 
     [JsonPropertyName("guid")]
@@ -39,7 +41,7 @@ public class Server
     public string MapName { get; set; }
 
     [JsonPropertyName("mapSize")]
-    public float? MapSize { get; set; }
+    public float MapSize { get; set; }
 
     [JsonPropertyName("password")]
     public bool? Password { get; set; }

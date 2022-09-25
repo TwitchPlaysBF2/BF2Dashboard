@@ -44,7 +44,7 @@ public class TrayService : IDisposable
         {
             var title = $"[{server.NumPlayersWithoutBots}/{server.MaxPlayers}] {server.Name}";
             var item = new ToolStripMenuItem(title, null, (_, _) => OnJoinServer(server), title);
-            item.ToolTipText = $@"Map: {server.MapName}";
+            item.ToolTipText = $@"Map: {server.MapNameAndSize}";
             _trayItemFavorites.DropDown.Items.Add(item);
         }
 

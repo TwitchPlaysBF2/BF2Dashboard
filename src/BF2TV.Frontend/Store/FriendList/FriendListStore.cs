@@ -157,7 +157,7 @@ public class FriendListEffects
     {
         var friendModels = CreateFriendModels(action.FriendNameList, action.ServerList).ToList();
         var onlineFriendList = friendModels.Where(m => m.IsOnline)
-            .OrderBy(m => m.ServerInfo?.MapName)
+            .OrderBy(m => m.ServerInfo?.MapNameAndSize)
             .ThenBy(m => m.ServerInfo?.ServerName)
             .ThenBy(m => m.DisplayName)
             .ToList();

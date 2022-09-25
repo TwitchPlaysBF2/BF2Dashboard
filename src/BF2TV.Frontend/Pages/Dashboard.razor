@@ -46,7 +46,7 @@
                                 <i class="bi bi-circle-fill" style="color: green; font-size: 11pt;"></i>
                                 @friend.DisplayName
                                 <span style="font-size: 10pt; color: #767676">
-                                    @friend.ServerInfo.MapName @@ <a href="servers/@friend.ServerInfo.IpAndPort" style="color: slategrey">@friend.ServerInfo.ServerName</a>
+                                    @friend.ServerInfo.MapNameAndSize @@ <a href="servers/@friend.ServerInfo.IpAndPort" style="color: slategrey">@friend.ServerInfo.ServerName</a>
                                     (@friend.ServerInfo.CurrentPlayerCountWithoutBots/@friend.ServerInfo.MaxPlayerCount)
                                     @if (friend.ServerInfo.JoinLink != null)
                                     {
@@ -128,7 +128,7 @@ else
                                     </div>
                                     <div class="row">
                                         <small>
-                                            <span style="color: #747474">@server.MapName</span>
+                                            <span style="color: #747474">@server.MapNameAndSize</span>
                                         </small>
                                     </div>
                                 </div>
@@ -291,7 +291,7 @@ else
                                         </div>
                                         <div class="row">
                                             <small>
-                                                <span style="color: #747474">@server.MapName</span>
+                                                <span style="color: #747474">@server.MapNameAndSize</span>
                                             </small>
                                         </div>
                                     </div>

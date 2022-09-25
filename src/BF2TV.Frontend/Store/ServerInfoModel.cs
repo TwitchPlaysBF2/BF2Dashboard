@@ -15,6 +15,8 @@ public class ServerInfoModel
     public string? JoinLink { get; private init; }
 
     public string IpAndPort { get; private init; }
+    
+    public string MapNameAndSize { get; private init; }
 
     public static ServerInfoModel FromServer(Server server)
     {
@@ -22,6 +24,7 @@ public class ServerInfoModel
         {
             ServerName = server.Name,
             MapName = server.MapName,
+            MapNameAndSize = server.MapNameAndSize,
             CurrentPlayerCountWithoutBots = server.NumPlayersWithoutBots,
             MaxPlayerCount = (int?)server.MaxPlayers ?? 0,
             JoinLink = server.JoinLink,
