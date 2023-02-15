@@ -1,6 +1,5 @@
 games:
     bf2:
-        args: ["+fullscreen", "0", "+szx", "1600", "+szy", "1200"]
         hooks:
             - handler: purge-server-history
               when: pre-launch
