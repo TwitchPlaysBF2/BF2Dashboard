@@ -1,4 +1,0 @@
-games:
-    bf2:
-        install_path: C:\Program Files (x86)\EA GAMES\Battlefield 2
-        args: ["+fullscreen", "0", "+szx", "1600", "+szy", "1200"]

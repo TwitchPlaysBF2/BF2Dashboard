@@ -1,7 +1,7 @@
 ; Inno Setup Script
 
 #define MyAppName "BF2.TV"
-#define MyAppVersion "0.0.2.0"
+#define MyAppVersion "0.0.3.0"
 #define MyAppPublisher "TwitchPlaysBF2"
 #define MyAppURL "https://www.github.com/TwitchPlaysBF2"
 #define MyAppExeName "BF2TV.WindowsApp.exe"
@@ -39,7 +39,7 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 
 [Files]
 Source: "bin\publish\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "redistributables\*"; DestDir: "{app}\_external"; Flags: ignoreversion
+Source: "redistributables\*"; DestDir: "{app}\_external"; Excludes: "*config.yaml*"; Flags: ignoreversion
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]
