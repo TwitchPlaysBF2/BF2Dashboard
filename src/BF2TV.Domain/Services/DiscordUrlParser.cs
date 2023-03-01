@@ -6,7 +6,7 @@ public class DiscordUrlParser
 {
     public bool TryGetDiscordUrl(string textToParse, out string discordUrl)
     {
-        var regex = new Regex(@"(https?:\/\/)?(www\.)?(discord\.(gg|io|me|li)|discordapp\.com\/invite)\/.+[a-z0-9]", RegexOptions.IgnoreCase);
+        var regex = new Regex(@"(?:https?://)?discord(?:(?:app)?\.com/invite|\.gg)/?[a-zA-Z0-9]+/?", RegexOptions.IgnoreCase);
         var match = regex.Match(textToParse);
         if (match.Success)
         {
