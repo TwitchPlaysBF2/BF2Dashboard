@@ -44,16 +44,24 @@
 {
     <div class="row">
         <div class="col-xxl-6">
-            <h3>
-                Server: @Server.Name
-                @if (Server.MaxPlayers != null)
-                {
-                    <span> (@Server.NumPlayersWithoutBots/@Server.MaxPlayers)</span>
-                }
-            </h3>
-
             @if (Server.NumPlayersWithoutBots > 0)
             {
+                <div class="row text-center">
+                    <div class="col">
+                        <h3>
+                            @Server.Name 
+                            @if (Server.MaxPlayers != null)
+                            {
+                                <span class="text-secondary"> (@Server.NumPlayersWithoutBots/@Server.MaxPlayers)</span>
+                            }
+                        </h3>
+                    </div>
+                </div>
+                <div class="row text-center">
+                    <div class="col">
+                        @Server.MapName <span class="text-secondary" title="Map Size (16/32/64)">(@($"x{Server.MapSize}"))</span>
+                    </div>
+                </div>
                 <div class="row m-5 text-center">
                     <div class="col ps-5">
                         <!-- Scoreboard -->
@@ -137,98 +145,98 @@
             </div>
         </div>
         <div class="col-xxl-6">
-            <div class="mx-3 pb-3">
+            <div class="mt-3 mx-3 pb-3 text-center">
                 <h3>Server Details</h3>
             </div>
-            <div class="mx-5 px-5">
-                <div class="row">
+            <div class="pt-2 mx-5 px-5 text-center">
+                <div>
                     Current Map: @Server.MapName
                 </div>
-                <div class="row">
+                <div>
                     Current Players (excluding bots): @Server.NumPlayersWithoutBots
                 </div>
-                <div class="row">
+                <div>
                     Maximum Players: @Server.MaxPlayers
                 </div>
-                <div class="row">
+                <div>
                     Reserved Slots: @Server.ReservedSlots
                 </div>
-                <div class="row">
+                <div>
                     Ranked: <input class="form-check-input state-info-box" type="checkbox" value="" checked="@Server.Ranked" disabled>
                 </div>
-                <div class="row">
+                <div>
                     Password: <input class="form-check-input state-info-box" type="checkbox" value="" checked="@Server.Password" disabled>
                 </div>
-                <div class="row">
+                <div>
                     Friendly Fire: <input class="form-check-input state-info-box" type="checkbox" value="" checked="@Server.Friendlyfire" disabled>
                 </div>
-                <div class="row">
+                <div>
                     Autobalance: <input class="form-check-input state-info-box" type="checkbox" value="" checked="@Server.Autobalance" disabled>
                 </div>
-                <div class="row">
+                <div>
                     Allow Global Unlocks: <input class="form-check-input state-info-box" type="checkbox" value="" checked="@Server.GlobalUnlocks" disabled>
                 </div>
-                <div class="row">
+                <div>
                     No Vehicles: <input class="form-check-input state-info-box" type="checkbox" value="" checked="@Server.NoVehicles" disabled>
                 </div>
-                <div class="row">
+                <div>
                     Teamkill Mode: @Server.Tkmode
                 </div>
-                <div class="row">
+                <div>
                     Map Size: @Server.MapSize
                 </div>
-                <div class="row">
+                <div>
                     Rounds per Map: @Server.RoundsPerMap
                 </div>
-                <div class="row">
+                <div>
                     Spawn Time: @Server.Spawntime
                 </div>
-                <div class="row">
+                <div>
                     Time Limit: @Server.Timelimit
                 </div>
-                <div class="row">
+                <div>
                     Ticket Ratio: @Server.Ticketratio
                 </div>
-                <div class="row">
+                <div>
                     Team Ratio: @Server.Teamratio
                 </div>
-                <div class="row">
+                <div>
                     Game Variant: @Server.GameVariant
                 </div>
-                <div class="row">
+                <div>
                     Game Mode: @Server.GameType
                 </div>
-                <div class="row">
+                <div>
                     Operating System: @Server.Os
                 </div>
-                <div class="row">
+                <div>
                     Server FPS: @Server.Fps
                 </div>
-                <div class="row">
+                <div>
                     Server IP: @Server.Ip
                 </div>
-                <div class="row">
+                <div>
                     Server Port: @Server.Port
                 </div>
-                <div class="row">
+                <div>
                     Dedicated Server: <input class="form-check-input state-info-box" type="checkbox" value="" checked="@Server.Dedicated" disabled>
                 </div>
-                <div class="row">
+                <div>
                     VoIP: <input class="form-check-input state-info-box" type="checkbox" value="" checked="@Server.Voip" disabled>
                 </div>
-                <div class="row">
+                <div>
                     Server Continent: @(ServerLocation?.ContinentCode ?? "-")
                 </div>
-                <div class="row">
+                <div>
                     Server Country: @(ServerLocation?.CountryName ?? "-")
                 </div>
-                <div class="row">
+                <div>
                     Server City: @(ServerLocation?.City ?? "-")
                 </div>
-                <div class="row">
+                <div>
                     Battlerecorder enabled: <input class="form-check-input state-info-box" type="checkbox" value="" checked="@Server.Battlerecorder" disabled>
                 </div>
-                <div class="row">
+                <div>
                     Battlerecorder URL: <a href="@Server.DemoDownload" target="_blank">@Server.DemoDownload</a>
                 </div>
             </div>
