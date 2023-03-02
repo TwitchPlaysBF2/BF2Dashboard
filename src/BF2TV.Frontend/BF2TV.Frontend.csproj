@@ -6,6 +6,7 @@
         <Nullable>enable</Nullable>
         <RootNamespace>BF2TV.Frontend</RootNamespace>
         <IsPackable>false</IsPackable>
+        <LangVersion>11</LangVersion>
     </PropertyGroup>
 
     <ItemGroup>

@@ -50,7 +50,11 @@
                                 <span style="font-size: 10pt; color: #767676">
                                     @friend.ServerInfo.MapNameAndSize @@ <a href="servers/@friend.ServerInfo.IpAndPort" style="color: slategrey">@friend.ServerInfo.ServerName</a>
                                     (@friend.ServerInfo.CurrentPlayerCountWithoutBots/@friend.ServerInfo.MaxPlayerCount)
-                                    <button disabled="@friend.ServerInfo.IsPasswordProtected" role="button" title="Join server (requires joinme.click/download)" href="@friend.ServerInfo.JoinLink" class="btn btn-dark btn-sm mx-2">
+                                    <button role="button"
+                                            title="Join server (requires joinme.click/download)"
+                                            href="@friend.ServerInfo.JoinLink"
+                                            class="btn btn-dark btn-sm mx-2"
+                                            disabled="@friend.ServerInfo.IsPasswordProtected">
                                         <i class="bi @(friend.ServerInfo.IsPasswordProtected ? "bi-lock" : "bi-play-circle") icon-in-a-button-small"></i> Join
                                     </button>
                                 </span>
