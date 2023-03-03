@@ -108,10 +108,12 @@ public class ResolveFriendListAction
 public class FriendListEffects
 {
     private readonly ILocalStorageService _localStorageService;
+    private readonly IState<FriendListState> _friendlistState;
 
-    public FriendListEffects(ILocalStorageService localStorageService)
+    public FriendListEffects(ILocalStorageService localStorageService, IState<FriendListState> friendlistState)
     {
         _localStorageService = localStorageService;
+        _friendlistState = friendlistState;
     }
 
     [EffectMethod]
@@ -145,7 +147,9 @@ public class FriendListEffects
     [EffectMethod]
     public async Task InitializeFriendList(SetFullServerListAction action, IDispatcher dispatcher)
     {
-        dispatcher.Dispatch(new SetLoadingFriendListAction(true));
+        if (_friendlistState.Value.IsEmpty)
+            dispatcher.Dispatch(new SetLoadingFriendListAction(true));
+
         var friends = await _localStorageService.GetItemAsync<List<string>>(Commons.FriendListKey)
                       ?? new List<string>();
 
