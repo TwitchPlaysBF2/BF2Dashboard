@@ -11,6 +11,7 @@
 @inject IState<LoadingState> _loadingState
 @inject IEnvironment _environment
 @inject IActivePlayerLookupService _activePlayerLookupService
+@inject IPeriodicRefresher _periodicRefresher
 
 @if (_environment.IsApp() && _activePlayerName != null)
 {
@@ -416,6 +417,7 @@ else
         if (!_isServerDataLoaded)
         {
             _dispatcher.Dispatch(new InitializeServerListsAction());
+            _periodicRefresher.StartRefreshing();
             _isServerDataLoaded = true;
 
             if (_environment.IsApp())
