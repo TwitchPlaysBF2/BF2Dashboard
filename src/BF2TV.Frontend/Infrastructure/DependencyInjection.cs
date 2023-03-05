@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using BF2TV.Domain.DiscordApi;
 using BF2TV.Domain.Services;
+using BF2TV.Frontend.Services;
 using Blazored.LocalStorage;
 using Fluxor;
 using MediatR;
@@ -29,5 +30,6 @@ public static class DependencyInjection
         
         services.AddMediatR(Assembly.GetExecutingAssembly());
         services.AddSingleton<DiscordUrlParser>();
+        services.AddScoped<IPeriodicRefresher, PeriodicRefresher>();
     }
 }

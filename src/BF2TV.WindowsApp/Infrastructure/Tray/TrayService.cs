@@ -45,11 +45,11 @@ public class TrayService : IDisposable
             var title = $"[{server.NumPlayersWithoutBots}/{server.MaxPlayers}] {server.Name}";
             var item = new ToolStripMenuItem(title, null, (_, _) => OnJoinServer(server), title);
             item.ToolTipText = $@"Map: {server.MapNameAndSize}";
-            _trayItemFavorites.DropDown.Items.Add(item);
+            AddFavoriteItem(item);
         }
 
-        _trayItemFavorites.DropDown.Items.Add(new ToolStripSeparator());
-        _trayItemFavorites.DropDown.Items.Add(new ToolStripMenuItem("(Open the app to add more favorites)", null, ShowApp));
+        AddFavoriteItem(new ToolStripSeparator());
+        AddFavoriteItem(new ToolStripMenuItem("(Open the app to add more favorites)", null, ShowApp));
     }
 
     private ContextMenuStrip CreateMenu()
@@ -96,6 +96,24 @@ public class TrayService : IDisposable
         Dispose();
         Application.Exit();
     }
+
+    /// <summary>
+    /// Thread-safe UI updates https://stackoverflow.com/a/10775421/13350907
+    /// </summary>
+    private void AddFavoriteItem(ToolStripItem item)
+    {
+        if (_form.InvokeRequired)
+        {
+            var callback = new AddItemCallback(AddFavoriteItem);
+           _form.Invoke(callback, item);
+        }
+        else
+        {
+            _trayItemFavorites.DropDown.Items.Add(item);
+        }
+    }
+
+    private delegate void AddItemCallback(ToolStripItem item);
 
     public void Dispose() => _trayIcon.Dispose();
 }

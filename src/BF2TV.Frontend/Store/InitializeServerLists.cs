@@ -35,7 +35,6 @@ public class InitializeServerListsEffect
     public async Task InitializeServerLists(IDispatcher dispatcher)
     {
         var fullServerList = await _serverListService.GetServerList();
-        dispatcher.Dispatch(new SetFullServerListAction(fullServerList));
 
         var favoriteServerIds = await _localStorageService.GetItemAsync<List<string>>(Commons.FavoriteServerListKey);
         var favorites = fullServerList?
@@ -48,6 +47,7 @@ public class InitializeServerListsEffect
             ?.ToList()
             ?? new List<Server>();
 
+        dispatcher.Dispatch(new SetFullServerListAction(fullServerList));
         dispatcher.Dispatch(new SetFavoriteServerListAction(favorites));
 
         if (_environment.IsApp())

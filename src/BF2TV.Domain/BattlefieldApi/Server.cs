@@ -15,7 +15,7 @@ public class Server
 
     public string IpAndPort => Ip + ":" + Port;
 
-    public string MapNameAndSize => $"{MapName} ({MapSize})";
+    public string MapNameAndSize => $"{MapName} (x{MapSize})";
 
     public GeoLocation? GeoLocation { get; set; }
 

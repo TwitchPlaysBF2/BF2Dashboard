@@ -32,3 +32,11 @@
         max-width: 800px;
     }
 }
+
+.form-check-input:checked {
+    background-color: #4c4dbfbd;
+}
+
+.form-check-input {
+    background-color: #adadad;
+}
