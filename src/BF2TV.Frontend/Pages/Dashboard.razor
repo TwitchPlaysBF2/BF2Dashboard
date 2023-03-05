@@ -419,12 +419,6 @@ else
 @code {
     private bool _isServerDataLoaded = false;
     private string? _activePlayerName;
-    private string AutoRefreshEnabledDisplayName => _periodicRefresher.IsEnabled ? "on" : "off";
-    private bool IsAutoRefreshEnabled
-    {
-        get => _periodicRefresher.IsEnabled;
-        set => _periodicRefresher.UpdateSetting(value);
-    }
 
     protected override async Task OnInitializedAsync()
     {
