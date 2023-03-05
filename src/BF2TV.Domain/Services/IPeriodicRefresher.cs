@@ -2,5 +2,6 @@
 
 public interface IPeriodicRefresher
 {
-    void StartRefreshing();
+    bool IsEnabled { get; }
+    void UpdateSetting(bool value);
 }

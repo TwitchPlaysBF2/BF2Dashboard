@@ -20,9 +20,17 @@
     </div>
 }
 
-<a role="button" class="btn btn-dark" title="Refresh all server data" @onclick="Refresh">
-    <i class="bi bi-arrow-clockwise icon-in-a-button-big"></i> Refresh your personal BF2.TV Dashboard
+<a role="button" class="btn btn-dark me-3" title="Refresh all server data" @onclick="Refresh">
+    <i class="bi bi-arrow-clockwise icon-in-a-button-big"></i> Refresh
 </a>
+<div class="btn btn-dark">
+    <div class="form-switch p-1 ps-5">
+        <input type="checkbox" style="cursor: pointer" id="chkAutoReload" class="form-check-input"
+               checked="@_periodicRefresher.IsEnabled"
+               @onclick="() => _periodicRefresher.UpdateSetting(!_periodicRefresher.IsEnabled)">
+        <label style="cursor: pointer" for="chkAutoReload" class="form-check-label ms-2 me-2 text-nowrap">Auto Refresh is @AutoRefreshEnabledDisplayName</label>
+    </div>
+</div>
 
 <div class="col-md-6 pt-5 mt-2">
     @if (_fullServerListState.Value.ServerList != null && _friendListState.Value.IsLoading == false && _friendListState.Value.IsInitialized)
@@ -411,13 +419,19 @@ else
 @code {
     private bool _isServerDataLoaded = false;
     private string? _activePlayerName;
+    private string AutoRefreshEnabledDisplayName => _periodicRefresher.IsEnabled ? "on" : "off";
+    private bool IsAutoRefreshEnabled
+    {
+        get => _periodicRefresher.IsEnabled;
+        set => _periodicRefresher.UpdateSetting(value);
+    }
 
     protected override async Task OnInitializedAsync()
     {
         if (!_isServerDataLoaded)
         {
             _dispatcher.Dispatch(new InitializeServerListsAction());
-            _periodicRefresher.StartRefreshing();
+            _periodicRefresher.UpdateSetting(true);
             _isServerDataLoaded = true;
 
             if (_environment.IsApp())

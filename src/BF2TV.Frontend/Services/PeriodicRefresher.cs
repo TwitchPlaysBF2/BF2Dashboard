@@ -10,24 +10,34 @@ public class PeriodicRefresher : IPeriodicRefresher
 {
     private readonly IDispatcher _dispatcher;
     private readonly Timer _timer;
-    private bool _isRunning;
 
     public PeriodicRefresher(IDispatcher dispatcher)
     {
         _dispatcher = dispatcher;
         _timer = new Timer();
-        _timer.Interval = TimeSpan.FromSeconds(60).TotalMilliseconds;
+        _timer.Interval = TimeSpan.FromSeconds(5).TotalMilliseconds;
         _timer.Elapsed += OnTick;
         _timer.AutoReset = true;
     }
 
-    public void StartRefreshing()
+    public bool IsEnabled
     {
-        if (_isRunning)
+        get => _timer.Enabled;
+        private set => _timer.Enabled = value;
+    }
+
+    public void UpdateSetting(bool shouldEnable)
+    {
+        if (shouldEnable && IsEnabled)
             return;
 
-        _timer.Start();
-        _isRunning = true;
+        IsEnabled = shouldEnable;
+
+        if (IsEnabled)
+        {
+            // Refresh now, when toggling on
+            _dispatcher.Dispatch(new InitializeServerListsAction());
+        }
     }
 
     private void OnTick(object? sender, ElapsedEventArgs e)
