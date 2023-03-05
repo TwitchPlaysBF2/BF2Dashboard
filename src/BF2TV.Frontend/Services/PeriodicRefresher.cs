@@ -15,7 +15,7 @@ public class PeriodicRefresher : IPeriodicRefresher
     {
         _dispatcher = dispatcher;
         _timer = new Timer();
-        _timer.Interval = TimeSpan.FromSeconds(5).TotalMilliseconds;
+        _timer.Interval = TimeSpan.FromSeconds(20).TotalMilliseconds;
         _timer.Elapsed += OnTick;
         _timer.AutoReset = true;
     }
