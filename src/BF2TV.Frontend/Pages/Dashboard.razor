@@ -20,15 +20,19 @@
     </div>
 }
 
-<a role="button" class="btn btn-dark me-3" title="Refresh all server data" @onclick="Refresh">
-    <i class="bi bi-arrow-clockwise icon-in-a-button-big"></i> Refresh
+<a role="button" class="btn btn-dark me-3 align-content-center" title="Refresh all server data" @onclick="Refresh">
+    <span class="ps-1 pe-2 d-flex align-items-center" style="min-height: 40px">
+        <i class="bi bi-arrow-clockwise icon-in-a-button-big"></i> Refresh Dashboard
+    </span>
 </a>
-<div class="btn btn-dark">
-    <div class="form-switch p-1 ps-5">
-        <input type="checkbox" style="cursor: pointer" id="chkAutoReload" class="form-check-input"
-               checked="@_periodicRefresher.IsEnabled"
-               @onclick="() => _periodicRefresher.UpdateSetting(!_periodicRefresher.IsEnabled)">
-        <label style="cursor: pointer" for="chkAutoReload" class="form-check-label ms-2 me-2 text-nowrap">Auto Refresh is @AutoRefreshEnabledDisplayName</label>
+<div class="btn btn-dark p-0">
+    <div class="form-switch p-1 ps-5 d-flex align-items-center" style="min-height: 40px">
+        <label style="cursor: pointer" for="chkAutoReload" class="form-check-label p-3 text-nowrap">
+            <input type="checkbox" style="cursor: pointer" id="chkAutoReload" class="form-check-input me-1"
+                   checked="@_periodicRefresher.IsEnabled"
+                   @onclick="() => _periodicRefresher.UpdateSetting(!_periodicRefresher.IsEnabled)">
+            Auto Refresh is @(_periodicRefresher.IsEnabled ? "on" : "off")
+        </label>
     </div>
 </div>
 
