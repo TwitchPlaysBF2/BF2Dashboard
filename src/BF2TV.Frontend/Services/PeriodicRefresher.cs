@@ -32,12 +32,6 @@ public class PeriodicRefresher : IPeriodicRefresher
             return;
 
         IsEnabled = shouldEnable;
-
-        if (IsEnabled)
-        {
-            // Refresh now, when toggling on
-            _dispatcher.Dispatch(new InitializeServerListsAction());
-        }
     }
 
     private void OnTick(object? sender, ElapsedEventArgs e)
