@@ -1,4 +1,5 @@
 ﻿@page "/friends"
+@using BF2TV.Frontend.Pages.Friends
 @using BF2TV.Frontend.Store.FriendList
 @using BF2TV.Frontend.Store
 @inherits FluxorComponent
@@ -34,7 +35,8 @@
                                 </a>
                             }
                         </span>
-                        <i class="btn btn-sm btn-outline-warning bi bi-person-dash grow" @onclick="() => RemoveFriend(friend)" title="Remove friend"></i>
+                        <i class="btn btn-sm btn-outline-warning bi bi-person-dash grow me-2" @onclick="() => RemoveFriend(friend)" title="Remove friend"></i>
+                        <ToggleFriendIsOnlineAlertComponent Friend="@friend" />
                     </li>
                 }
             </ul>
@@ -59,12 +61,13 @@
             <ul style="list-style-type: none;">
                 @foreach (var friend in _friendListState.Value.OfflineFriendList)
                 {
-                    <li style="opacity: .5">
+                    <li style="opacity: .5" class="mb-2">
                         <i class="bi bi-circle-fill" style="color: #767676; font-size: 11pt;"></i>
                         <a href="@friend.ProfileUrl" target="_blank" style="text-decoration: none; opacity: .75" title="Open BF2Hub profile">
                             @friend.DisplayName
                         </a>
-                        <i class="btn btn-sm btn-outline-warning bi bi-person-dash grow" @onclick="() => RemoveFriend(friend)" title="Remove friend"></i>
+                        <i class="btn btn-sm btn-outline-warning bi bi-person-dash grow ms-2 me-2" @onclick="() => RemoveFriend(friend)" title="Remove friend"></i>
+                        <ToggleFriendIsOnlineAlertComponent Friend="@friend" />
                     </li>
                 }
             </ul>

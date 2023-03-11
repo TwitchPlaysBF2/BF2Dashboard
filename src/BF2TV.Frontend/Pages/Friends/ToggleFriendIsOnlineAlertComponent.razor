@@ -1,0 +1,51 @@
+﻿@using BF2TV.Frontend.Store.FriendList
+@using BF2TV.Frontend.Store.Alerts
+@using BF2TV.Domain.Models.Alerts
+@inherits FluxorComponent
+@inject IDispatcher Dispatcher
+@inject IState<AlertStore.State> State
+
+@if (Friend != null)
+{
+    <i class="btn btn-sm bi @(IsAlertActive ? "bi-bell-slash btn-outline-success" : "bi-bell btn-outline-secondary") grow"
+       @onclick="Toggle"
+       title="Alerts are turned @(IsAlertActive ? "on" : "off")">
+    </i>
+}
+
+@code {
+
+    [Parameter]
+    public FriendModel? Friend { get; set; }
+
+    private bool IsAlertActive => State.Value.ServerConditions.Any(x => x.ConditionIdentifier == Friend?.DisplayName);
+
+    private void Toggle()
+    {
+        var friendName = Friend?.DisplayName;
+        if (string.IsNullOrWhiteSpace(friendName))
+            return;
+
+        if (IsAlertActive)
+            RemoveAlert();
+        else
+            AddAlert(friendName);
+    }
+
+    private void RemoveAlert()
+    {
+        var activeCondition =
+            State.Value.ServerConditions.FirstOrDefault(x => x.ConditionIdentifier == Friend?.DisplayName);
+        if (activeCondition == null)
+            return;
+
+        Dispatcher.Dispatch(new AlertStore.Actions.RemoveAlert(activeCondition));
+    }
+
+    private void AddAlert(string fullFriendName)
+    {
+        var condition = new FriendIsOnServerCondition(fullFriendName);
+        Dispatcher.Dispatch(new AlertStore.Actions.AddNewAlert(condition));
+    }
+
+}
