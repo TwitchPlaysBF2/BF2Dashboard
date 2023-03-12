@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using BF2TV.Domain.BattlefieldApi;
+using BF2TV.Domain.Models;
 using Blazored.LocalStorage;
 using Fluxor;
 

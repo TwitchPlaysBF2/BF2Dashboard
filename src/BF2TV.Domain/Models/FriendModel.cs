@@ -1,6 +1,6 @@
 ﻿using BF2TV.Domain.BattlefieldApi;
 
-namespace BF2TV.Frontend.Store.FriendList;
+namespace BF2TV.Domain.Models;
 
 public class FriendModel
 {
