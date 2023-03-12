@@ -1,4 +1,5 @@
-﻿using BF2TV.Domain.BattlefieldApi;
+﻿using BF2TV.Domain;
+using BF2TV.Domain.BattlefieldApi;
 using BF2TV.Domain.Commands;
 using BF2TV.Domain.Services;
 using BF2TV.Frontend.Infrastructure;
