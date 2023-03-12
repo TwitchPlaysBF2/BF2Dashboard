@@ -44,14 +44,13 @@
             @if (_friendListState.Value.IsEmpty)
             {
                 <span style="font-size: 10pt; color: #767676">
-                    <span>No friends added yet.</span>
-                    <p>Mark your BF2 friends in the server scoreboard, to always see where they are playing!</p>
+                    <i>No friends added yet — mark friends in the server scoreboard, to see who is playing.</i>
                 </span>
             }
             else
             {
                 <ul style="list-style-type: none;">
-                    @if (_friendListState.Value.OnlineFriendList != null)
+                    @if (_friendListState.Value.OnlineFriendList != null && _friendListState.Value.OnlineFriendList.Count > 0)
                     {
                         @foreach (var friend in _friendListState.Value.OnlineFriendList)
                         {
@@ -73,6 +72,12 @@
                                 </span>
                             </li>
                         }
+                    }
+                    else
+                    {
+                        <span style="font-size: 10pt; color: #767676">
+                            <i>No friends online — add more friends in the server scoreboard, to see who is playing.</i>
+                        </span>
                     }
                 </ul>
             }
