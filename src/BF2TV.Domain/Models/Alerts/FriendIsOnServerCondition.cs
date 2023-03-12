@@ -4,7 +4,7 @@ namespace BF2TV.Domain.Models.Alerts;
 
 public class FriendIsOnServerCondition : IServerCondition
 {
-    public string ConditionIdentifier => FriendIdentity;
+    public ConditionId ConditionId => ConditionId.Create(this);
     public IAlert ResultingAlert { get; private set; }
     public string FriendIdentity { get; }
 

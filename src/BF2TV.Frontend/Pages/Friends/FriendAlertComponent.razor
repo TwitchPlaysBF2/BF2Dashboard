@@ -6,37 +6,41 @@
 @inject IDispatcher Dispatcher
 @inject IState<AlertStore.State> State
 
-@if (Friend != null)
-{
-    <i class="btn btn-sm bi @(IsAlertActive ? "bi-bell-slash btn-outline-success" : "bi-bell btn-outline-secondary") grow"
-       @onclick="Toggle"
-       title="Alerts are turned @(IsAlertActive ? "on" : "off")">
-    </i>
-}
+<i class="btn btn-sm bi @(IsAlertActive ? "bi-bell-slash btn-outline-success" : "bi-bell btn-outline-secondary") grow"
+   @onclick="Toggle"
+   title="Alerts are turned @(IsAlertActive ? "on" : "off")">
+</i>
+
 
 @code {
 
     [Parameter]
-    public FriendModel? Friend { get; set; }
+    public FriendModel Friend { get; set; } = default!;
 
-    private bool IsAlertActive => State.Value.ActiveServerConditions.Any(x => x.ConditionIdentifier == Friend?.DisplayName);
+    private bool IsAlertActive
+    {
+        get { return State.Value.ActiveServerConditions.Any(x =>
+        {
+            var conditionId = ConditionId.Create<FriendIsOnServerCondition>(Friend.DisplayName);
+            return x.ConditionId == conditionId;
+        }); }
+    }
 
     private void Toggle()
     {
-        var friendName = Friend?.DisplayName;
-        if (string.IsNullOrWhiteSpace(friendName))
-            return;
-
         if (IsAlertActive)
             RemoveAlert();
         else
-            AddAlert(friendName);
+            AddAlert(Friend.DisplayName);
     }
 
     private void RemoveAlert()
     {
-        var activeCondition =
-            State.Value.ActiveServerConditions.FirstOrDefault(x => x.ConditionIdentifier == Friend?.DisplayName);
+        var activeCondition = State.Value.ActiveServerConditions.FirstOrDefault(x =>
+        {
+            var conditionId = ConditionId.Create<FriendIsOnServerCondition>(Friend.DisplayName);
+            return x.ConditionId == conditionId;
+        });
         if (activeCondition == null)
             return;
 
