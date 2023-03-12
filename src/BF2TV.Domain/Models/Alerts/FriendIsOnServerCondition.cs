@@ -22,7 +22,7 @@ public class FriendIsOnServerCondition : IServerCondition
         if (!isPlayingOnServer) 
             return false;
 
-        ResultingAlert = new FriendCameOnlineAlert(FriendIdentity, server.Name, DateTime.UtcNow);
+        ResultingAlert = new FriendCameOnlineAlert(FriendIdentity, ServerInfoModel.FromServer(server), DateTime.UtcNow);
         return isPlayingOnServer;
     }
 }
