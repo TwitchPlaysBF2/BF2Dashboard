@@ -37,7 +37,7 @@ public class InitializeServerListsEffect
         var fullServerList = await _serverListService.GetServerList();
 
         var favoriteServerIds = await _localStorageService.GetItemAsync<List<string>>(Commons.FavoriteServerListKey);
-        var favorites = fullServerList?
+        var favorites = fullServerList
             .Where(s => favoriteServerIds?.Contains(s.Guid) == true)
             ?.Select(s =>
             {
@@ -49,6 +49,7 @@ public class InitializeServerListsEffect
 
         dispatcher.Dispatch(new SetFullServerListAction(fullServerList));
         dispatcher.Dispatch(new SetFavoriteServerListAction(favorites));
+        dispatcher.Dispatch(new AlertStore.Actions.RunAlertGeneration(fullServerList));
 
         if (_environment.IsApp())
             await _mediator.Send(new RaiseFavoriteServerListToApp(favorites));

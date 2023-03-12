@@ -1,6 +1,6 @@
 ﻿@using BF2TV.Frontend.Store.FriendList
-@using BF2TV.Frontend.Store.Alerts
 @using BF2TV.Domain.Models.Alerts
+@using BF2TV.Frontend.Store
 @inherits FluxorComponent
 @inject IDispatcher Dispatcher
 @inject IState<AlertStore.State> State
@@ -18,7 +18,7 @@
     [Parameter]
     public FriendModel? Friend { get; set; }
 
-    private bool IsAlertActive => State.Value.ServerConditions.Any(x => x.ConditionIdentifier == Friend?.DisplayName);
+    private bool IsAlertActive => State.Value.ActiveServerConditions.Any(x => x.ConditionIdentifier == Friend?.DisplayName);
 
     private void Toggle()
     {
@@ -35,17 +35,17 @@
     private void RemoveAlert()
     {
         var activeCondition =
-            State.Value.ServerConditions.FirstOrDefault(x => x.ConditionIdentifier == Friend?.DisplayName);
+            State.Value.ActiveServerConditions.FirstOrDefault(x => x.ConditionIdentifier == Friend?.DisplayName);
         if (activeCondition == null)
             return;
 
-        Dispatcher.Dispatch(new AlertStore.Actions.RemoveAlert(activeCondition));
+        Dispatcher.Dispatch(new AlertStore.Actions.RemoveCondition(activeCondition));
     }
 
     private void AddAlert(string fullFriendName)
     {
         var condition = new FriendIsOnServerCondition(fullFriendName);
-        Dispatcher.Dispatch(new AlertStore.Actions.AddNewAlert(condition));
+        Dispatcher.Dispatch(new AlertStore.Actions.AddCondition(condition));
     }
 
 }

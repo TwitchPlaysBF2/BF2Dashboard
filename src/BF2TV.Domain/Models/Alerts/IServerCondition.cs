@@ -5,5 +5,6 @@ namespace BF2TV.Domain.Models.Alerts;
 public interface IServerCondition
 {
     string ConditionIdentifier { get; }
+    IAlert ResultingAlert { get; }
     bool IsFulfilled(Server server);
 }

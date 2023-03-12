@@ -4,12 +4,13 @@ namespace BF2TV.Domain.Models.Alerts;
 
 public class FriendIsOnServerCondition : IServerCondition
 {
-    public string FullPlayerName { get; }
-    public string ConditionIdentifier => FullPlayerName;
+    public string ConditionIdentifier => FriendIdentity;
+    public IAlert ResultingAlert { get; private set; }
+    public string FriendIdentity { get; }
 
-    public FriendIsOnServerCondition(string fullPlayerName)
+    public FriendIsOnServerCondition(string friendIdentity)
     {
-        FullPlayerName = fullPlayerName;
+        FriendIdentity = friendIdentity;
     }
 
     public bool IsFulfilled(Server server)
@@ -17,7 +18,11 @@ public class FriendIsOnServerCondition : IServerCondition
         if (server?.Players == null)
             return false;
 
-        var isPlayingOnServer = server.Players.Any(x => x.FullName == FullPlayerName);
+        var isPlayingOnServer = server.Players.Any(x => x.FullName == FriendIdentity);
+        if (!isPlayingOnServer) 
+            return false;
+
+        ResultingAlert = new FriendCameOnlineAlert(FriendIdentity, server.Name);
         return isPlayingOnServer;
     }
 }
