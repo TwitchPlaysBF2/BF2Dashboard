@@ -1,0 +1,21 @@
+﻿@page "/alerts"
+@using BF2TV.Frontend.Pages.Alerts
+@using BF2TV.Frontend.Store
+@inherits FluxorComponent
+@inject IState<AlertStore.State> State
+
+<h3>Alerts</h3>
+
+<div class="mb-5">
+    <h5>History</h5>
+    <AlertHistory/>
+</div>
+<div>
+    <h5>Conditions</h5>
+    <ul>
+        @foreach (var condition in State.Value.ActiveServerConditions)
+        {
+            <li>@condition.ConditionIdentifier</li>
+        }
+    </ul>
+</div>

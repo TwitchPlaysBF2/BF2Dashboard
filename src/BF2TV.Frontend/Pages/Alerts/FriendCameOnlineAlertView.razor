@@ -1,0 +1,19 @@
+﻿@using BF2TV.Domain.Models.Alerts
+@using BF2TV.Frontend.Components
+
+<span>
+    [@Alert.WhenUtc.ToLocalTime().ToShortTimeString()]
+    <span class="text-white font-weight-bold">
+        @Alert.PlayerName
+    </span> has joined server:
+    <span class="text-body">
+        <CroppedSpan Input="@Alert.ServerName" MaxLength="26"/>
+    </span>
+</span>
+
+@code {
+
+    [Parameter]
+    public FriendCameOnlineAlert Alert { get; set; } = default!;
+
+}

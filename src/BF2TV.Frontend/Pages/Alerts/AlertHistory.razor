@@ -1,0 +1,35 @@
+﻿@using BF2TV.Frontend.Store
+@using BF2TV.Frontend.Components
+@using BF2TV.Domain.Models.Alerts
+@inherits FluxorComponent
+@inject IState<AlertStore.State> State
+
+<div>
+    @if (State.Value.AlertHistory.Any())
+    {
+        <ul>
+            @foreach (var alert in State.Value.AlertHistory)
+            {
+                switch (alert)
+                {
+                    case FriendCameOnlineAlert friendCameOnlineAlert:
+                        <li>
+                            <FriendCameOnlineAlertView Alert="friendCameOnlineAlert"/>
+                        </li>
+                        break;
+                    default:
+                        <li>[@alert.WhenUtc.ToLocalTime().ToShortTimeString()] Unknown Alert</li>
+                        break;
+                }
+            }
+        </ul>
+    }
+    else
+    {
+        <InfoSpan Text="No alerts yet."/>
+    }
+</div>
+
+@code {
+
+}

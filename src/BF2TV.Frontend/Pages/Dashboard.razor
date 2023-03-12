@@ -2,6 +2,7 @@
 @inherits FluxorComponent
 @using BF2TV.Domain.BattlefieldApi
 @using BF2TV.Domain.Services
+@using BF2TV.Frontend.Components
 @using BF2TV.Frontend.Store
 @using BF2TV.Frontend.Store.FriendList
 @inject IDispatcher _dispatcher
@@ -43,9 +44,7 @@
         <div class="row p-2 ms-4">
             @if (_friendListState.Value.IsEmpty)
             {
-                <span style="font-size: 10pt; color: #767676">
-                    <i>No friends added yet — mark friends in the server scoreboard, to see who is playing.</i>
-                </span>
+                <InfoSpan Text="No friends added yet — mark friends in the server scoreboard, to see who is playing."/>
             }
             else
             {
@@ -75,9 +74,7 @@
                     }
                     else
                     {
-                        <span style="font-size: 10pt; color: #767676">
-                            <i>No friends online — add more friends in the server scoreboard, to see who is playing.</i>
-                        </span>
+                        <InfoSpan Text="No friends online — add more friends in the server scoreboard, to see who is playing."/>
                     }
                 </ul>
             }
