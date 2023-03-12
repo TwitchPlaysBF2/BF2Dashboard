@@ -37,7 +37,7 @@
                             }
                         </span>
                         <i class="btn btn-sm btn-outline-warning bi bi-person-dash grow me-2" @onclick="() => RemoveFriend(friend)" title="Remove friend"></i>
-                        <ToggleFriendIsOnlineAlertComponent Friend="@friend" />
+                        <FriendAlertComponent Friend="@friend" />
                     </li>
                 }
             </ul>
@@ -68,7 +68,7 @@
                             @friend.DisplayName
                         </a>
                         <i class="btn btn-sm btn-outline-warning bi bi-person-dash grow ms-2 me-2" @onclick="() => RemoveFriend(friend)" title="Remove friend"></i>
-                        <ToggleFriendIsOnlineAlertComponent Friend="@friend" />
+                        <FriendAlertComponent Friend="@friend" />
                     </li>
                 }
             </ul>
