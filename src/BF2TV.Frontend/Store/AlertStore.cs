@@ -1,6 +1,8 @@
 ﻿using System.Collections.Immutable;
 using BF2TV.Domain.BattlefieldApi;
 using BF2TV.Domain.Models.Alerts;
+using BF2TV.Domain.Repositories;
+using BF2TV.Domain.Services;
 using Fluxor;
 
 namespace BF2TV.Frontend.Store;
@@ -65,10 +67,12 @@ public class AlertStore
     public class Effects
     {
         private readonly IState<State> _alertState;
+        private readonly IAlertRepository _alertRepository;
 
-        public Effects(IState<State> alertState)
+        public Effects(IState<State> alertState, IAlertRepository alertRepository)
         {
             _alertState = alertState;
+            _alertRepository = alertRepository;
         }
 
         [EffectMethod]
@@ -87,6 +91,18 @@ public class AlertStore
                     }
                 }
             });
+        }
+        
+        [EffectMethod]
+        public async Task Handle(Actions.AddCondition action, IDispatcher dispatcher)
+        {
+            await _alertRepository.Add(action.ServerCondition.ConditionId);
+        }
+        
+        [EffectMethod]
+        public async Task Handle(Actions.RemoveCondition action, IDispatcher dispatcher)
+        {
+            await _alertRepository.Remove(action.ServerCondition.ConditionId);
         }
     }
 }
