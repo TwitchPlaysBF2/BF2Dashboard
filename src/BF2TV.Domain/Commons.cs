@@ -6,5 +6,5 @@ public static class Commons
 
     public static readonly string FriendListKey = "FriendList04";
 
-    public static readonly string ConditionListKey = "ConditionListKey01";
+    public static readonly string ConditionListKey = "ConditionListKey08";
 }

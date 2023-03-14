@@ -1,14 +1,14 @@
 ﻿namespace BF2TV.Domain.Models.Alerts;
 
-public record ConditionId(string Id)
+public class ConditionId : IEquatable<ConditionId>
 {
+    public string Id { get; }
+
     public override string ToString() => Id;
 
-    public static ConditionId Create<TCondition>(string uniqueConditionContent)
-        where TCondition : IServerCondition
+    private ConditionId(string id)
     {
-        var id = GenerateLiteral<TCondition>(uniqueConditionContent);
-        return new ConditionId(id);
+        Id = id;
     }
 
     public static ConditionId Create(FriendIsOnServerCondition condition)
@@ -17,9 +17,18 @@ public record ConditionId(string Id)
         return new ConditionId(id);
     }
 
-    private static string GenerateLiteral<TConditionType>(string uniqueConditionContent)
-        where TConditionType : IServerCondition
+    public static ConditionId Create<T>(string uniqueConditionContent)
+        where T : IServerCondition
     {
-        return $"{nameof(ConditionId)}__{typeof(TConditionType).Name}__{uniqueConditionContent}";
+        var id = GenerateLiteral<T>(uniqueConditionContent);
+        return new ConditionId(id);
     }
+
+    private static string GenerateLiteral<T>(string uniqueConditionContent)
+        where T : IServerCondition
+    {
+        return $"{nameof(ConditionId)}__{typeof(T).Name}__{uniqueConditionContent}";
+    }
+
+    public bool Equals(ConditionId? other) => other?.Id == Id;
 }

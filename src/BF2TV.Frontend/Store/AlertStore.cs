@@ -1,39 +1,51 @@
 ﻿using System.Collections.Immutable;
+using System.Diagnostics.CodeAnalysis;
 using BF2TV.Domain.BattlefieldApi;
 using BF2TV.Domain.Models.Alerts;
 using BF2TV.Domain.Repositories;
-using BF2TV.Domain.Services;
 using Fluxor;
 
 namespace BF2TV.Frontend.Store;
 
+// ReSharper disable UnusedMember.Global
+// ReSharper disable UnusedType.Global
 // ReSharper disable ClassNeverInstantiated.Global
+[SuppressMessage("Performance", "CA1822:Mark members as static")]
 public class AlertStore
 {
     [FeatureState]
     public class State
     {
         public IImmutableList<IAlert> AlertHistory { get; }
-        public IImmutableList<IServerCondition> ActiveServerConditions { get; }
+        public IImmutableList<FriendIsOnServerCondition> FriendIsOnServerConditions { get; }
 
         public State()
         {
             AlertHistory = ImmutableList.Create<IAlert>();
-            ActiveServerConditions = ImmutableList.Create<IServerCondition>();
+            FriendIsOnServerConditions = ImmutableList.Create<FriendIsOnServerCondition>();
         }
 
-        public State(IImmutableList<IServerCondition> activeServerConditions, IImmutableList<IAlert> alertHistory)
+        public State(
+            IImmutableList<IAlert> alertHistory,
+            IImmutableList<FriendIsOnServerCondition> friendIsOnServerConditions)
         {
             AlertHistory = alertHistory;
-            ActiveServerConditions = activeServerConditions;
+            FriendIsOnServerConditions = friendIsOnServerConditions;
         }
     }
 
     public class Actions
     {
-        public record AddCondition(IServerCondition ServerCondition);
+        public class FriendIsOnServerConditions
+        {
+            public record StartLoading;
 
-        public record RemoveCondition(IServerCondition ServerCondition);
+            public record FinishLoading(IImmutableList<FriendIsOnServerCondition> Conditions);
+
+            public record Add(FriendIsOnServerCondition Condition);
+
+            public record Remove(FriendIsOnServerCondition Condition);
+        }
 
         public record RunAlertGeneration(List<Server> FullServerList);
 
@@ -43,36 +55,42 @@ public class AlertStore
     public class Reducers
     {
         [ReducerMethod]
-        public State Reduce(State oldState, Actions.AddCondition action)
+        public State Reduce(State oldState, Actions.FriendIsOnServerConditions.FinishLoading action)
         {
-            var conditions = oldState.ActiveServerConditions.Add(action.ServerCondition);
-            return new State(conditions, oldState.AlertHistory);
+            return new State(oldState.AlertHistory, action.Conditions);
         }
 
         [ReducerMethod]
-        public State Reduce(State oldState, Actions.RemoveCondition action)
+        public State Reduce(State oldState, Actions.FriendIsOnServerConditions.Add action)
         {
-            var conditions = oldState.ActiveServerConditions.Remove(action.ServerCondition);
-            return new State(conditions, oldState.AlertHistory);
+            var conditions = oldState.FriendIsOnServerConditions.Add(action.Condition);
+            return new State(oldState.AlertHistory, conditions);
+        }
+
+        [ReducerMethod]
+        public State Reduce(State oldState, Actions.FriendIsOnServerConditions.Remove action)
+        {
+            var conditions = oldState.FriendIsOnServerConditions.Remove(action.Condition);
+            return new State(oldState.AlertHistory, conditions);
         }
 
         [ReducerMethod]
         public State Reduce(State oldState, Actions.SendAlert action)
         {
             var alertHistory = oldState.AlertHistory.Add(action.Alert);
-            return new State(oldState.ActiveServerConditions, alertHistory);
+            return new State(alertHistory, oldState.FriendIsOnServerConditions);
         }
     }
 
     public class Effects
     {
         private readonly IState<State> _alertState;
-        private readonly IAlertRepository _alertRepository;
+        private readonly IJsonRepository<FriendIsOnServerCondition> _jsonRepository;
 
-        public Effects(IState<State> alertState, IAlertRepository alertRepository)
+        public Effects(IState<State> alertState, IJsonRepository<FriendIsOnServerCondition> jsonRepository)
         {
             _alertState = alertState;
-            _alertRepository = alertRepository;
+            _jsonRepository = jsonRepository;
         }
 
         [EffectMethod]
@@ -82,27 +100,34 @@ public class AlertStore
             {
                 foreach (var server in action.FullServerList)
                 {
-                    foreach (var condition in _alertState.Value.ActiveServerConditions)
+                    foreach (var condition in _alertState.Value.FriendIsOnServerConditions)
                     {
-                        if (condition.IsFulfilled(server))
+                        if (condition.IsFulfilled(server, out var resultingAlert))
                         {
-                            dispatcher.Dispatch(new Actions.SendAlert(condition.ResultingAlert));
+                            dispatcher.Dispatch(new Actions.SendAlert(resultingAlert!));
                         }
                     }
                 }
             });
         }
-        
+
         [EffectMethod]
-        public async Task Handle(Actions.AddCondition action, IDispatcher dispatcher)
+        public async Task Handle(Actions.FriendIsOnServerConditions.StartLoading action, IDispatcher dispatcher)
         {
-            await _alertRepository.Add(action.ServerCondition.ConditionId);
+            var conditions = await _jsonRepository.GetAll();
+            dispatcher.Dispatch(new Actions.FriendIsOnServerConditions.FinishLoading(conditions.ToImmutableList()));
         }
-        
+
         [EffectMethod]
-        public async Task Handle(Actions.RemoveCondition action, IDispatcher dispatcher)
+        public async Task Handle(Actions.FriendIsOnServerConditions.Add action, IDispatcher dispatcher)
         {
-            await _alertRepository.Remove(action.ServerCondition.ConditionId);
+            await _jsonRepository.Add(action.Condition);
+        }
+
+        [EffectMethod]
+        public async Task Handle(Actions.FriendIsOnServerConditions.Remove action, IDispatcher dispatcher)
+        {
+            await _jsonRepository.Remove(action.Condition);
         }
     }
 }

@@ -431,6 +431,7 @@ else
         if (!_isServerDataLoaded)
         {
             _dispatcher.Dispatch(new InitializeServerListsAction());
+            _dispatcher.Dispatch(new AlertStore.Actions.FriendIsOnServerConditions.StartLoading());
             _periodicRefresher.UpdateSetting(true);
             _isServerDataLoaded = true;
 

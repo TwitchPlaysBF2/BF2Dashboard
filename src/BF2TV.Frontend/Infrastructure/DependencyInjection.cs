@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using BF2TV.Domain.DiscordApi;
+using BF2TV.Domain.Models.Alerts;
 using BF2TV.Domain.Repositories;
 using BF2TV.Domain.Services;
 using BF2TV.Frontend.Services;
@@ -31,7 +32,7 @@ public static class DependencyInjection
         
         services.AddMediatR(Assembly.GetExecutingAssembly());
         services.AddSingleton<DiscordUrlParser>();
-        services.AddScoped<IAlertRepository, AlertRepository>();
+        services.AddScoped<IJsonRepository<FriendIsOnServerCondition>, JsonRepository<FriendIsOnServerCondition>>();
         services.AddScoped<IPeriodicRefresher, PeriodicRefresher>();
     }
 }

@@ -2,13 +2,19 @@
 @using BF2TV.Domain.Models.Alerts
 @using BF2TV.Frontend.Store
 @using BF2TV.Domain.Models
+@using BF2TV.Frontend.Store
+@using Fluxor
+@using BF2TV.Frontend.Store
+@using Fluxor
+@using BF2TV.Frontend.Store
+@using Fluxor
 @inherits FluxorComponent
 @inject IDispatcher Dispatcher
 @inject IState<AlertStore.State> State
 
-<i class="btn btn-sm bi @(IsAlertActive ? "bi-bell-slash btn-outline-success" : "bi-bell btn-outline-secondary") grow"
+<i class="btn btn-sm bi @(IsAlertActiveForFriend ? "bi-bell-slash btn-outline-success" : "bi-bell btn-outline-secondary") grow"
    @onclick="Toggle"
-   title="Alerts are turned @(IsAlertActive ? "on" : "off")">
+   title="Alerts are turned @(IsAlertActiveForFriend ? "on" : "off")">
 </i>
 
 
@@ -17,18 +23,11 @@
     [Parameter]
     public FriendModel Friend { get; set; } = default!;
 
-    private bool IsAlertActive
-    {
-        get { return State.Value.ActiveServerConditions.Any(x =>
-        {
-            var conditionId = ConditionId.Create<FriendIsOnServerCondition>(Friend.DisplayName);
-            return x.ConditionId == conditionId;
-        }); }
-    }
+    private bool IsAlertActiveForFriend => FindActiveCondition(Friend.DisplayName) != null;
 
     private void Toggle()
     {
-        if (IsAlertActive)
+        if (IsAlertActiveForFriend)
             RemoveAlert();
         else
             AddAlert(Friend.DisplayName);
@@ -36,21 +35,27 @@
 
     private void RemoveAlert()
     {
-        var activeCondition = State.Value.ActiveServerConditions.FirstOrDefault(x =>
-        {
-            var conditionId = ConditionId.Create<FriendIsOnServerCondition>(Friend.DisplayName);
-            return x.ConditionId == conditionId;
-        });
+        var activeCondition = FindActiveCondition(Friend.DisplayName);
         if (activeCondition == null)
             return;
 
-        Dispatcher.Dispatch(new AlertStore.Actions.RemoveCondition(activeCondition));
+        Dispatcher.Dispatch(new AlertStore.Actions.FriendIsOnServerConditions.Remove(activeCondition));
     }
 
     private void AddAlert(string fullFriendName)
     {
         var condition = new FriendIsOnServerCondition(fullFriendName);
-        Dispatcher.Dispatch(new AlertStore.Actions.AddCondition(condition));
+        Dispatcher.Dispatch(new AlertStore.Actions.FriendIsOnServerConditions.Add(condition));
+    }
+
+    private FriendIsOnServerCondition? FindActiveCondition(string friendName)
+    {
+        var result = State.Value.FriendIsOnServerConditions.FirstOrDefault(x =>
+        {
+            var conditionId = ConditionId.Create<FriendIsOnServerCondition>(friendName);
+            return x.ConditionId.Id == conditionId.Id;
+        });
+        return result;
     }
 
 }
