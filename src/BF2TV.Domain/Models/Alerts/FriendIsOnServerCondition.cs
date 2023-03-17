@@ -1,10 +1,11 @@
 ﻿using BF2TV.Domain.BattlefieldApi;
+using BF2TV.Domain.Services;
 
 namespace BF2TV.Domain.Models.Alerts;
 
 public class FriendIsOnServerCondition : IServerCondition, IEquatable<FriendIsOnServerCondition>
 {
-    public ConditionId ConditionId => ConditionId.Create(this);
+    public ConditionId Id => ConditionId.Create(this);
     public string FriendIdentity { get; }
 
     public FriendIsOnServerCondition(string friendIdentity)
@@ -12,9 +13,9 @@ public class FriendIsOnServerCondition : IServerCondition, IEquatable<FriendIsOn
         FriendIdentity = friendIdentity;
     }
 
-    public bool IsFulfilled(Server server, out IAlert? resultingAlert)
+    public bool IsFulfilled(IDateTimeProvider dateTimeProvider, Server server, out IConditionStatus result)
     {
-        resultingAlert = null;
+        result = null!;
 
         if (server?.Players == null)
             return false;
@@ -23,9 +24,9 @@ public class FriendIsOnServerCondition : IServerCondition, IEquatable<FriendIsOn
         if (!isPlayingOnServer)
             return false;
 
-        resultingAlert = new FriendCameOnlineAlert(FriendIdentity, ServerInfoModel.FromServer(server), DateTime.UtcNow);
+        result = new FrameIsOnServerStatus(dateTimeProvider.NowUtc, FriendIdentity, ServerInfoModel.FromServer(server));
         return true;
     }
 
-    public bool Equals(FriendIsOnServerCondition? other) => other?.ConditionId.Id == ConditionId.Id;
+    public bool Equals(FriendIsOnServerCondition? other) => other?.Id.Id == Id.Id;
 }

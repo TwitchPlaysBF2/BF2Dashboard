@@ -1,6 +1,7 @@
 namespace BF2TV.Domain.Models.Alerts;
 
-public interface IAlert
+public interface IConditionStatus
 {
+    ConditionStatusId Id { get; }
     DateTime WhenUtc { get; }
 }

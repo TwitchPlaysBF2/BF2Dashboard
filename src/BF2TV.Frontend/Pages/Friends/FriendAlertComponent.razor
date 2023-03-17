@@ -53,7 +53,7 @@
         var result = State.Value.FriendIsOnServerConditions.FirstOrDefault(x =>
         {
             var conditionId = ConditionId.Create<FriendIsOnServerCondition>(friendName);
-            return x.ConditionId.Id == conditionId.Id;
+            return x.Id.Id == conditionId.Id;
         });
         return result;
     }

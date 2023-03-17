@@ -3,6 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 using BF2TV.Domain.BattlefieldApi;
 using BF2TV.Domain.Models.Alerts;
 using BF2TV.Domain.Repositories;
+using BF2TV.Domain.Services;
 using Fluxor;
 
 namespace BF2TV.Frontend.Store;
@@ -16,17 +17,17 @@ public class AlertStore
     [FeatureState]
     public class State
     {
-        public IImmutableList<IAlert> AlertHistory { get; }
+        public IImmutableList<IConditionStatus> AlertHistory { get; }
         public IImmutableList<FriendIsOnServerCondition> FriendIsOnServerConditions { get; }
 
         public State()
         {
-            AlertHistory = ImmutableList.Create<IAlert>();
+            AlertHistory = ImmutableList.Create<IConditionStatus>();
             FriendIsOnServerConditions = ImmutableList.Create<FriendIsOnServerCondition>();
         }
 
         public State(
-            IImmutableList<IAlert> alertHistory,
+            IImmutableList<IConditionStatus> alertHistory,
             IImmutableList<FriendIsOnServerCondition> friendIsOnServerConditions)
         {
             AlertHistory = alertHistory;
@@ -49,7 +50,7 @@ public class AlertStore
 
         public record RunAlertGeneration(List<Server> FullServerList);
 
-        public record SendAlert(IAlert Alert);
+        public record SendAlert(IConditionStatus ConditionStatus);
     }
 
     public class Reducers
@@ -63,7 +64,7 @@ public class AlertStore
         [ReducerMethod]
         public State Reduce(State oldState, Actions.FriendIsOnServerConditions.Add action)
         {
-            var conditions = oldState.FriendIsOnServerConditions.Add(action.Condition);
+            var conditions = oldState.FriendIsOnServerConditions.Insert(0, action.Condition);
             return new State(oldState.AlertHistory, conditions);
         }
 
@@ -77,7 +78,7 @@ public class AlertStore
         [ReducerMethod]
         public State Reduce(State oldState, Actions.SendAlert action)
         {
-            var alertHistory = oldState.AlertHistory.Add(action.Alert);
+            var alertHistory = oldState.AlertHistory.Insert(0, action.ConditionStatus);
             return new State(alertHistory, oldState.FriendIsOnServerConditions);
         }
     }
@@ -86,11 +87,19 @@ public class AlertStore
     {
         private readonly IState<State> _alertState;
         private readonly IJsonRepository<FriendIsOnServerCondition> _jsonRepository;
+        private readonly IDateTimeProvider _dateTimeProvider;
+        private readonly IConditionStatusTracker _conditionStatusTracker;
 
-        public Effects(IState<State> alertState, IJsonRepository<FriendIsOnServerCondition> jsonRepository)
+        public Effects(
+            IState<State> alertState,
+            IJsonRepository<FriendIsOnServerCondition> jsonRepository,
+            IDateTimeProvider dateTimeProvider, 
+            IConditionStatusTracker conditionStatusTracker)
         {
             _alertState = alertState;
             _jsonRepository = jsonRepository;
+            _dateTimeProvider = dateTimeProvider;
+            _conditionStatusTracker = conditionStatusTracker;
         }
 
         [EffectMethod]
@@ -102,9 +111,10 @@ public class AlertStore
                 {
                     foreach (var condition in _alertState.Value.FriendIsOnServerConditions)
                     {
-                        if (condition.IsFulfilled(server, out var resultingAlert))
+                        if (condition.IsFulfilled(_dateTimeProvider, server, out var result))
                         {
-                            dispatcher.Dispatch(new Actions.SendAlert(resultingAlert!));
+                            if (_conditionStatusTracker.IsNewStatus(result))
+                                dispatcher.Dispatch(new Actions.SendAlert(result));
                         }
                     }
                 }
@@ -115,6 +125,7 @@ public class AlertStore
         public async Task Handle(Actions.FriendIsOnServerConditions.StartLoading action, IDispatcher dispatcher)
         {
             var conditions = await _jsonRepository.GetAll();
+            conditions.Reverse();
             dispatcher.Dispatch(new Actions.FriendIsOnServerConditions.FinishLoading(conditions.ToImmutableList()));
         }
 

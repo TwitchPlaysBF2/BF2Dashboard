@@ -2,18 +2,18 @@
 @using BF2TV.Frontend.Components
 
 <span>
-    [@Alert.WhenUtc.ToLocalTime().ToShortTimeString()]
+    [@Status.WhenUtc.ToLocalTime().ToShortTimeString()]
     <span class="text-white font-weight-bold">
-        @Alert.PlayerName
+        @Status.PlayerName
     </span> has joined server:
     <span class="text-body">
-        <CroppedSpan Input="@Alert.ServerInfo.ServerName" MaxLength="26"/>
+        <CroppedSpan Input="@Status.ServerInfo.ServerName" MaxLength="26"/>
     </span>
 </span>
 
 @code {
 
     [Parameter]
-    public FriendCameOnlineAlert Alert { get; set; } = default!;
+    public FrameIsOnServerStatus Status { get; set; } = default!;
 
 }

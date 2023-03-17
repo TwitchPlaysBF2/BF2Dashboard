@@ -18,6 +18,8 @@ public static class DependencyInjection
     {
         services.AddBlazoredLocalStorage();
         services.AddScoped<IServerListService, ServerListService>();
+        services.AddScoped<IConditionStatusTracker, ConditionStatusTracker>();
+        services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
         services.AddFluxor(options =>
         {
             options
