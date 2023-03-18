@@ -1,13 +1,13 @@
 ﻿@using BF2TV.Domain.Models.Alerts
 @using BF2TV.Frontend.Components
 
-<span>
+<span style="color: #767676">
     [@Status.WhenUtc.ToLocalTime().ToShortTimeString()]
     <span class="text-white">
         @Status.PlayerName
     </span> has joined server:
-    <span class="fw-bold">
-        <CroppedSpan Input="@Status.ServerInfo.ServerName" MaxLength="@ServerNameCropLength"/>
+    <span style="font-size: 10pt;">
+        <LinkedServer Server="@Status.ServerInfo"/>
     </span>
 </span>
 
@@ -16,6 +16,4 @@
     [Parameter]
     public FrameIsOnServerStatus Status { get; set; } = default!;
 
-    [Parameter]
-    public int? ServerNameCropLength { get; set; }
 }

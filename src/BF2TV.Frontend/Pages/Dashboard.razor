@@ -59,8 +59,7 @@
                                     @friend.DisplayName
                                 </a>
                                 <span style="font-size: 10pt; color: #767676">
-                                    @friend.ServerInfo.MapNameAndSize @@ <a href="servers/@friend.ServerInfo.IpAndPort" style="color: slategrey">@friend.ServerInfo.ServerName</a>
-                                    (@friend.ServerInfo.CurrentPlayerCountWithoutBots/@friend.ServerInfo.MaxPlayerCount)
+                                    @friend.ServerInfo.MapNameAndSize @@ <LinkedServer Server="friend.ServerInfo"/>
                                     <a role="button"
                                             title="Join server (requires joinme.click/download)"
                                             href="@friend.ServerInfo.JoinLink"

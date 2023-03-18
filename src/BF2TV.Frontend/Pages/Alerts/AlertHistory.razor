@@ -7,7 +7,7 @@
 <div>
     @if (State.Value.AlertHistory.Any())
     {
-        <ul>
+        <ul class="list-unstyled">
             @foreach (var status in State.Value.AlertHistory)
             {
                 switch (status)

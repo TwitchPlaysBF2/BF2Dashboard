@@ -7,26 +7,27 @@
 @inject IDispatcher Dispatcher
 @inject IPeriodicRefresher PeriodicRefresher
 
-<h3>Your Alerts</h3>
+<h3>Alerts</h3>
 
-<div class="mb-5 mt-5">
-    <h5>Recent Alerts</h5>
+<div class="mt-2 mb-5 p-2">
     <AlertHistory/>
 </div>
 <div>
     <h5>Alert Settings</h5>
-    <ul>
-        @foreach (var condition in State.Value.FriendIsOnServerConditions)
-        {
-            <li>
-                <span>
-                    Notify me, when <strong>friend</strong> joins <strong>any server</strong>:
-                    <span class="text-white">@condition.FriendIdentity</span>
-                </span>
-                <span>[Remove]</span>
-            </li>
-        }
-    </ul>
+    <div class="mt-2 p-2">
+        <ul class="list-unstyled">
+            @foreach (var condition in State.Value.FriendIsOnServerConditions)
+            {
+                <li>
+                    <span>
+                        Notify me, when <strong>friend</strong> joins <strong>any server</strong>:
+                        <span class="text-white">@condition.FriendIdentity</span>
+                    </span>
+                    <span>[Remove]</span>
+                </li>
+            }
+        </ul>
+    </div>
 </div>
 
 @code {

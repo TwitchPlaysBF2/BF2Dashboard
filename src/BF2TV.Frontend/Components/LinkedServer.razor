@@ -1,0 +1,10 @@
+﻿@using BF2TV.Domain.Models
+<a href="servers/@Server.IpAndPort" style="color: slategrey">@Server.ServerName</a>
+(@Server.CurrentPlayerCountWithoutBots/@Server.MaxPlayerCount)
+
+@code {
+
+    [Parameter]
+    public ServerInfoModel Server { get; set; } = default!;
+
+}
