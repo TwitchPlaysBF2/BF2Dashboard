@@ -1,5 +1,4 @@
 ﻿@page "/alerts"
-@using BF2TV.Frontend.Store
 @using BF2TV.Domain.Services
 @inject IPeriodicRefresher PeriodicRefresher
 
@@ -7,17 +6,13 @@
     <h3><span class="oi oi-bell" aria-hidden="true"></span> Alerts</h3>
 </div>
 
-<div>
-    <h5>Notifications</h5>
-    <div class="m-5 mt-4">
-        <History/>
-    </div>
+<h5>Notifications</h5>
+<div class="m-5 mt-4">
+    <History/>
 </div>
-<div>
-    <h5>Settings</h5>
-    <div class="m-5 mt-4">
-        <Conditions/>
-    </div>
+<h5>Settings</h5>
+<div class="m-5 mt-4">
+    <Conditions/>
 </div>
 
 @code {
