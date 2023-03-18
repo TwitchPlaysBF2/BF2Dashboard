@@ -34,7 +34,7 @@ public class TrayService : IDisposable
 
     public void GenerateFavorites(params Server[] serverList)
     {
-        _trayItemFavorites.DropDownItems.Clear();
+        ClearFavoriteItems();
         if (serverList.Length == 0)
         {
             _trayItemFavorites.DropDown.Items.Add(new ToolStripMenuItem("No favorites added yet", null, ShowApp));
@@ -114,6 +114,21 @@ public class TrayService : IDisposable
     }
 
     private delegate void AddItemCallback(ToolStripItem item);
+
+    private void ClearFavoriteItems()
+    {
+        if (_form.InvokeRequired)
+        {
+           _form.BeginInvoke(new MethodInvoker(() =>
+            {
+                _trayItemFavorites.DropDown.Items.Clear();
+            }));
+        }
+        else
+        {
+            _trayItemFavorites.DropDown.Items.Clear();
+        }
+    }
 
     public void Dispose() => _trayIcon.Dispose();
 }
