@@ -4,26 +4,17 @@
 @using BF2TV.Domain.Services
 @inherits FluxorComponent
 @inject IState<AlertStore.State> State
-@inject IEnvironment _environment
-@inject IDispatcher _dispatcher
-@inject IPeriodicRefresher _periodicRefresher
-@inject IActivePlayerLookupService _activePlayerLookupService
+@inject IDispatcher Dispatcher
+@inject IPeriodicRefresher PeriodicRefresher
 
-@if (_environment.IsApp())
-{
-    <h3>Alerts for @_activePlayerName</h3>
-}
-else
-{
-    <h3>Alerts</h3>
-}
+<h3>Your Alerts</h3>
 
 <div class="mb-5 mt-5">
-    <h5>Alert History</h5>
+    <h5>Recent Alerts</h5>
     <AlertHistory/>
 </div>
 <div>
-    <h5>Configuration</h5>
+    <h5>Alert Settings</h5>
     <ul>
         @foreach (var condition in State.Value.FriendIsOnServerConditions)
         {
@@ -41,19 +32,15 @@ else
 @code {
 
     private bool _isInitialized = false;
-    private string? _activePlayerName;
 
     protected override async Task OnInitializedAsync()
     {
         if (!_isInitialized)
         {
-            _dispatcher.Dispatch(new InitializeServerListsAction());
-            _dispatcher.Dispatch(new AlertStore.Actions.FriendIsOnServerConditions.StartLoading());
-            _periodicRefresher.UpdateSetting(true);
+            Dispatcher.Dispatch(new InitializeServerListsAction());
+            Dispatcher.Dispatch(new AlertStore.Actions.FriendIsOnServerConditions.StartLoading());
+            PeriodicRefresher.UpdateSetting(true);
             _isInitialized = true;
-
-            if (_environment.IsApp())
-                _activePlayerName = _activePlayerLookupService.GetPlayer()?.ToString();
         }
         await base.OnInitializedAsync();
     }
