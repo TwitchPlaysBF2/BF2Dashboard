@@ -1,7 +1,8 @@
 ﻿@using BF2TV.Domain.Models.Alerts
 @using BF2TV.Frontend.Components
 
-<span style="color: #767676">
+<span style="color: #767676; display: inline-flex; gap: 0.4rem;"> 
+    <span class="oi oi-bell text-white me-1" style="align-self: center" aria-hidden="true"></span>
     [@Status.WhenUtc.ToLocalTime().ToShortTimeString()]
     <span class="text-white">
         @Status.PlayerName
