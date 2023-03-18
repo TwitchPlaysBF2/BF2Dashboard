@@ -18,16 +18,22 @@ else
     <h3>Alerts</h3>
 }
 
-<div class="mb-5">
-    <h5>History</h5>
+<div class="mb-5 mt-5">
+    <h5>Alert History</h5>
     <AlertHistory/>
 </div>
 <div>
-    <h5>Conditions</h5>
+    <h5>Configuration</h5>
     <ul>
         @foreach (var condition in State.Value.FriendIsOnServerConditions)
         {
-            <li>@condition.Id</li>
+            <li>
+                <span>
+                    Notify me, when <strong>friend</strong> joins <strong>any server</strong>:
+                    <span class="text-white">@condition.FriendIdentity</span>
+                </span>
+                <span>[Remove]</span>
+            </li>
         }
     </ul>
 </div>

@@ -8,9 +8,9 @@
     @if (State.Value.AlertHistory.Any())
     {
         <ul>
-            @foreach (var alert in State.Value.AlertHistory)
+            @foreach (var status in State.Value.AlertHistory)
             {
-                switch (alert)
+                switch (status)
                 {
                     case FrameIsOnServerStatus friendCameOnlineAlert:
                         <li>
@@ -18,7 +18,7 @@
                         </li>
                         break;
                     default:
-                        <li>[@alert.WhenUtc.ToLocalTime().ToShortTimeString()] Unknown Alert</li>
+                        <li>[@status.WhenUtc.ToLocalTime().ToShortTimeString()] Unknown Status</li>
                         break;
                 }
             }
@@ -29,7 +29,3 @@
         <InfoSpan Text="No alerts yet."/>
     }
 </div>
-
-@code {
-
-}

@@ -3,10 +3,10 @@
 
 <span>
     [@Status.WhenUtc.ToLocalTime().ToShortTimeString()]
-    <span class="text-white font-weight-bold">
+    <span class="text-white">
         @Status.PlayerName
     </span> has joined server:
-    <span class="text-body">
+    <span class="fw-bold">
         <CroppedSpan Input="@Status.ServerInfo.ServerName" MaxLength="@ServerNameCropLength"/>
     </span>
 </span>
