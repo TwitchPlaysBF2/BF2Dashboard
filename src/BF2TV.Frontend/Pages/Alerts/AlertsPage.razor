@@ -1,10 +1,6 @@
 ﻿@page "/alerts"
-@using BF2TV.Frontend.Pages.Alerts
 @using BF2TV.Frontend.Store
 @using BF2TV.Domain.Services
-@inherits FluxorComponent
-@inject IState<AlertStore.State> State
-@inject IDispatcher Dispatcher
 @inject IPeriodicRefresher PeriodicRefresher
 
 <div class="mb-5">
@@ -20,25 +16,7 @@
 <div>
     <h5>Settings</h5>
     <div class="m-5 mt-4">
-        @if (State.Value.FriendIsOnServerConditions?.Any() == true)
-        {
-            <ul class="list-unstyled">
-                @foreach (var condition in State.Value.FriendIsOnServerConditions)
-                {
-                    <li>
-                        <span>
-                            Notify me, when <strong>friend</strong> joins <strong>any server</strong>:
-                            <span class="text-white">@condition.FriendIdentity</span>
-                        </span>
-                        <span>[Remove]</span>
-                    </li>
-                }
-            </ul>
-        }
-        else
-        {
-            <InfoSpan Text="Activate notifications for a friend in the friend page."/>
-        }
+        <Conditions/>
     </div>
 </div>
 
@@ -50,10 +28,6 @@
     {
         if (!_isInitialized)
         {
-            Dispatcher.Dispatch(new InitializeServerListsAction());
-            if (!State.Value.IsLoaded)
-                Dispatcher.Dispatch(new AlertStore.Actions.FriendIsOnServerConditions.StartLoading());
-
             PeriodicRefresher.UpdateSetting(true);
             _isInitialized = true;
         }

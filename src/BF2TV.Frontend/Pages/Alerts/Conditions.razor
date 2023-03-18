@@ -1,0 +1,42 @@
+﻿@using BF2TV.Frontend.Store
+@inherits FluxorComponent
+@inject IState<AlertStore.State> State
+@inject IDispatcher Dispatcher
+
+@if (State.Value.FriendIsOnServerConditions?.Any() == true)
+{
+    <ul class="list-unstyled">
+        @foreach (var condition in State.Value.FriendIsOnServerConditions)
+        {
+            <li>
+                <span>
+                    Notify me, when <strong>friend</strong> joins <strong>any server</strong>:
+                    <span class="text-white">@condition.FriendIdentity</span>
+                </span>
+                <span>[Remove]</span>
+            </li>
+        }
+    </ul>
+}
+else
+{
+    <InfoSpan Text="Set up alerts on the friends page, using the bell icon."/>
+}
+
+@code {
+
+    private bool _isInitialized = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (!_isInitialized)
+        {
+            Dispatcher.Dispatch(new InitializeServerListsAction());
+            if (!State.Value.IsLoaded)
+                Dispatcher.Dispatch(new AlertStore.Actions.FriendIsOnServerConditions.StartLoading());
+
+            _isInitialized = true;
+        }
+        await base.OnInitializedAsync();
+    }
+}
