@@ -7,7 +7,7 @@
         @Status.PlayerName
     </span> has joined server:
     <span class="text-body">
-        <CroppedSpan Input="@Status.ServerInfo.ServerName" MaxLength="26"/>
+        <CroppedSpan Input="@Status.ServerInfo.ServerName" MaxLength="@ServerNameCropLength"/>
     </span>
 </span>
 
@@ -16,4 +16,6 @@
     [Parameter]
     public FrameIsOnServerStatus Status { get; set; } = default!;
 
+    [Parameter]
+    public int? ServerNameCropLength { get; set; }
 }

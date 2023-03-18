@@ -1,4 +1,4 @@
-﻿<span title="@Input">@GetCroppedString(Input, MaxLength)</span>
+﻿<span title="@Input">@GetCroppedString(Input)</span>
 
 @code {
 
@@ -6,12 +6,15 @@
     public string Input { get; set; } = null!;
 
     [Parameter]
-    public int MaxLength { get; set; }
+    public int? MaxLength { get; set; }
 
-    private string GetCroppedString(string input, int maxLength)
+    private string GetCroppedString(string input)
     {
-        return input.Length > maxLength
-            ? $"{input.Substring(0, maxLength)}..."
+        if (MaxLength == null)
+            return input;
+        
+        return input.Length > MaxLength
+            ? $"{input.Substring(0, (int)MaxLength)}..."
             : input;
     }
 
