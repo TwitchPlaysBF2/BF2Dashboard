@@ -51,7 +51,9 @@
         if (!_isInitialized)
         {
             Dispatcher.Dispatch(new InitializeServerListsAction());
-            Dispatcher.Dispatch(new AlertStore.Actions.FriendIsOnServerConditions.StartLoading());
+            if (!State.Value.IsLoaded)
+                Dispatcher.Dispatch(new AlertStore.Actions.FriendIsOnServerConditions.StartLoading());
+
             PeriodicRefresher.UpdateSetting(true);
             _isInitialized = true;
         }

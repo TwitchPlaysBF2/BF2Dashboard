@@ -19,19 +19,23 @@ public class AlertStore
     {
         public IImmutableList<IConditionStatus> AlertHistory { get; }
         public IImmutableList<FriendIsOnServerCondition> FriendIsOnServerConditions { get; }
+        public bool IsLoaded { get; }
 
         public State()
         {
             AlertHistory = ImmutableList.Create<IConditionStatus>();
             FriendIsOnServerConditions = ImmutableList.Create<FriendIsOnServerCondition>();
+            IsLoaded = false;
         }
 
         public State(
             IImmutableList<IConditionStatus> alertHistory,
-            IImmutableList<FriendIsOnServerCondition> friendIsOnServerConditions)
+            IImmutableList<FriendIsOnServerCondition> friendIsOnServerConditions,
+            bool isLoaded)
         {
             AlertHistory = alertHistory;
             FriendIsOnServerConditions = friendIsOnServerConditions;
+            IsLoaded = isLoaded;
         }
     }
 
@@ -58,28 +62,28 @@ public class AlertStore
         [ReducerMethod]
         public State Reduce(State oldState, Actions.FriendIsOnServerConditions.FinishLoading action)
         {
-            return new State(oldState.AlertHistory, action.Conditions);
+            return new State(oldState.AlertHistory, action.Conditions, isLoaded: true);
         }
 
         [ReducerMethod]
         public State Reduce(State oldState, Actions.FriendIsOnServerConditions.Add action)
         {
             var conditions = oldState.FriendIsOnServerConditions.Insert(0, action.Condition);
-            return new State(oldState.AlertHistory, conditions);
+            return new State(oldState.AlertHistory, conditions, oldState.IsLoaded);
         }
 
         [ReducerMethod]
         public State Reduce(State oldState, Actions.FriendIsOnServerConditions.Remove action)
         {
             var conditions = oldState.FriendIsOnServerConditions.Remove(action.Condition);
-            return new State(oldState.AlertHistory, conditions);
+            return new State(oldState.AlertHistory, conditions, oldState.IsLoaded);
         }
 
         [ReducerMethod]
         public State Reduce(State oldState, Actions.SendAlert action)
         {
             var alertHistory = oldState.AlertHistory.Insert(0, action.ConditionStatus);
-            return new State(alertHistory, oldState.FriendIsOnServerConditions);
+            return new State(alertHistory, oldState.FriendIsOnServerConditions, oldState.IsLoaded);
         }
     }
 
