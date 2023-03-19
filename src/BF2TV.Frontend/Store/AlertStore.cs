@@ -50,6 +50,8 @@ public class AlertStore
             public record Add(FriendIsOnServerCondition Condition);
 
             public record Remove(FriendIsOnServerCondition Condition);
+
+            public record SetEnabledState(FriendIsOnServerCondition Condition, bool NewEnabledState);
         }
 
         public record RunAlertGeneration(List<Server> FullServerList);
@@ -80,6 +82,17 @@ public class AlertStore
         }
 
         [ReducerMethod]
+        public State Reduce(State oldState, Actions.FriendIsOnServerConditions.SetEnabledState action)
+        {
+            var condition = oldState.FriendIsOnServerConditions.FirstOrDefault(x => x.Id.Id == action.Condition.Id.Id);
+            if (condition == null)
+                return oldState;
+
+            condition.IsEnabled = action.NewEnabledState;
+            return new State(oldState.AlertHistory, oldState.FriendIsOnServerConditions, oldState.IsLoaded);
+        }
+
+        [ReducerMethod]
         public State Reduce(State oldState, Actions.SendAlert action)
         {
             var alertHistory = oldState.AlertHistory.Insert(0, action.ConditionStatus);
@@ -97,7 +110,7 @@ public class AlertStore
         public Effects(
             IState<State> alertState,
             IJsonRepository<FriendIsOnServerCondition> jsonRepository,
-            IDateTimeProvider dateTimeProvider, 
+            IDateTimeProvider dateTimeProvider,
             IConditionStatusTracker conditionStatusTracker)
         {
             _alertState = alertState;
@@ -143,6 +156,14 @@ public class AlertStore
         public async Task Handle(Actions.FriendIsOnServerConditions.Remove action, IDispatcher dispatcher)
         {
             await _jsonRepository.Remove(action.Condition);
+        }
+
+        [EffectMethod]
+        public async Task Handle(Actions.FriendIsOnServerConditions.SetEnabledState action, IDispatcher dispatcher)
+        {
+            await _jsonRepository.Remove(action.Condition);
+            action.Condition.IsEnabled = action.NewEnabledState;
+            await _jsonRepository.Add(action.Condition);
         }
     }
 }

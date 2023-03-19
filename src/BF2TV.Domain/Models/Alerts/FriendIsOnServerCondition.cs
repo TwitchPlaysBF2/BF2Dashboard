@@ -7,6 +7,7 @@ public class FriendIsOnServerCondition : IServerCondition, IEquatable<FriendIsOn
 {
     public ConditionId Id => ConditionId.Create(this);
     public string FriendIdentity { get; }
+    public bool IsEnabled { get; set; } = true;
 
     public FriendIsOnServerCondition(string friendIdentity)
     {

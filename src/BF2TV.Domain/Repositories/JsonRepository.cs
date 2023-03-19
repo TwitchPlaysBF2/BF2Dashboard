@@ -8,7 +8,7 @@ public class JsonRepository<T> : IJsonRepository<T>
 {
     private readonly SemaphoreSlim _semaphore = new(1);
     private readonly ILocalStorageService _localStorageService;
-    private readonly string _storageKey = typeof(T).Name;
+    private readonly string _storageKey = typeof(T).Name + "10";
 
     public JsonRepository(ILocalStorageService localStorageService)
     {
