@@ -6,12 +6,12 @@ public class ConditionStatusTracker : IConditionStatusTracker
 {
     private readonly List<ConditionStatusId> _statusHistory = new();
 
-    public bool IsNewStatus(IConditionStatus status)
+    public bool TrackUnlessAlreadyExists(IConditionStatus status)
     {
         if (_statusHistory.Contains(status.Id))
-            return false;
+            return true;
         
         _statusHistory.Add(status.Id);
-        return true;
+        return false;
     }
 }

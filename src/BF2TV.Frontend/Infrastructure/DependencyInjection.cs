@@ -4,6 +4,7 @@ using BF2TV.Domain.Models.Alerts;
 using BF2TV.Domain.Repositories;
 using BF2TV.Domain.Services;
 using BF2TV.Frontend.Services;
+using BF2TV.Frontend.Services.Alerts;
 using Blazored.LocalStorage;
 using Fluxor;
 using MediatR;
@@ -18,6 +19,7 @@ public static class DependencyInjection
     {
         services.AddBlazoredLocalStorage();
         services.AddScoped<IServerListService, ServerListService>();
+        services.AddScoped<IAlertGenerationService, AlertGenerationService>();
         services.AddScoped<IConditionStatusTracker, ConditionStatusTracker>();
         services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
         services.AddFluxor(options =>

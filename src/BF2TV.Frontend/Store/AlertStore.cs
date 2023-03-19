@@ -4,6 +4,7 @@ using BF2TV.Domain.BattlefieldApi;
 using BF2TV.Domain.Models.Alerts;
 using BF2TV.Domain.Repositories;
 using BF2TV.Domain.Services;
+using BF2TV.Frontend.Services.Alerts;
 using Fluxor;
 
 namespace BF2TV.Frontend.Store;
@@ -102,40 +103,21 @@ public class AlertStore
 
     public class Effects
     {
-        private readonly IState<State> _alertState;
+        private readonly IAlertGenerationService _alertGenerationService;
         private readonly IJsonRepository<FriendIsOnServerCondition> _jsonRepository;
-        private readonly IDateTimeProvider _dateTimeProvider;
-        private readonly IConditionStatusTracker _conditionStatusTracker;
 
         public Effects(
-            IState<State> alertState,
-            IJsonRepository<FriendIsOnServerCondition> jsonRepository,
-            IDateTimeProvider dateTimeProvider,
-            IConditionStatusTracker conditionStatusTracker)
+            IAlertGenerationService alertGenerationService,
+            IJsonRepository<FriendIsOnServerCondition> jsonRepository)
         {
-            _alertState = alertState;
+            _alertGenerationService = alertGenerationService;
             _jsonRepository = jsonRepository;
-            _dateTimeProvider = dateTimeProvider;
-            _conditionStatusTracker = conditionStatusTracker;
         }
 
         [EffectMethod]
         public async Task Handle(Actions.RunAlertGeneration action, IDispatcher dispatcher)
         {
-            await Task.Run(() =>
-            {
-                foreach (var server in action.FullServerList)
-                {
-                    foreach (var condition in _alertState.Value.FriendIsOnServerConditions)
-                    {
-                        if (condition.IsFulfilled(_dateTimeProvider, server, out var result))
-                        {
-                            if (_conditionStatusTracker.IsNewStatus(result))
-                                dispatcher.Dispatch(new Actions.SendAlert(result));
-                        }
-                    }
-                }
-            });
+            await Task.Run(() => _alertGenerationService.Generate(action.FullServerList));
         }
 
         [EffectMethod]
