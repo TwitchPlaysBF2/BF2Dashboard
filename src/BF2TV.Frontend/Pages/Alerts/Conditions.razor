@@ -1,4 +1,5 @@
 ﻿@using BF2TV.Frontend.Store
+@using BF2TV.Frontend.Components;
 @inherits FluxorComponent
 @inject IState<AlertStore.State> State
 @inject IDispatcher Dispatcher
@@ -8,19 +9,21 @@
     <ul class="list-unstyled">
         @foreach (var condition in State.Value.FriendIsOnServerConditions)
         {
-            <li>
+            <li class="m-2">
+                <span class="btn btn-sm bi bi-x-circle-fill btn-outline-primary me-1" style="color: #983d3a;" title="Delete alert"
+                      @onclick="() => Dispatcher.Dispatch(new AlertStore.Actions.FriendIsOnServerConditions.Remove(condition))">
+                </span>
                 <span>
-                    Notify me, when <strong>friend</strong> joins <strong>any server</strong>:
+                    Notify, when <strong>friend</strong> joins <strong>any server</strong>:
                     <span class="text-white">@condition.FriendIdentity</span>
                 </span>
-                <span>[Remove]</span>
             </li>
         }
     </ul>
 }
 else
 {
-    <InfoSpan Text="Set up alerts on the friends page, using the bell icon."/>
+    <i style="font-size: 10pt; color: #767676">Activate new alerts on the <a href='/friends'>friends</a> page, to get notified when they come online.</i>
 }
 
 @code {
@@ -39,4 +42,5 @@ else
         }
         await base.OnInitializedAsync();
     }
+
 }
