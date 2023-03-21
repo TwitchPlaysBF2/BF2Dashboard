@@ -25,6 +25,7 @@ namespace BF2TV.WindowsApp
             InitializeTrayIcon();
             InitializeComponent();
 
+            blazorWebView.WebView.DefaultBackgroundColor = Color.FromArgb(39, 43, 48);
             blazorWebView.HostPage = "wwwroot\\index.html";
             blazorWebView.RootComponents.Add<Frontend.App>("#app");
             blazorWebView.Services = _serviceProvider;
