@@ -20,7 +20,7 @@ public class WindowsAlertService : IAlertService
             _trayService.TrayIcon.ShowBalloonTip(5,
                 "",
                 status.AlertText,
-                ToolTipIcon.Info);
+                ToolTipIcon.None);
         });
     }
 }

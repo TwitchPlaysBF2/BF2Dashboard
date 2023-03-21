@@ -12,6 +12,7 @@
     <AssemblyOriginatorKeyFile>Properties\BF2TV_StrongNaming_File.snk</AssemblyOriginatorKeyFile>
     <NeutralLanguage>en</NeutralLanguage>
     <LangVersion>10</LangVersion>
+    <AssemblyName>BF2.TV</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
