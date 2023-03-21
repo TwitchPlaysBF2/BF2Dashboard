@@ -131,7 +131,7 @@
             <div class="m-4 text-center">
                 @if (!string.IsNullOrWhiteSpace(Server.CommunityLogoUrl))
                 {
-                    <img src="@Server.CommunityLogoUrl" alt="Server"/>
+                    <img src="@Server.CommunityLogoUrl" alt="Server" style="max-width: 100%;"/>
                     <br/>
                 }
                 @if (Uri.IsWellFormedUriString(Server.SponsorText, UriKind.Absolute))
