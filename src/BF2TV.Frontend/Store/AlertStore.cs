@@ -21,22 +21,26 @@ public class AlertStore
         public IImmutableList<IConditionStatus> AlertHistory { get; }
         public IImmutableList<FriendIsOnServerCondition> FriendIsOnServerConditions { get; }
         public bool IsLoaded { get; }
+        public bool? AreAllAlertsEnabled { get; }
 
         public State()
         {
             AlertHistory = ImmutableList.Create<IConditionStatus>();
             FriendIsOnServerConditions = ImmutableList.Create<FriendIsOnServerCondition>();
             IsLoaded = false;
+            AreAllAlertsEnabled = null;
         }
 
         public State(
             IImmutableList<IConditionStatus> alertHistory,
             IImmutableList<FriendIsOnServerCondition> friendIsOnServerConditions,
-            bool isLoaded)
+            bool isLoaded,
+            bool? areAllAlertsEnabled)
         {
             AlertHistory = alertHistory;
             FriendIsOnServerConditions = friendIsOnServerConditions;
             IsLoaded = isLoaded;
+            AreAllAlertsEnabled = areAllAlertsEnabled;
         }
     }
 
@@ -58,6 +62,15 @@ public class AlertStore
         public record RunAlertGeneration(List<Server> FullServerList);
 
         public record SendAlert(IConditionStatus ConditionStatus);
+
+        public class AreAllAlertsEnabled
+        {
+            public record StartLoadingFromSettings;
+
+            public record FinishLoadingFromSettings(bool AreAllAlertsEnabled);
+
+            public record Toggle(bool AreAllAlertsEnabled);
+        }
     }
 
     public class Reducers
@@ -65,21 +78,21 @@ public class AlertStore
         [ReducerMethod]
         public State Reduce(State oldState, Actions.FriendIsOnServerConditions.FinishLoading action)
         {
-            return new State(oldState.AlertHistory, action.Conditions, isLoaded: true);
+            return new State(oldState.AlertHistory, action.Conditions, isLoaded: true, oldState.AreAllAlertsEnabled);
         }
 
         [ReducerMethod]
         public State Reduce(State oldState, Actions.FriendIsOnServerConditions.Add action)
         {
             var conditions = oldState.FriendIsOnServerConditions.Insert(0, action.Condition);
-            return new State(oldState.AlertHistory, conditions, oldState.IsLoaded);
+            return new State(oldState.AlertHistory, conditions, oldState.IsLoaded, oldState.AreAllAlertsEnabled);
         }
 
         [ReducerMethod]
         public State Reduce(State oldState, Actions.FriendIsOnServerConditions.Remove action)
         {
             var conditions = oldState.FriendIsOnServerConditions.Remove(action.Condition);
-            return new State(oldState.AlertHistory, conditions, oldState.IsLoaded);
+            return new State(oldState.AlertHistory, conditions, oldState.IsLoaded, oldState.AreAllAlertsEnabled);
         }
 
         [ReducerMethod]
@@ -90,14 +103,30 @@ public class AlertStore
                 return oldState;
 
             condition.IsEnabled = action.NewEnabledState;
-            return new State(oldState.AlertHistory, oldState.FriendIsOnServerConditions, oldState.IsLoaded);
+            return new State(oldState.AlertHistory, oldState.FriendIsOnServerConditions, oldState.IsLoaded,
+                oldState.AreAllAlertsEnabled);
         }
 
         [ReducerMethod]
         public State Reduce(State oldState, Actions.SendAlert action)
         {
             var alertHistory = oldState.AlertHistory.Insert(0, action.ConditionStatus);
-            return new State(alertHistory, oldState.FriendIsOnServerConditions, oldState.IsLoaded);
+            return new State(alertHistory, oldState.FriendIsOnServerConditions, oldState.IsLoaded,
+                oldState.AreAllAlertsEnabled);
+        }
+
+        [ReducerMethod]
+        public State Reduce(State oldState, Actions.AreAllAlertsEnabled.Toggle action)
+        {
+            return new State(oldState.AlertHistory, oldState.FriendIsOnServerConditions, oldState.IsLoaded,
+                action.AreAllAlertsEnabled);
+        }
+
+        [ReducerMethod]
+        public State Reduce(State oldState, Actions.AreAllAlertsEnabled.FinishLoadingFromSettings action)
+        {
+            return new State(oldState.AlertHistory, oldState.FriendIsOnServerConditions, oldState.IsLoaded,
+                action.AreAllAlertsEnabled);
         }
     }
 
@@ -106,20 +135,27 @@ public class AlertStore
         private readonly IAlertGenerationService _alertGenerationService;
         private readonly IAlertService _alertService;
         private readonly IJsonRepository<FriendIsOnServerCondition> _jsonRepository;
+        private readonly IAlertSettingsService _alertSettingsService;
 
         public Effects(
             IAlertGenerationService alertGenerationService,
             IAlertService alertService,
-            IJsonRepository<FriendIsOnServerCondition> jsonRepository)
+            IJsonRepository<FriendIsOnServerCondition> jsonRepository,
+            IAlertSettingsService alertSettingsService)
         {
             _alertGenerationService = alertGenerationService;
             _alertService = alertService;
             _jsonRepository = jsonRepository;
+            _alertSettingsService = alertSettingsService;
         }
 
         [EffectMethod]
         public async Task Handle(Actions.RunAlertGeneration action, IDispatcher dispatcher)
         {
+            var shouldGenerate = await _alertSettingsService.GetAreAllAlertsEnabled();
+            if (!shouldGenerate)
+                return;
+
             await Task.Run(() => _alertGenerationService.Generate(action.FullServerList));
         }
 
@@ -155,6 +191,19 @@ public class AlertStore
             await _jsonRepository.Remove(action.Condition);
             action.Condition.IsEnabled = action.NewEnabledState;
             await _jsonRepository.Add(action.Condition);
+        }
+
+        [EffectMethod]
+        public async Task Handle(Actions.AreAllAlertsEnabled.Toggle action, IDispatcher dispatcher)
+        {
+            await _alertSettingsService.SetAreAllAlertsEnabled(action.AreAllAlertsEnabled);
+        }
+
+        [EffectMethod]
+        public async Task Handle(Actions.AreAllAlertsEnabled.StartLoadingFromSettings action, IDispatcher dispatcher)
+        {
+            var result = await _alertSettingsService.GetAreAllAlertsEnabled();
+            dispatcher.Dispatch(new Actions.AreAllAlertsEnabled.FinishLoadingFromSettings(result));
         }
     }
 }

@@ -1,27 +1,34 @@
 ﻿@page "/alerts"
 @using BF2TV.Domain.Services
-@inject IPeriodicRefresher PeriodicRefresher
+@using BF2TV.Frontend.Store
 @using GranDen.Blazor.Bootstrap.SwitchButton
+@inherits FluxorComponent
+@inject IState<AlertStore.State> State
+@inject IDispatcher Dispatcher
+@inject IPeriodicRefresher PeriodicRefresher
 
 <div class="mb-5">
     <span class="fs-3">
         <span class="oi oi-bell fs-5" aria-hidden="true"></span>
         <span class="pb-3">Alerts</span>
-    <Switch OnUiLabel="ON" OffUiLabel="OFF" OnUiStyle="outline-primary" OffUiStyle="outline-secondary" SwitchSize="xs" SwitchHeight="30" InitialState="on">
-    </Switch>
+        <Switch OnUiLabel="ON" OffUiLabel="OFF" OnUiStyle="outline-primary" OffUiStyle="outline-secondary" SwitchSize="xs" SwitchHeight="30"
+                @bind-State="@(IsEnabled)">
+        </Switch>
     </span>
 </div>
 
-<div>
-    <span class="fs-5">Notifications</span>
-    <div class="m-5 mt-4">
-        <History/>
+<div style="@(IsEnabled ? "" : "opacity: .1")">
+    <div>
+        <span class="fs-5">Notifications</span>
+        <div class="m-5 mt-4">
+            <History/>
+        </div>
     </div>
-</div>
-<div>
-    <span class="fs-5">Your Alerts</span>
-    <div class="m-5 mt-4 ms-4">
-        <Conditions/>
+    <div>
+        <span class="fs-5">Your Alerts</span>
+        <div class="m-5 mt-4 ms-4">
+            <Conditions/>
+        </div>
     </div>
 </div>
 
@@ -29,10 +36,17 @@
 
     private bool _isInitialized = false;
 
+    private bool IsEnabled
+    {
+        get => State.Value?.AreAllAlertsEnabled ?? true;
+        set => Dispatcher.Dispatch(new AlertStore.Actions.AreAllAlertsEnabled.Toggle(value));
+    }
+
     protected override async Task OnInitializedAsync()
     {
         if (!_isInitialized)
         {
+            Dispatcher.Dispatch(new AlertStore.Actions.AreAllAlertsEnabled.StartLoadingFromSettings());
             PeriodicRefresher.UpdateSetting(true);
             _isInitialized = true;
         }

@@ -41,6 +41,8 @@ public static class DependencyInjection
         services.AddMediatR(Assembly.GetExecutingAssembly());
         services.AddSingleton<DiscordUrlParser>();
         services.AddScoped<IJsonRepository<FriendIsOnServerCondition>, JsonRepository<FriendIsOnServerCondition>>();
+        services.AddScoped<IJsonRepository<AlertSettings>, JsonRepository<AlertSettings>>();
+        services.AddScoped<IAlertSettingsService, AlertSettingsService>();
         services.AddScoped<IPeriodicRefresher, PeriodicRefresher>();
     }
 }
