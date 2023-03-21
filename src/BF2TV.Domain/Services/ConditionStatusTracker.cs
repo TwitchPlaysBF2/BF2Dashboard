@@ -1,17 +1,24 @@
 ﻿using BF2TV.Domain.Models.Alerts;
+using BF2TV.Domain.Repositories;
 
 namespace BF2TV.Domain.Services;
 
 public class ConditionStatusTracker : IConditionStatusTracker
 {
-    private readonly List<ConditionStatusId> _statusHistory = new();
+    private readonly IJsonRepository<ConditionStatusId> _repository;
+
+    public ConditionStatusTracker(IJsonRepository<ConditionStatusId> repository)
+    {
+        _repository = repository;
+    }
 
     public bool TrackUnlessAlreadyExists(IConditionStatus status)
     {
-        if (_statusHistory.Contains(status.Id))
+        var trackedIds = _repository.GetAll().Result;
+        if (trackedIds.Contains(status.Id))
             return true;
-        
-        _statusHistory.Add(status.Id);
+
+        _repository.Add(status.Id);
         return false;
     }
 }
