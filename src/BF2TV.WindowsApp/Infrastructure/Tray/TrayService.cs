@@ -7,7 +7,7 @@ namespace BF2TV.WindowsApp.Infrastructure.Tray;
 public class TrayService : IDisposable
 {
     private readonly IMediator _mediator;
-    private NotifyIcon _trayIcon = null!;
+    public NotifyIcon TrayIcon = null!;
     private BlazorViewForm _form = null!;
     private readonly ToolStripMenuItem _trayItemFavorites = new("Join Favorite Server");
 
@@ -19,7 +19,7 @@ public class TrayService : IDisposable
     public void Initialize(BlazorViewForm form)
     {
         _form = form ?? throw new ArgumentNullException(nameof(form));
-        _trayIcon = new NotifyIcon
+        TrayIcon = new NotifyIcon
         {
             Icon = new Icon("Resources/favicon.ico"),
             Text = $@"BF2.TV v{VersionProvider.GetAppVersion()}",
@@ -27,8 +27,8 @@ public class TrayService : IDisposable
             Visible = true,
         };
 
-        _trayIcon.MouseClick += OnTrayClick;
-        _trayIcon.DoubleClick += (sender, _)
+        TrayIcon.MouseClick += OnTrayClick;
+        TrayIcon.DoubleClick += (sender, _)
             => OnTrayClick(sender, new MouseEventArgs(MouseButtons.Left, 2, 0, 0, 0));
     }
 
@@ -130,5 +130,5 @@ public class TrayService : IDisposable
         }
     }
 
-    public void Dispose() => _trayIcon.Dispose();
+    public void Dispose() => TrayIcon.Dispose();
 }
