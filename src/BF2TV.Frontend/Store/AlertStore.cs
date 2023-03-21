@@ -104,13 +104,16 @@ public class AlertStore
     public class Effects
     {
         private readonly IAlertGenerationService _alertGenerationService;
+        private readonly IAlertService _alertService;
         private readonly IJsonRepository<FriendIsOnServerCondition> _jsonRepository;
 
         public Effects(
             IAlertGenerationService alertGenerationService,
+            IAlertService alertService,
             IJsonRepository<FriendIsOnServerCondition> jsonRepository)
         {
             _alertGenerationService = alertGenerationService;
+            _alertService = alertService;
             _jsonRepository = jsonRepository;
         }
 
@@ -118,6 +121,12 @@ public class AlertStore
         public async Task Handle(Actions.RunAlertGeneration action, IDispatcher dispatcher)
         {
             await Task.Run(() => _alertGenerationService.Generate(action.FullServerList));
+        }
+
+        [EffectMethod]
+        public async Task Handle(Actions.SendAlert action, IDispatcher dispatcher)
+        {
+            await _alertService.NotifyAsync(action.ConditionStatus);
         }
 
         [EffectMethod]

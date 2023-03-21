@@ -17,6 +17,7 @@ public static class DependencyInjection
         services.AddTransient<IEnvironment, WinFormsEnvironment>();
         services.AddTransient<IGameLauncher, JoinmeUriProtocolGameLauncher>();
         services.AddTransient<IActivePlayerLookupService, AppBasedActivePlayerLookupService>();
+        services.AddTransient<IAlertService, WindowsAlertService>();
         services.AddSingleton<TrayService>();
         services.AddBf2DataReader();
     }

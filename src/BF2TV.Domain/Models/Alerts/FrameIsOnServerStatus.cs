@@ -7,4 +7,6 @@ public record FrameIsOnServerStatus(
     : IConditionStatus
 {
     public ConditionStatusId Id => ConditionStatusId.Create(this);
+    public string AlertTitle => "BF2.TV Friend Alert";
+    public string AlertText => $"{PlayerName} joined: \n{ServerInfo.ServerName}";
 }

@@ -1,8 +1,10 @@
 ﻿@using BF2TV.Domain.Models.Alerts
 @using BF2TV.Frontend.Components
+@using BF2TV.Frontend.Store
+@inject IDispatcher Dispatcher
 
-<span style="color: #767676; display: inline-flex; gap: 0.4rem;"> 
-    <span class="oi oi-bell text-white me-1" style="align-self: center" aria-hidden="true"></span>
+<span style="color: #767676; display: inline-flex; gap: 0.4rem;">
+    <span class="oi oi-bell text-white me-1" style="align-self: center" aria-hidden="true" @onclick="RepeatAlertIfDebug"></span>
     [@Status.WhenUtc.ToLocalTime().ToShortTimeString()]
     <span class="text-white">
         @Status.PlayerName
@@ -16,5 +18,12 @@
 
     [Parameter]
     public FrameIsOnServerStatus Status { get; set; } = default!;
+
+    private void RepeatAlertIfDebug()
+    {
+#if DEBUG
+        Dispatcher.Dispatch(new AlertStore.Actions.SendAlert(Status));
+#endif
+    }
 
 }

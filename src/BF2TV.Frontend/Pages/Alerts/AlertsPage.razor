@@ -1,18 +1,28 @@
 ﻿@page "/alerts"
 @using BF2TV.Domain.Services
 @inject IPeriodicRefresher PeriodicRefresher
+@using GranDen.Blazor.Bootstrap.SwitchButton
 
 <div class="mb-5">
-    <h3><span class="oi oi-bell" aria-hidden="true"></span> Alerts</h3>
+    <span class="fs-3">
+        <span class="oi oi-bell fs-5" aria-hidden="true"></span>
+        <span class="pb-3">Alerts</span>
+    <Switch OnUiLabel="ON" OffUiLabel="OFF" OnUiStyle="outline-primary" OffUiStyle="outline-secondary" SwitchSize="xs" SwitchHeight="30" InitialState="on">
+    </Switch>
+    </span>
 </div>
 
-<h5>Notifications</h5>
-<div class="m-5 mt-4">
-    <History/>
+<div>
+    <span class="fs-5">Notifications</span>
+    <div class="m-5 mt-4">
+        <History/>
+    </div>
 </div>
-<h5>Your Alerts</h5>
-<div class="m-5 mt-4 ms-4">
-    <Conditions/>
+<div>
+    <span class="fs-5">Your Alerts</span>
+    <div class="m-5 mt-4 ms-4">
+        <Conditions/>
+    </div>
 </div>
 
 @code {

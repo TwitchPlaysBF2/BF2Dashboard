@@ -7,6 +7,8 @@ using BF2TV.Frontend.Services;
 using BF2TV.Frontend.Services.Alerts;
 using Blazored.LocalStorage;
 using Fluxor;
+using Majorsoft.Blazor.Components.CssEvents;
+using Majorsoft.Blazor.Components.Notifications;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using Refit;
@@ -18,6 +20,8 @@ public static class DependencyInjection
     public static void RegisterSharedServices(this IServiceCollection services)
     {
         services.AddBlazoredLocalStorage();
+        services.AddCssEvents();
+        services.AddNotifications();
         services.AddScoped<IServerListService, ServerListService>();
         services.AddScoped<IAlertGenerationService, AlertGenerationService>();
         services.AddScoped<IConditionStatusTracker, ConditionStatusTracker>();
