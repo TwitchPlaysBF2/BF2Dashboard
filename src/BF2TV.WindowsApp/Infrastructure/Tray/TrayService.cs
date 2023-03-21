@@ -37,7 +37,7 @@ public class TrayService : IDisposable
         ClearFavoriteItems();
         if (serverList.Length == 0)
         {
-            _trayItemFavorites.DropDown.Items.Add(new ToolStripMenuItem("No favorites added yet", null, ShowApp));
+            AddFavoriteItem(new ToolStripMenuItem("No favorites added yet", null, ShowApp));
         }
 
         foreach (var server in serverList)
