@@ -1,0 +1,32 @@
+﻿@using BF2TV.Frontend.Store
+@using GranDen.Blazor.Bootstrap.SwitchButton
+@using BF2TV.Domain.Models.Alerts
+@inherits FluxorComponent
+@inject IState<AlertStore.State> State
+@inject IDispatcher Dispatcher
+
+<span class="me-2" title="@(IsEnabled ? "Disable" : "Enable") Alert">
+    <Switch
+        OnUiLabel="ON" OffUiLabel="OFF" OnUiStyle="outline-primary" OffUiStyle="outline-secondary" SwitchSize="xs" SwitchHeight="30"
+        @bind-State="IsEnabled">
+    </Switch>
+</span>
+<span class="btn btn-sm bi bi-x-circle-fill btn-outline-primary me-2" style="color: #983d3a;" title="Delete alert"
+      @onclick="() => Dispatcher.Dispatch(new AlertStore.Actions.FriendIsOnServerConditions.Remove(Condition))">
+</span>
+<span style="@(!IsEnabled ? "opacity: .5" : "")">
+    Notify, when <strong><span class="text-white">@Condition.FriendIdentity</span></strong> joins <strong>any server</strong>
+</span>
+
+@code {
+
+    private bool IsEnabled
+    {
+        get => Condition.IsEnabled;
+        set => Dispatcher.Dispatch(new AlertStore.Actions.FriendIsOnServerConditions.SetEnabledState(Condition, value));
+    }
+
+    [Parameter]
+    public FriendIsOnServerCondition Condition { get; set; } = default!;
+
+}

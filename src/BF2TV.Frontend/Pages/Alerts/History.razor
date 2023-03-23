@@ -1,0 +1,31 @@
+﻿@using BF2TV.Frontend.Store
+@using BF2TV.Frontend.Components
+@using BF2TV.Domain.Models.Alerts
+@inherits FluxorComponent
+@inject IState<AlertStore.State> State
+
+<div>
+    @if (State.Value.AlertHistory.Any())
+    {
+        <ul class="list-unstyled">
+            @foreach (var status in State.Value.AlertHistory)
+            {
+                switch (status)
+                {
+                    case FrameIsOnServerStatus frameIsOnServerStatus:
+                        <li>
+                            <FrameIsOnServerStatusView Status="frameIsOnServerStatus"/>
+                        </li>
+                        break;
+                    default:
+                        <li>[@status.WhenUtc.ToLocalTime().ToShortTimeString()] Unknown Status</li>
+                        break;
+                }
+            }
+        </ul>
+    }
+    else
+    {
+        <InfoSpan Text="No recent alerts."/>
+    }
+</div>

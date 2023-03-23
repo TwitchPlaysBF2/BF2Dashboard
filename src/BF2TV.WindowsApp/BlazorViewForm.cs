@@ -4,6 +4,7 @@ using BF2TV.WindowsApp.Infrastructure;
 using BF2TV.WindowsApp.Infrastructure.Tray;
 using Microsoft.AspNetCore.Components.WebView.WindowsForms;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Web.WebView2.Core;
 
 namespace BF2TV.WindowsApp
 {
@@ -24,10 +25,7 @@ namespace BF2TV.WindowsApp
 
             InitializeTrayIcon();
             InitializeComponent();
-
-            blazorWebView.HostPage = "wwwroot\\index.html";
-            blazorWebView.RootComponents.Add<Frontend.App>("#app");
-            blazorWebView.Services = _serviceProvider;
+            InitializeWebView();
 
             UpdateService.PromptForUpdateIfThereIsOneAvailable();
         }
@@ -37,6 +35,31 @@ namespace BF2TV.WindowsApp
             _trayService = _serviceProvider.GetService<TrayService>()
                            ?? throw new InvalidOperationException($"Failed to resolve {nameof(TrayService)}");
             _trayService.Initialize(this);
+        }
+
+        private void InitializeWebView()
+        {
+            OverwriteStorageLocation();
+            blazorWebView.WebView.DefaultBackgroundColor = Color.FromArgb(39, 43, 48);
+            blazorWebView.HostPage = "wwwroot\\index.html";
+            blazorWebView.RootComponents.Add<Frontend.App>("#app");
+            blazorWebView.Services = _serviceProvider;
+
+            void OverwriteStorageLocation()
+            {
+                // Reason for doing this is quite long and very silly. Let me explain.
+                // Default storage path is: %localappdata%\<ASSEMBLYNAME>.WebView2\EBWebView
+                // This means, if AssemblyName ever changes, the user loses all existing localstorage data.
+                // This was the case, since we renamed AssemblyName from BF2TV.WindowsApp to BF2.TV.
+                // Reason for rename was NotifyIcon's default baloon notification behavior:
+                // The notification title would always show the AssemblyName.
+                // For all these reasons, we renamed the AssemblyName AND manually had to set the old one here.
+                // Not doing this, would cause users to lose their existing favorites & friends, which sucks.
+
+                var localAppData = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+                var cacheFolderPath = Path.Combine(localAppData, "BF2TV.WindowsApp.WebView2");
+                Environment.SetEnvironmentVariable("WEBVIEW2_USER_DATA_FOLDER", cacheFolderPath);
+            }
         }
 
         private void BlazorViewForm_Resize(object sender, EventArgs e)

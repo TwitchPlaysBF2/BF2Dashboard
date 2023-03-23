@@ -1,0 +1,61 @@
+﻿@using BF2TV.Frontend.Store.FriendList
+@using BF2TV.Domain.Models.Alerts
+@using BF2TV.Frontend.Store
+@using BF2TV.Domain.Models
+@using BF2TV.Frontend.Store
+@using Fluxor
+@using BF2TV.Frontend.Store
+@using Fluxor
+@using BF2TV.Frontend.Store
+@using Fluxor
+@inherits FluxorComponent
+@inject IDispatcher Dispatcher
+@inject IState<AlertStore.State> State
+
+<i class="btn btn-sm bi @(IsAlertActiveForFriend ? "bi-bell-slash btn-outline-success" : "bi-bell btn-outline-secondary") grow"
+   @onclick="Toggle"
+   title="Alerts are turned @(IsAlertActiveForFriend ? "on" : "off")">
+</i>
+
+
+@code {
+
+    [Parameter]
+    public FriendModel Friend { get; set; } = default!;
+
+    private bool IsAlertActiveForFriend => FindActiveCondition(Friend.DisplayName) != null;
+
+    private void Toggle()
+    {
+        if (IsAlertActiveForFriend)
+            RemoveAlert();
+        else
+            AddAlert(Friend.DisplayName);
+    }
+
+    private void RemoveAlert()
+    {
+        var activeCondition = FindActiveCondition(Friend.DisplayName);
+        if (activeCondition == null)
+            return;
+
+        Dispatcher.Dispatch(new AlertStore.Actions.FriendIsOnServerConditions.Remove(activeCondition));
+    }
+
+    private void AddAlert(string fullFriendName)
+    {
+        var condition = new FriendIsOnServerCondition(fullFriendName);
+        Dispatcher.Dispatch(new AlertStore.Actions.FriendIsOnServerConditions.Add(condition));
+    }
+
+    private FriendIsOnServerCondition? FindActiveCondition(string friendName)
+    {
+        var result = State.Value.FriendIsOnServerConditions.FirstOrDefault(x =>
+        {
+            var conditionId = ConditionId.Create<FriendIsOnServerCondition>(friendName);
+            return x.Id.Id == conditionId.Id;
+        });
+        return result;
+    }
+
+}

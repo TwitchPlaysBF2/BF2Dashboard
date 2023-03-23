@@ -1,4 +1,4 @@
-﻿namespace BF2TV.Frontend.Store;
+﻿namespace BF2TV.Domain;
 
 public static class Commons
 {

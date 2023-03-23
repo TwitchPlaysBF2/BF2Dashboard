@@ -1,0 +1,41 @@
+﻿@using BF2TV.Frontend.Store
+@using BF2TV.Frontend.Components;
+@using GranDen.Blazor.Bootstrap.SwitchButton
+@inherits FluxorComponent
+@inject IState<AlertStore.State> State
+@inject IDispatcher Dispatcher
+
+@if (State.Value.FriendIsOnServerConditions?.Any() == true)
+{
+    <ul class="list-unstyled">
+        @foreach (var condition in State.Value.FriendIsOnServerConditions)
+        {
+            <li class="m-2">
+                <FriendIsOnServerConditionView Condition="condition"/>
+            </li>
+        }
+    </ul>
+}
+else
+{
+    <i style="font-size: 10pt; color: #767676">Activate new alerts on the <a href='/friends'>friends</a> page, to get notified when they come online.</i>
+}
+
+@code {
+
+    private bool _isInitialized = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (!_isInitialized)
+        {
+            Dispatcher.Dispatch(new InitializeServerListsAction());
+            if (!State.Value.IsLoaded)
+                Dispatcher.Dispatch(new AlertStore.Actions.FriendIsOnServerConditions.StartLoading());
+
+            _isInitialized = true;
+        }
+        await base.OnInitializedAsync();
+    }
+
+}

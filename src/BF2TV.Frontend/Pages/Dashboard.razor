@@ -2,18 +2,19 @@
 @inherits FluxorComponent
 @using BF2TV.Domain.BattlefieldApi
 @using BF2TV.Domain.Services
+@using BF2TV.Frontend.Components
 @using BF2TV.Frontend.Store
 @using BF2TV.Frontend.Store.FriendList
-@inject IDispatcher _dispatcher
-@inject IState<FavoriteServerListState> _favoriteServerListState
-@inject IState<FullServerListState> _fullServerListState
-@inject IState<FriendListState> _friendListState
-@inject IState<LoadingState> _loadingState
-@inject IEnvironment _environment
-@inject IActivePlayerLookupService _activePlayerLookupService
-@inject IPeriodicRefresher _periodicRefresher
+@inject IDispatcher Dispatcher
+@inject IState<AlertStore.State> AlertState
+@inject IState<FavoriteServerListState> FavoriteServerListState
+@inject IState<FullServerListState> FullServerListState
+@inject IState<FriendListState> FriendListState
+@inject IEnvironment Environment
+@inject IActivePlayerLookupService ActivePlayerLookupService
+@inject IPeriodicRefresher PeriodicRefresher
 
-@if (_environment.IsApp() && _activePlayerName != null)
+@if (Environment.IsApp() && _activePlayerName != null)
 {
     <div class="mb-3">
         <small>Welcome to duty, <strong>@_activePlayerName</strong>!</small>
@@ -29,31 +30,28 @@
     <div class="form-switch p-1 ps-5 d-flex align-items-center" style="min-height: 40px">
         <label style="cursor: pointer" for="chkAutoReload" class="form-check-label p-3 text-nowrap">
             <input type="checkbox" style="cursor: pointer" id="chkAutoReload" class="form-check-input me-1"
-                   checked="@_periodicRefresher.IsEnabled"
-                   @onclick="() => _periodicRefresher.UpdateSetting(!_periodicRefresher.IsEnabled)">
-            Auto Refresh is @(_periodicRefresher.IsEnabled ? "on" : "off")
+                   checked="@PeriodicRefresher.IsEnabled"
+                   @onclick="() => PeriodicRefresher.UpdateSetting(!PeriodicRefresher.IsEnabled)">
+            Auto Refresh is @(PeriodicRefresher.IsEnabled ? "on" : "off")
         </label>
     </div>
 </div>
 
 <div class="col-md-6 pt-5 mt-2">
-    @if (_fullServerListState.Value.ServerList != null && _friendListState.Value.IsLoading == false && _friendListState.Value.IsInitialized)
+    @if (FullServerListState.Value.ServerList != null && FriendListState.Value.IsLoading == false && FriendListState.Value.IsInitialized)
     {
         <h3>Online Friends</h3>
         <div class="row p-2 ms-4">
-            @if (_friendListState.Value.IsEmpty)
+            @if (FriendListState.Value.IsEmpty)
             {
-                <span style="font-size: 10pt; color: #767676">
-                    <span>No friends added yet.</span>
-                    <p>Mark your BF2 friends in the server scoreboard, to always see where they are playing!</p>
-                </span>
+                <InfoSpan Text="No friends added yet — mark friends in the server scoreboard, to see who is playing."/>
             }
             else
             {
                 <ul style="list-style-type: none;">
-                    @if (_friendListState.Value.OnlineFriendList != null)
+                    @if (FriendListState.Value.OnlineFriendList != null && FriendListState.Value.OnlineFriendList.Count > 0)
                     {
-                        @foreach (var friend in _friendListState.Value.OnlineFriendList)
+                        @foreach (var friend in FriendListState.Value.OnlineFriendList)
                         {
                             <li class="m-2">
                                 <i class="bi bi-circle-fill" style="color: green; font-size: 11pt;"></i>
@@ -61,8 +59,7 @@
                                     @friend.DisplayName
                                 </a>
                                 <span style="font-size: 10pt; color: #767676">
-                                    @friend.ServerInfo.MapNameAndSize @@ <a href="servers/@friend.ServerInfo.IpAndPort" style="color: slategrey">@friend.ServerInfo.ServerName</a>
-                                    (@friend.ServerInfo.CurrentPlayerCountWithoutBots/@friend.ServerInfo.MaxPlayerCount)
+                                    @friend.ServerInfo.MapNameAndSize @@ <LinkedServer Server="friend.ServerInfo"/>
                                     <a role="button"
                                             title="Join server (requires joinme.click/download)"
                                             href="@friend.ServerInfo.JoinLink"
@@ -74,6 +71,10 @@
                             </li>
                         }
                     }
+                    else
+                    {
+                        <InfoSpan Text="No friends online — add more friends in the server scoreboard, to see who is playing."/>
+                    }
                 </ul>
             }
         </div>
@@ -81,7 +82,7 @@
 </div>
 
 <div class="row pt-5 mt-2">
-@if (_fullServerListState.Value.ServerList == null || _favoriteServerListState.Value.ServerList == null)
+@if (FullServerListState.Value.ServerList == null || FavoriteServerListState.Value.ServerList == null)
 {
     <LoadingSpinner/>
 }
@@ -92,7 +93,7 @@ else
             <h3>All Battlefield 2 Servers</h3>
         </div>
         <div class="accordion accordion-flush bg-dark" id="mainAccordion">
-            @foreach (var server in _fullServerListState.Value.ServerList)
+            @foreach (var server in FullServerListState.Value.ServerList)
             {
                 <!-- All Servers -->
                 <div class="accordion-item">
@@ -254,9 +255,9 @@ else
             <h3>Your favorites</h3>
         </div>
         <div class="accordion accordion-flush bg-dark" id="favoritesAccordion">
-            @if (_favoriteServerListState.Value.ServerList?.Any() == true)
+            @if (FavoriteServerListState.Value.ServerList?.Any() == true)
             {
-                foreach (var server in _favoriteServerListState.Value.ServerList)
+                foreach (var server in FavoriteServerListState.Value.ServerList)
                 {
                     <!-- Favorites -->
                     <div class="accordion-item">
@@ -428,26 +429,29 @@ else
     {
         if (!_isServerDataLoaded)
         {
-            _dispatcher.Dispatch(new InitializeServerListsAction());
-            _periodicRefresher.UpdateSetting(true);
+            Dispatcher.Dispatch(new InitializeServerListsAction());
+            if (!AlertState.Value.IsLoaded)
+                Dispatcher.Dispatch(new AlertStore.Actions.FriendIsOnServerConditions.StartLoading());
+
+            PeriodicRefresher.UpdateSetting(true);
             _isServerDataLoaded = true;
 
-            if (_environment.IsApp())
-                _activePlayerName = _activePlayerLookupService.GetPlayer()?.ToString();
+            if (Environment.IsApp())
+                _activePlayerName = ActivePlayerLookupService.GetPlayer()?.ToString();
         }
         await base.OnInitializedAsync();
     }
 
     private void Refresh()
     {
-        _dispatcher.Dispatch(new SetFullServerListAction(null));
-        _dispatcher.Dispatch(new SetFavoriteServerListAction(null));
-        _dispatcher.Dispatch(new InitializeServerListsAction());
+        Dispatcher.Dispatch(new SetFullServerListAction(null));
+        Dispatcher.Dispatch(new SetFavoriteServerListAction(null));
+        Dispatcher.Dispatch(new InitializeServerListsAction());
     }
 
     private void ToggleFavorite(Server server)
     {
-        _dispatcher.Dispatch(new ToggleFavoriteAction(server));
+        Dispatcher.Dispatch(new ToggleFavoriteAction(server));
     }
 
     private void AddOrRemoveFriend(Player player, Server server)
@@ -455,12 +459,12 @@ else
         if (player.IsFriend)
         {
             player.IsFriend = false;
-            _dispatcher.Dispatch(new RemoveFriendAction(player.FullName));
+            Dispatcher.Dispatch(new RemoveFriendAction(player.FullName));
         }
         else
         {
             player.IsFriend = true;
-            _dispatcher.Dispatch(new AddFriendAction(player, server));
+            Dispatcher.Dispatch(new AddFriendAction(player, server));
         }
     }
 
