@@ -2,7 +2,8 @@
 
 namespace BF2TV.Domain.Services;
 
-public interface IAlertService
+public interface INotificationService
 {
     Task NotifyAsync(IConditionStatus status);
+    Task RequestPermissions();
 }

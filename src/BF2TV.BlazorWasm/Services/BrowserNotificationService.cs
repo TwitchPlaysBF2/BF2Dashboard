@@ -5,18 +5,18 @@ using Majorsoft.Blazor.Components.Notifications;
 
 namespace BF2TV.BlazorWasm.Services;
 
-public class BrowserAlertService : IAlertService
+public class BrowserNotificationService : INotificationService
 {
     private readonly IHtmlNotificationService _notificationService;
 
-    public BrowserAlertService(IHtmlNotificationService notificationService)
+    public BrowserNotificationService(IHtmlNotificationService notificationService)
     {
         _notificationService = notificationService;
     }
 
     public async Task NotifyAsync(IConditionStatus status)
     {
-        await RequestBrowserPermission();
+        await RequestPermissions();
 
         var options = new HtmlNotificationOptions(status.AlertTitle)
         {
@@ -30,7 +30,7 @@ public class BrowserAlertService : IAlertService
         await _notificationService.ShowsAsync(options);
     }
 
-    private async Task RequestBrowserPermission()
+    public async Task RequestPermissions()
     {
         await _notificationService.RequestPermissionAsync(null!);
     }

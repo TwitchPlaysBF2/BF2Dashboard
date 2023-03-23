@@ -135,18 +135,18 @@ public class AlertStore
     public class Effects
     {
         private readonly IAlertGenerationService _alertGenerationService;
-        private readonly IAlertService _alertService;
+        private readonly INotificationService _notificationService;
         private readonly IJsonRepository<FriendIsOnServerCondition> _jsonRepository;
         private readonly IAlertSettingsService _alertSettingsService;
 
         public Effects(
             IAlertGenerationService alertGenerationService,
-            IAlertService alertService,
+            INotificationService notificationService,
             IJsonRepository<FriendIsOnServerCondition> jsonRepository,
             IAlertSettingsService alertSettingsService)
         {
             _alertGenerationService = alertGenerationService;
-            _alertService = alertService;
+            _notificationService = notificationService;
             _jsonRepository = jsonRepository;
             _alertSettingsService = alertSettingsService;
         }
@@ -164,7 +164,7 @@ public class AlertStore
         [EffectMethod]
         public async Task Handle(Actions.Notify action, IDispatcher dispatcher)
         {
-            await _alertService.NotifyAsync(action.ConditionStatus);
+            await _notificationService.NotifyAsync(action.ConditionStatus);
         }
 
         [EffectMethod]
@@ -179,6 +179,7 @@ public class AlertStore
         public async Task Handle(Actions.FriendIsOnServerConditions.Add action, IDispatcher dispatcher)
         {
             await _jsonRepository.Add(action.Condition);
+            await Task.Run(() => _notificationService.RequestPermissions());
         }
 
         [EffectMethod]
@@ -193,12 +194,14 @@ public class AlertStore
             await _jsonRepository.Remove(action.Condition);
             action.Condition.IsEnabled = action.NewEnabledState;
             await _jsonRepository.Add(action.Condition);
+            await Task.Run(() => _notificationService.RequestPermissions());
         }
 
         [EffectMethod]
         public async Task Handle(Actions.AreAllAlertsEnabled.Toggle action, IDispatcher dispatcher)
         {
             await _alertSettingsService.SetAreAllAlertsEnabled(action.AreAllAlertsEnabled);
+            await Task.Run(() => _notificationService.RequestPermissions());
         }
 
         [EffectMethod]

@@ -4,11 +4,11 @@ using BF2TV.WindowsApp.Infrastructure.Tray;
 
 namespace BF2TV.WindowsApp.Services;
 
-public class WindowsAlertService : IAlertService
+public class WindowsNotificationService : INotificationService
 {
     private readonly TrayService _trayService;
 
-    public WindowsAlertService(TrayService trayService)
+    public WindowsNotificationService(TrayService trayService)
     {
         _trayService = trayService;
     }
@@ -23,4 +23,6 @@ public class WindowsAlertService : IAlertService
                 ToolTipIcon.None);
         });
     }
+
+    public Task RequestPermissions() => Task.CompletedTask;
 }
