@@ -23,6 +23,7 @@
     <!-- anything after Autoupdater 1.7.0 uses WebView2 and currently (1.7.4) only gives me runtime errors so I revered it back to 1.7.0 which uses webbrowser -->
     <PackageReference Include="Autoupdater.NET.Official" Version="1.7.0" />
     <PackageReference Include="GameDataReader" Version="0.0.1" />
+    <PackageReference Include="GranDen.Blazor.Bootstrap.SwitchButton" Version="1.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebView.WindowsForms" Version="6.0.419" />
   </ItemGroup>
 
