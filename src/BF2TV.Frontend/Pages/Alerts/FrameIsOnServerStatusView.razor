@@ -22,7 +22,7 @@
     private void RepeatAlertIfDebug()
     {
 #if DEBUG
-        Dispatcher.Dispatch(new AlertStore.Actions.SendAlert(Status));
+        Dispatcher.Dispatch(new AlertStore.Actions.Notify(Status));
 #endif
     }
 

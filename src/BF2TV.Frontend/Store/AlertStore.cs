@@ -61,7 +61,9 @@ public class AlertStore
 
         public record RunAlertGeneration(List<Server> FullServerList);
 
-        public record SendAlert(IConditionStatus ConditionStatus);
+        public record ShowAlert(IConditionStatus ConditionStatus);
+
+        public record Notify(IConditionStatus ConditionStatus);
 
         public class AreAllAlertsEnabled
         {
@@ -108,7 +110,7 @@ public class AlertStore
         }
 
         [ReducerMethod]
-        public State Reduce(State oldState, Actions.SendAlert action)
+        public State Reduce(State oldState, Actions.ShowAlert action)
         {
             var alertHistory = oldState.AlertHistory.Insert(0, action.ConditionStatus);
             return new State(alertHistory, oldState.FriendIsOnServerConditions, oldState.IsLoaded,
@@ -160,7 +162,7 @@ public class AlertStore
         }
 
         [EffectMethod]
-        public async Task Handle(Actions.SendAlert action, IDispatcher dispatcher)
+        public async Task Handle(Actions.Notify action, IDispatcher dispatcher)
         {
             await _alertService.NotifyAsync(action.ConditionStatus);
         }

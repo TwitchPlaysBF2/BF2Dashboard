@@ -11,17 +11,20 @@ public class AlertGenerationService : IAlertGenerationService
     private readonly IDispatcher _dispatcher;
     private readonly IDateTimeProvider _dateTimeProvider;
     private readonly IState<AlertStore.State> _alertState;
-    private readonly IConditionStatusTracker _conditionStatusTracker;
+    private readonly IConditionStatusTracker _notificationTracker;
 
-    public AlertGenerationService(IDispatcher dispatcher,
+    private bool _hasCompletedInitialGeneration;
+
+    public AlertGenerationService(
+        IDispatcher dispatcher,
         IDateTimeProvider dateTimeProvider,
         IState<AlertStore.State> alertState,
-        IConditionStatusTracker conditionStatusTracker)
+        IConditionStatusTracker notificationTracker)
     {
         _dispatcher = dispatcher;
         _dateTimeProvider = dateTimeProvider;
         _alertState = alertState;
-        _conditionStatusTracker = conditionStatusTracker;
+        _notificationTracker = notificationTracker;
     }
 
     public void Generate(List<Server> fullServerList)
@@ -30,6 +33,8 @@ public class AlertGenerationService : IAlertGenerationService
         {
             ForServer(server);
         }
+
+        _hasCompletedInitialGeneration = true;
     }
 
     private void ForServer(Server server)
@@ -48,9 +53,12 @@ public class AlertGenerationService : IAlertGenerationService
         if (!condition.IsFulfilled(_dateTimeProvider, server, out var result))
             return;
 
-        if (_conditionStatusTracker.TrackUnlessAlreadyExists(result))
+        if (_notificationTracker.HasAlreadyNotified(result))
             return;
 
-        _dispatcher.Dispatch(new AlertStore.Actions.SendAlert(result));
+        _dispatcher.Dispatch(new AlertStore.Actions.ShowAlert(result));
+
+        if (_hasCompletedInitialGeneration)
+            _dispatcher.Dispatch(new AlertStore.Actions.Notify(result));
     }
 }

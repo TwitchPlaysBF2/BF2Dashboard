@@ -4,5 +4,5 @@ namespace BF2TV.Domain.Services;
 
 public interface IConditionStatusTracker
 {
-    bool TrackUnlessAlreadyExists(IConditionStatus status);
+    bool HasAlreadyNotified(IConditionStatus status);
 }

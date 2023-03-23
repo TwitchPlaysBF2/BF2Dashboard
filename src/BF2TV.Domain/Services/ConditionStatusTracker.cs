@@ -6,7 +6,7 @@ public class ConditionStatusTracker : IConditionStatusTracker
 {
     private readonly List<ConditionStatusId> _statusHistory = new();
 
-    public bool TrackUnlessAlreadyExists(IConditionStatus status)
+    public bool HasAlreadyNotified(IConditionStatus status)
     {
         if (_statusHistory.Contains(status.Id))
             return true;
