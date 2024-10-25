@@ -1,0 +1,481 @@
+@import '';
+
+/* _content/Majorsoft.Blazor.Components.Notifications/Alerts/Alert.razor.rz.scp.css */
+.bnotify-normal-primary[b-4eawdc1h4e] {
+  background-color: #cce5ff;
+  color: #0065d2;
+  fill: #0065d2; }
+
+.bnotify-outlined-primary[b-4eawdc1h4e] {
+  border: 2px solid #cce5ff;
+  color: #0065d2;
+  fill: #0065d2;
+  background: white; }
+
+.bnotify-strong-primary[b-4eawdc1h4e] {
+  background-color: #0065d2;
+  color: #f7f7f7;
+  fill: #f7f7f7; }
+
+.bnotify-normal-secondary[b-4eawdc1h4e] {
+  background-color: #e2e3e5;
+  color: #544f4f;
+  fill: #544f4f; }
+
+.bnotify-outlined-secondary[b-4eawdc1h4e] {
+  border: 2px solid #e2e3e5;
+  color: #544f4f;
+  fill: #544f4f;
+  background: white; }
+
+.bnotify-strong-secondary[b-4eawdc1h4e] {
+  background-color: #544f4f;
+  color: #f7f7f7;
+  fill: #f7f7f7; }
+
+.bnotify-normal-info[b-4eawdc1h4e] {
+  background-color: #bfe4ea;
+  color: #2083b3;
+  fill: #2083b3; }
+
+.bnotify-outlined-info[b-4eawdc1h4e] {
+  border: 2px solid #bfe4ea;
+  color: #2083b3;
+  fill: #2083b3;
+  background: white; }
+
+.bnotify-strong-info[b-4eawdc1h4e] {
+  background-color: #2083b3;
+  color: #f7f7f7;
+  fill: #f7f7f7; }
+
+.bnotify-normal-success[b-4eawdc1h4e] {
+  background-color: #c3e6cb;
+  color: #0a8e28;
+  fill: #0a8e28; }
+
+.bnotify-outlined-success[b-4eawdc1h4e] {
+  border: 2px solid #c3e6cb;
+  color: #0a8e28;
+  fill: #0a8e28;
+  background: white; }
+
+.bnotify-strong-success[b-4eawdc1h4e] {
+  background-color: #0a8e28;
+  color: #f7f7f7;
+  fill: #f7f7f7; }
+
+.bnotify-normal-warning[b-4eawdc1h4e] {
+  background-color: #fdf2cf;
+  color: #ffa500;
+  fill: #ffa500; }
+
+.bnotify-outlined-warning[b-4eawdc1h4e] {
+  border: 2px solid #fdf2cf;
+  color: #ffa500;
+  fill: #ffa500;
+  background: white; }
+
+.bnotify-strong-warning[b-4eawdc1h4e] {
+  background-color: #ffa500;
+  color: #f7f7f7;
+  fill: #f7f7f7; }
+
+.bnotify-normal-danger[b-4eawdc1h4e] {
+  background-color: #f8d7da;
+  color: #ff162c;
+  fill: #ff162c; }
+
+.bnotify-outlined-danger[b-4eawdc1h4e] {
+  border: 2px solid #f8d7da;
+  color: #ff162c;
+  fill: #ff162c;
+  background: white; }
+
+.bnotify-strong-danger[b-4eawdc1h4e] {
+  background-color: #ff162c;
+  color: #f7f7f7;
+  fill: #f7f7f7; }
+
+.bnotify-normal-light[b-4eawdc1h4e] {
+  background-color: #fafafa;
+  color: #818182;
+  fill: #818182; }
+
+.bnotify-outlined-light[b-4eawdc1h4e] {
+  border: 2px solid #fafafa;
+  color: #818182;
+  fill: #818182;
+  background: white; }
+
+.bnotify-strong-light[b-4eawdc1h4e] {
+  background-color: #818182;
+  color: #f7f7f7;
+  fill: #f7f7f7; }
+
+.bnotify-normal-dark[b-4eawdc1h4e] {
+  background-color: #d0d0d0;
+  color: #1b1e21;
+  fill: #1b1e21; }
+
+.bnotify-outlined-dark[b-4eawdc1h4e] {
+  border: 2px solid #d0d0d0;
+  color: #1b1e21;
+  fill: #1b1e21;
+  background: white; }
+
+.bnotify-strong-dark[b-4eawdc1h4e] {
+  background-color: #1b1e21;
+  color: #f7f7f7;
+  fill: #f7f7f7; }
+
+.balert-main[b-4eawdc1h4e] {
+  position: relative;
+  border-radius: 0.25rem;
+  outline: 0;
+  transition: opacity 0.5s ease-in; }
+
+.balert-body[b-4eawdc1h4e] {
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+  outline: 0; }
+
+.balert-body .balert-text[b-4eawdc1h4e] {
+  padding: 0.6em 0;
+  margin: 0 0.6em; }
+
+.balert-body .balert-img[b-4eawdc1h4e] {
+  padding: 0.6em 0;
+  margin: 0 0.2em 0 0.7em;
+  width: 24px;
+  display: flex;
+  border: 0;
+  outline: none; }
+
+.balert-progress[b-4eawdc1h4e] {
+  width: 0px;
+  height: 0.2em;
+  border-radius: 0 0 .15rem .15rem; }
+
+.balert-progress.primary[b-4eawdc1h4e] {
+  background-color: #0065d2; }
+
+.balert-progress.secondary[b-4eawdc1h4e] {
+  background-color: #544f4f; }
+
+.balert-progress.info[b-4eawdc1h4e] {
+  background-color: #2083b3; }
+
+.balert-progress.success[b-4eawdc1h4e] {
+  background-color: #0a8e28; }
+
+.balert-progress.warning[b-4eawdc1h4e] {
+  background-color: #ffa500; }
+
+.balert-progress.danger[b-4eawdc1h4e] {
+  background-color: #ff162c; }
+
+.balert-progress.light[b-4eawdc1h4e] {
+  background-color: #818182; }
+
+.balert-progress.dark[b-4eawdc1h4e] {
+  background-color: #1b1e21; }
+
+.balert-progress.strong[b-4eawdc1h4e] {
+  background-color: #f7f7f7; }
+
+.balert-progress.start[b-4eawdc1h4e] {
+  width: 100% !important; }
+
+.balert-body .close[b-4eawdc1h4e] {
+  margin: 0 0 0 auto;
+  padding: 0.4em 0.5em;
+  outline: none;
+  border: 0;
+  font-size: 1.5rem;
+  z-index: 5;
+  color: inherit;
+  display: flex; }
+
+.balert-body .close.strong[b-4eawdc1h4e] {
+  font-weight: normal;
+  color: #f7f7f7; }
+
+.balert-body .close:hover[b-4eawdc1h4e] {
+  color: #1c1b1b; }
+
+.balert-body .close.strong:hover[b-4eawdc1h4e] {
+  color: white; }
+/* _content/Majorsoft.Blazor.Components.Notifications/Toasts/Toast.razor.rz.scp.css */
+.bnotify-normal-primary[b-39ju4xs1kr] {
+  background-color: #cce5ff;
+  color: #0065d2;
+  fill: #0065d2; }
+
+.bnotify-outlined-primary[b-39ju4xs1kr] {
+  border: 2px solid #cce5ff;
+  color: #0065d2;
+  fill: #0065d2;
+  background: white; }
+
+.bnotify-strong-primary[b-39ju4xs1kr] {
+  background-color: #0065d2;
+  color: #f7f7f7;
+  fill: #f7f7f7; }
+
+.bnotify-normal-secondary[b-39ju4xs1kr] {
+  background-color: #e2e3e5;
+  color: #544f4f;
+  fill: #544f4f; }
+
+.bnotify-outlined-secondary[b-39ju4xs1kr] {
+  border: 2px solid #e2e3e5;
+  color: #544f4f;
+  fill: #544f4f;
+  background: white; }
+
+.bnotify-strong-secondary[b-39ju4xs1kr] {
+  background-color: #544f4f;
+  color: #f7f7f7;
+  fill: #f7f7f7; }
+
+.bnotify-normal-info[b-39ju4xs1kr] {
+  background-color: #bfe4ea;
+  color: #2083b3;
+  fill: #2083b3; }
+
+.bnotify-outlined-info[b-39ju4xs1kr] {
+  border: 2px solid #bfe4ea;
+  color: #2083b3;
+  fill: #2083b3;
+  background: white; }
+
+.bnotify-strong-info[b-39ju4xs1kr] {
+  background-color: #2083b3;
+  color: #f7f7f7;
+  fill: #f7f7f7; }
+
+.bnotify-normal-success[b-39ju4xs1kr] {
+  background-color: #c3e6cb;
+  color: #0a8e28;
+  fill: #0a8e28; }
+
+.bnotify-outlined-success[b-39ju4xs1kr] {
+  border: 2px solid #c3e6cb;
+  color: #0a8e28;
+  fill: #0a8e28;
+  background: white; }
+
+.bnotify-strong-success[b-39ju4xs1kr] {
+  background-color: #0a8e28;
+  color: #f7f7f7;
+  fill: #f7f7f7; }
+
+.bnotify-normal-warning[b-39ju4xs1kr] {
+  background-color: #fdf2cf;
+  color: #ffa500;
+  fill: #ffa500; }
+
+.bnotify-outlined-warning[b-39ju4xs1kr] {
+  border: 2px solid #fdf2cf;
+  color: #ffa500;
+  fill: #ffa500;
+  background: white; }
+
+.bnotify-strong-warning[b-39ju4xs1kr] {
+  background-color: #ffa500;
+  color: #f7f7f7;
+  fill: #f7f7f7; }
+
+.bnotify-normal-danger[b-39ju4xs1kr] {
+  background-color: #f8d7da;
+  color: #ff162c;
+  fill: #ff162c; }
+
+.bnotify-outlined-danger[b-39ju4xs1kr] {
+  border: 2px solid #f8d7da;
+  color: #ff162c;
+  fill: #ff162c;
+  background: white; }
+
+.bnotify-strong-danger[b-39ju4xs1kr] {
+  background-color: #ff162c;
+  color: #f7f7f7;
+  fill: #f7f7f7; }
+
+.bnotify-normal-light[b-39ju4xs1kr] {
+  background-color: #fafafa;
+  color: #818182;
+  fill: #818182; }
+
+.bnotify-outlined-light[b-39ju4xs1kr] {
+  border: 2px solid #fafafa;
+  color: #818182;
+  fill: #818182;
+  background: white; }
+
+.bnotify-strong-light[b-39ju4xs1kr] {
+  background-color: #818182;
+  color: #f7f7f7;
+  fill: #f7f7f7; }
+
+.bnotify-normal-dark[b-39ju4xs1kr] {
+  background-color: #d0d0d0;
+  color: #1b1e21;
+  fill: #1b1e21; }
+
+.bnotify-outlined-dark[b-39ju4xs1kr] {
+  border: 2px solid #d0d0d0;
+  color: #1b1e21;
+  fill: #1b1e21;
+  background: white; }
+
+.bnotify-strong-dark[b-39ju4xs1kr] {
+  background-color: #1b1e21;
+  color: #f7f7f7;
+  fill: #f7f7f7; }
+
+.btoast-main[b-39ju4xs1kr] {
+  display: block;
+  position: relative;
+  border-radius: 0.25rem;
+  outline: 0;
+  transition: opacity 0.7s ease-in; }
+
+.btoast-body[b-39ju4xs1kr] {
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+  outline: 0; }
+
+.btoast-body .btoast-text[b-39ju4xs1kr] {
+  padding: 0.6em 0;
+  margin: 0 0.6em; }
+
+.btoast-body .btoast-img[b-39ju4xs1kr] {
+  padding: 0.6em 0;
+  margin: 0 0.2em 0 0.7em;
+  width: 24px;
+  display: flex;
+  border: 0;
+  outline: none; }
+
+.btoast-progress[b-39ju4xs1kr] {
+  width: 0px;
+  height: 0.2em;
+  border-radius: 0 0 .15rem .15rem; }
+
+.btoast-progress.primary[b-39ju4xs1kr] {
+  background-color: #0065d2; }
+
+.btoast-progress.secondary[b-39ju4xs1kr] {
+  background-color: #544f4f; }
+
+.btoast-progress.info[b-39ju4xs1kr] {
+  background-color: #2083b3; }
+
+.btoast-progress.success[b-39ju4xs1kr] {
+  background-color: #0a8e28; }
+
+.btoast-progress.warning[b-39ju4xs1kr] {
+  background-color: #ffa500; }
+
+.btoast-progress.danger[b-39ju4xs1kr] {
+  background-color: #ff162c; }
+
+.btoast-progress.light[b-39ju4xs1kr] {
+  background-color: #818182; }
+
+.btoast-progress.dark[b-39ju4xs1kr] {
+  background-color: #1b1e21; }
+
+.btoast-progress.strong[b-39ju4xs1kr] {
+  background-color: #f7f7f7; }
+
+.btoast-progress.start[b-39ju4xs1kr] {
+  width: 100% !important; }
+
+.btoast-body .close[b-39ju4xs1kr] {
+  margin: 0 0 0 auto;
+  padding: 0.4em 0.5em;
+  outline: none;
+  border: 0;
+  font-size: 1.5rem;
+  z-index: 5;
+  color: inherit;
+  display: flex; }
+
+.btoast-body .close.strong[b-39ju4xs1kr] {
+  font-weight: normal;
+  color: #f7f7f7; }
+
+.btoast-body .close:hover[b-39ju4xs1kr] {
+  color: #1c1b1b; }
+
+.btoast-body .close.strong:hover[b-39ju4xs1kr] {
+  color: white; }
+/* _content/Majorsoft.Blazor.Components.Notifications/Toasts/ToastContainer.razor.rz.scp.css */
+.btoast-container[b-mki5nm548p] {
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    z-index: 10;
+}
+
+.position-topleft[b-mki5nm548p],
+.position-topright[b-mki5nm548p],
+.position-topcenter[b-mki5nm548p] {
+    top: 0;
+}
+
+.position-bottomleft[b-mki5nm548p],
+.position-bottomright[b-mki5nm548p],
+.position-bottomcenter[b-mki5nm548p] {
+    bottom: 0;
+}
+
+.position-topcenter[b-mki5nm548p],
+.position-bottomcenter[b-mki5nm548p] {
+    left: 50%;
+}
+.position-topleft[b-mki5nm548p],
+.position-bottomleft[b-mki5nm548p] {
+    left: 0;
+}
+.position-topright[b-mki5nm548p],
+.position-bottomright[b-mki5nm548p] {
+    right: 0;
+}
+
+@media (min-width: 576px) {
+    .position-topleft[b-mki5nm548p] {
+        top: 2rem;
+        left: 2rem;
+    }
+
+    .position-topright[b-mki5nm548p] {
+        top: 2rem;
+        right: 2rem;
+    }
+
+    .position-topcenter[b-mki5nm548p] {
+        top: 2rem;
+        left: 50%;
+    }
+
+    .position-bottomleft[b-mki5nm548p] {
+        bottom: 2rem;
+        left: 2rem;
+    }
+
+    .position-bottomright[b-mki5nm548p] {
+        bottom: 2rem;
+        right: 2rem;
+    }
+
+    .position-bottomcenter[b-mki5nm548p] {
+        bottom: 2rem;
+        left: 50%;
+    }
+}
