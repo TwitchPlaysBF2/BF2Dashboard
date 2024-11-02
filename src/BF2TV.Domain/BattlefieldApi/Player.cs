@@ -14,9 +14,7 @@ public class Player
 
     public string FullName => Tag + " " + Name;
 
-    // Long names of player may be cut off if used in combination with a clan tag/prefix,
-    // meaning linking to the cut-off name would lead to a 404 => link to profile based on pid instead
-    public string ProfileUrl => $"https://www.bf2hub.com/stats/{Pid}";
+    public string ProfileUrl => $"https://playerpath.link/p/{Pid}";
     
     [JsonPropertyName("pid")]
     public int? Pid { get; set; }

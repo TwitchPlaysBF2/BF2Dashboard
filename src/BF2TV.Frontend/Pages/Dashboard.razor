@@ -56,9 +56,16 @@
                         {
                             <li class="m-2">
                                 <i class="bi bi-circle-fill" style="color: green; font-size: 11pt;"></i>
-                                <a href="@friend.ProfileUrl" target="_blank" style="text-decoration: none; opacity: .75" title="Open BF2Hub profile">
-                                    @friend.DisplayName
-                                </a>
+                                @if (friend.ProfileUrl != null)
+                                {
+                                    <a href="@friend.ProfileUrl" target="_blank" style="text-decoration: none; opacity: .75" title="Open stats profile">
+                                        @friend.DisplayName
+                                    </a>
+                                }
+                                else
+                                {
+                                    <span style="text-decoration: none; opacity: .75">@friend.DisplayName</span>
+                                }
                                 <span style="font-size: 10pt; color: #767676">
                                     @friend.ServerInfo.MapNameAndSize @@ <LinkedServer Server="friend.ServerInfo"/>
                                     <a role="button"
@@ -205,7 +212,7 @@ else
                                                 {
                                                     <tr>
                                                         <td style="vertical-align: center;">
-                                                            <a title="Open BF2Hub profile" class="link-light text-nowrap text-decoration-none" target="_blank"
+                                                            <a title="Open stats profile" class="link-light text-nowrap text-decoration-none" target="_blank"
                                                                href="@player.ProfileUrl">
                                                                 <span style="color: @(player.IsFriend ? "darkseagreen" : "")">@player.FullName</span>
                                                             </a>
@@ -240,7 +247,7 @@ else
                                                 {
                                                     <tr>
                                                         <td>
-                                                            <a title="Open BF2Hub profile" class="link-light text-nowrap text-decoration-none" target="_blank"
+                                                            <a title="Open stats profile" class="link-light text-nowrap text-decoration-none" target="_blank"
                                                                href="@player.ProfileUrl">
                                                                 <span style="color: @(player.IsFriend ? "darkseagreen" : "")">@player.FullName</span>
                                                             </a>
@@ -382,7 +389,7 @@ else
                                                     {
                                                         <tr>
                                                             <td>
-                                                                <a title="Open BF2Hub profile" class="link-light text-nowrap text-decoration-none" target="_blank"
+                                                                <a title="Open stats profile" class="link-light text-nowrap text-decoration-none" target="_blank"
                                                                    href="@player.ProfileUrl">
                                                                     <span style="color: @(player.IsFriend ? "darkseagreen" : "")">@player.FullName</span>
                                                                 </a>
@@ -417,7 +424,7 @@ else
                                                     {
                                                         <tr>
                                                             <td>
-                                                                <a title="Open BF2Hub profile" class="link-light text-nowrap text-decoration-none" target="_blank"
+                                                                <a title="Open stats profile" class="link-light text-nowrap text-decoration-none" target="_blank"
                                                                    href="@player.ProfileUrl">
                                                                     <span style="color: @(player.IsFriend ? "darkseagreen" : "")">@player.FullName</span>
                                                                 </a>
