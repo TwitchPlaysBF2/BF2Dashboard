@@ -212,10 +212,17 @@ else
                                                 {
                                                     <tr>
                                                         <td style="vertical-align: center;">
-                                                            <a title="Open stats profile" class="link-light text-nowrap text-decoration-none" target="_blank"
-                                                               href="@player.ProfileUrl">
+                                                            @if (@player.ProfileUrl != null)
+                                                            {
+                                                                <a title="Open stats profile" class="link-light text-nowrap text-decoration-none" target="_blank"
+                                                                   href="@player.ProfileUrl">
+                                                                    <span style="color: @(player.IsFriend ? "darkseagreen" : "")">@player.FullName</span>
+                                                                </a>
+                                                            }
+                                                            else
+                                                            {
                                                                 <span style="color: @(player.IsFriend ? "darkseagreen" : "")">@player.FullName</span>
-                                                            </a>
+                                                            }
                                                         </td>
                                                         <td class="text-center">
                                                             @player.Score
@@ -247,10 +254,17 @@ else
                                                 {
                                                     <tr>
                                                         <td>
-                                                            <a title="Open stats profile" class="link-light text-nowrap text-decoration-none" target="_blank"
-                                                               href="@player.ProfileUrl">
+                                                            @if (@player.ProfileUrl != null)
+                                                            {
+                                                                <a title="Open stats profile" class="link-light text-nowrap text-decoration-none" target="_blank"
+                                                                   href="@player.ProfileUrl">
+                                                                    <span style="color: @(player.IsFriend ? "darkseagreen" : "")">@player.FullName</span>
+                                                                </a>
+                                                            }
+                                                            else
+                                                            {
                                                                 <span style="color: @(player.IsFriend ? "darkseagreen" : "")">@player.FullName</span>
-                                                            </a>
+                                                            }
                                                         </td>
                                                         <td class="text-center">
                                                             @player.Score
@@ -389,10 +403,17 @@ else
                                                     {
                                                         <tr>
                                                             <td>
-                                                                <a title="Open stats profile" class="link-light text-nowrap text-decoration-none" target="_blank"
-                                                                   href="@player.ProfileUrl">
+                                                                @if (@player.ProfileUrl != null)
+                                                                {
+                                                                    <a title="Open stats profile" class="link-light text-nowrap text-decoration-none" target="_blank"
+                                                                       href="@player.ProfileUrl">
+                                                                        <span style="color: @(player.IsFriend ? "darkseagreen" : "")">@player.FullName</span>
+                                                                    </a>
+                                                                }
+                                                                else
+                                                                {
                                                                     <span style="color: @(player.IsFriend ? "darkseagreen" : "")">@player.FullName</span>
-                                                                </a>
+                                                                }
                                                             </td>
                                                             <td class="text-center">
                                                                 @player.Score
@@ -424,10 +445,17 @@ else
                                                     {
                                                         <tr>
                                                             <td>
-                                                                <a title="Open stats profile" class="link-light text-nowrap text-decoration-none" target="_blank"
-                                                                   href="@player.ProfileUrl">
+                                                                @if (@player.ProfileUrl != null)
+                                                                {
+                                                                    <a title="Open stats profile" class="link-light text-nowrap text-decoration-none" target="_blank"
+                                                                       href="@player.ProfileUrl">
+                                                                        <span style="color: @(player.IsFriend ? "darkseagreen" : "")">@player.FullName</span>
+                                                                    </a>
+                                                                }
+                                                                else
+                                                                {
                                                                     <span style="color: @(player.IsFriend ? "darkseagreen" : "")">@player.FullName</span>
-                                                                </a>
+                                                                }
                                                             </td>
                                                             <td class="text-center">
                                                                 @player.Score
