@@ -1,34 +1,22 @@
-﻿using BF2TV.Domain.BattlefieldApi;
+﻿using System.Text.Json.Serialization;
 
-namespace BF2TV.Domain.Repositories;
+namespace BF2TV.Domain.BattlefieldApi;
 
+#pragma warning disable CS8618
+[Serializable]
 public class PagedServerListResponse
 {
-    public PagedServerListResponse(IReadOnlyList<Server> servers, int currentPage, string? maximumKnownPages)
-    {
-        CurrentPage = currentPage;
-        MaximumKnownPages = ParsePages(maximumKnownPages);
-        Servers = servers;
-    }
+    [JsonPropertyName("servers")]
+    public List<Server> Servers { get; set; }
 
-    public IReadOnlyList<Server> Servers { get; }
+    [JsonPropertyName("cursor")]
+    public string Cursor { get; set; }
+    
+    [JsonPropertyName("hasMore")]
+    public bool HasMore { get; set; }
 
     public bool IsEmpty => Servers.Count == 0;
 
-    public bool IsLastPage => CurrentPage >= MaximumKnownPages;
-
-    private int CurrentPage { get; }
-
-    private int? MaximumKnownPages { get; }
-
-    private static int? ParsePages(string? pages)
-    {
-        if (pages == null)
-            return null;
-
-        if (!int.TryParse(pages, out var maximumKnownPages))
-            return null;
-
-        return maximumKnownPages;
-    }
+    public bool IsLastPage => !HasMore;
 }
+#pragma warning restore CS8618

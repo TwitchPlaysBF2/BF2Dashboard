@@ -1,11 +1,12 @@
 ﻿using System.Runtime.Serialization;
 using System.Text.Json;
+using System.Web;
 using BF2TV.Domain.BattlefieldApi;
 
 namespace BF2TV.Domain.Repositories;
 
 /// <summary>
-///     https://bflist.io/api-endpoints/battlefield-2/
+///     https://bflist.io/api-endpoints/v2/battlefield-2/
 /// </summary>
 public class ServerListRepository : HttpRepositoryBase
 {
@@ -13,16 +14,19 @@ public class ServerListRepository : HttpRepositoryBase
     {
         var servers = new List<Server>();
 
+        var cursor = string.Empty;
+        var after = string.Empty;
         for (var i = 1;; i++)
         {
             Console.WriteLine($"Querying servers, page {i}");
-            var pagedResponse = await QueryServersForPage(i);
+            var pagedResponse = await QueryServersForPage(cursor, after);
             servers.AddRange(pagedResponse.Servers);
 
             if (pagedResponse.IsLastPage || pagedResponse.IsEmpty)
                 break;
 
-            await Task.Delay(50); // we don't want to bomb the API with too many requests at once
+            cursor = pagedResponse.Cursor;
+            after = pagedResponse.Servers.Last().IpAndPort;
         }
 
         var uniqueServers = servers
@@ -33,23 +37,36 @@ public class ServerListRepository : HttpRepositoryBase
         return uniqueServers;
     }
 
-    private static async Task<PagedServerListResponse> QueryServersForPage(int pageNumber)
+    private static async Task<PagedServerListResponse> QueryServersForPage(string? cursor, string? after)
     {
-        var endpoint = $"{Constants.ApiBaseUrl}/servers/{pageNumber}?perPage=100";
+        var query = HttpUtility.ParseQueryString(string.Empty);
+        
+        // Use maximum page size, https://bflist.io/api-endpoints/v2/#pagination-page-size
+        query.Set("perPage", "100");
+
+        // Add pagination parameters if given
+        if (!string.IsNullOrEmpty(cursor) && !string.IsNullOrEmpty(after))
+        {
+            query.Set("cursor", cursor);
+            query.Set("after", after);
+        }
+        
+        var endpoint = new UriBuilder(Constants.ApiBaseUrl);
+        endpoint.Path += "/servers";
+        endpoint.Query = query.ToString();
+        
         try
         {
-            var response = await HttpClient.GetAsync(endpoint);
+            var response = await HttpClient.GetAsync(endpoint.Uri);
             var json = await response.Content.ReadAsStringAsync();
-            var servers = JsonSerializer.Deserialize<List<Server>>(json, JsonOptions)
+            var servers = JsonSerializer.Deserialize<PagedServerListResponse>(json, JsonOptions)
                           ?? throw new SerializationException(json);
 
-            var maximumKnownPages = response.Headers.GetValues("X-Total-Pages").FirstOrDefault();
-
-            return new PagedServerListResponse(servers, pageNumber, maximumKnownPages);
+            return servers;
         }
         catch
         {
-            Console.WriteLine($"Failed querying endpoint {endpoint}");
+            Console.WriteLine($"Failed querying endpoint {endpoint.Uri}");
             throw;
         }
     }
