@@ -13,7 +13,6 @@
 @inject IEnvironment Environment
 @inject IActivePlayerLookupService ActivePlayerLookupService
 @inject IPeriodicRefresher PeriodicRefresher
-@inject DiscordUrlParser _discordUrlParser
 
 @if (Environment.IsApp() && _activePlayerName != null)
 {
@@ -167,13 +166,25 @@ else
                                         <a role="button" href="servers/@server.IpAndPort" class="btn btn-dark btn-sm mx-1">
                                             <i class="bi bi-info-circle icon-in-a-button-small align-middle"></i> <span class="align-middle">Server Details</span>
                                         </a>
-                                        @if (_discordUrlParser.TryGetDiscordUrl(server.SponsorText, out var discordUrl))
+                                        @if (server.Variables != null && server.Variables.TryGetValue("website", out var websiteUrl) && Uri.IsWellFormedUriString(websiteUrl, UriKind.Absolute))
                                         {
-                                            <a role="button" class="btn btn-dark btn-sm mx-1" target="_blank" href="@discordUrl">
-                                                <i class="bi bi-discord icon-in-a-button-small align-middle"></i> <span class="align-middle">Join Discord</span>
+                                            <a role="button" class="btn btn-dark btn-sm mx-1" target="_blank" href="@websiteUrl">
+                                                <i class="bi bi-link icon-in-a-button-small align-middle"></i> <span class="align-middle">Website</span>
                                             </a>
                                         }
-                                        @if (server.Battlerecorder == true && !string.IsNullOrWhiteSpace(server.DemoIndex) && Uri.IsWellFormedUriString(server.DemoIndex, UriKind.Absolute))
+                                        @if (server.Variables != null && server.Variables.TryGetValue("discord", out var discordUrl) && Uri.IsWellFormedUriString(discordUrl, UriKind.Absolute))
+                                        {
+                                            <a role="button" class="btn btn-dark btn-sm mx-1" target="_blank" href="@discordUrl">
+                                                <i class="bi bi-discord icon-in-a-button-small align-middle"></i> <span class="align-middle">Discord</span>
+                                            </a>
+                                        }
+                                        @if (server.Variables != null && server.Variables.TryGetValue("teamspeak", out var teamspeakUrl) && Uri.IsWellFormedUriString(teamspeakUrl, UriKind.Absolute))
+                                        {
+                                            <a role="button" class="btn btn-dark btn-sm mx-1" target="_blank" href="@teamspeakUrl">
+                                                <img src="_content/BF2TV.Frontend/img/teamspeak.png" alt="TeamSpeak" style="width: 11pt; height: 11pt; margin: 2.76pt 3px 2.76pt 0" class="align-middle"/> <span class="align-middle">TeamSpeak</span>
+                                            </a>
+                                        }
+                                        @if (server.Battlerecorder == true && Uri.IsWellFormedUriString(server.DemoIndex, UriKind.Absolute))
                                         {
                                             <a role="button" class="btn btn-dark btn-sm mx-1" target="_blank" href="@server.DemoIndex">
                                                 <i class="bi bi-camera-video icon-in-a-button-small align-middle"></i> <span class="align-middle">Demos</span>
@@ -358,13 +369,25 @@ else
                                             <a role="button" href="servers/@server.IpAndPort" class="btn btn-dark btn-sm mx-1">
                                                 <i class="bi bi-info-circle icon-in-a-button-small align-middle"></i> <span class="align-middle">Server Details</span>
                                             </a>
-                                            @if (_discordUrlParser.TryGetDiscordUrl(server.SponsorText, out var discordUrl))
+                                            @if (server.Variables != null && server.Variables.TryGetValue("website", out var websiteUrl) && Uri.IsWellFormedUriString(websiteUrl, UriKind.Absolute))
                                             {
-                                                <a role="button" class="btn btn-dark btn-sm mx-1" target="_blank" href="@discordUrl">
-                                                    <i class="bi bi-discord icon-in-a-button-small align-middle"></i> <span class="align-middle">Join Discord</span>
+                                                <a role="button" class="btn btn-dark btn-sm mx-1" target="_blank" href="@websiteUrl">
+                                                    <i class="bi bi-link icon-in-a-button-small align-middle"></i> <span class="align-middle">Website</span>
                                                 </a>
                                             }
-                                            @if (server.Battlerecorder == true && !string.IsNullOrWhiteSpace(server.DemoIndex) && Uri.IsWellFormedUriString(server.DemoIndex, UriKind.Absolute))
+                                            @if (server.Variables != null && server.Variables.TryGetValue("discord", out var discordUrl) && Uri.IsWellFormedUriString(discordUrl, UriKind.Absolute))
+                                            {
+                                                <a role="button" class="btn btn-dark btn-sm mx-1" target="_blank" href="@discordUrl">
+                                                    <i class="bi bi-discord icon-in-a-button-small align-middle"></i> <span class="align-middle">Discord</span>
+                                                </a>
+                                            }
+                                            @if (server.Variables != null && server.Variables.TryGetValue("teamspeak", out var teamspeakUrl) && Uri.IsWellFormedUriString(teamspeakUrl, UriKind.Absolute))
+                                            {
+                                                <a role="button" class="btn btn-dark btn-sm mx-1" target="_blank" href="@teamspeakUrl">
+                                                    <img src="_content/BF2TV.Frontend/img/teamspeak.png" alt="TeamSpeak" style="width: 11pt; height: 11pt; margin: 2.76pt 3px 2.76pt 0" class="align-middle"/> <span class="align-middle">TeamSpeak</span>
+                                                </a>
+                                            }
+                                            @if (server.Battlerecorder == true && Uri.IsWellFormedUriString(server.DemoIndex, UriKind.Absolute))
                                             {
                                                 <a role="button" class="btn btn-dark btn-sm mx-1" target="_blank" href="@server.DemoIndex">
                                                     <i class="bi bi-camera-video icon-in-a-button-small align-middle"></i> <span class="align-middle">Demos</span>

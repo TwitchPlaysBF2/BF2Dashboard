@@ -159,6 +159,9 @@ public class Server
 
     [JsonPropertyName("joinLinkWeb")]
     public string? JoinLinkWeb { get; set; }
+    
+    [JsonPropertyName("variables")]
+    public Dictionary<string, string>? Variables { get; set; }
 
     [JsonPropertyName("teams")]
     public List<Team>? Teams { get; set; }
