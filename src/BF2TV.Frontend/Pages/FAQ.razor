@@ -30,9 +30,19 @@
             The joinme.click launcher does not support joining servers with a password. It also only supports some of the more popular mods for Battlefield 2. Which is why the join button is not present for password protected servers as well as servers with less popular mods.
         </p>
         
-        <h5 id="missing-discord-button" class="mt-5">Why do some servers not have a "Join Discord" button?</h5>
+        <h5 id="server-links" class="mt-5">How can I add a website/Discord/TeamSpeak link for my server?</h5>
         <p>
-            The "Join Discord" button is only available if the server admins added a Discord invite to their "Sponsor Text". 
+            By adding <a class="link" target="_blank" href="https://sponsortext.cetteup.com/">sponsortext</a> variables to your server.
+            The following variables are supported:
+        </p>
+        <ul class="m-0">
+            <li><code>website</code></li>
+            <li><code>discord</code></li>
+            <li><code>teamspeak</code></li>
+        </ul>
+        <p>
+            If a variable does not contain a valid URL, it is ignored.
+            For <code>teamspeak</code>, using a <code>ts3server://</code> or <code>teamspeak://</code> URL allows players to join the server directly.
         </p>
 
         <h5 id="custom-maps" class="mt-5">Where can I download custom modded maps for competitive BF2 modes like "2 vs. 2 in a Helicopter"?</h5>

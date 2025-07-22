@@ -2,12 +2,10 @@
 @using Newtonsoft.Json
 @using BF2TV.Domain.BattlefieldApi
 @using BF2TV.Domain.GeoApi
-@using BF2TV.Domain.Services
 @using BF2TV.Frontend.Store.ServerDetail
 @inject IDispatcher _dispatcher
 @inject IState<ServerDetailState> _serverDetailState
 @inject IState<ServerGeoLocationState> _serverGeoLocationState
-@inject DiscordUrlParser _discordUrlParser
 @inherits FluxorComponent
 
 <a role="button" class="btn btn-dark" href="/">
@@ -22,10 +20,22 @@
         <i class="bi bi-play-circle icon-in-a-button-big"></i> Join Server now
     </a>
 }
-@if (Server?.SponsorText != null && _discordUrlParser.TryGetDiscordUrl(Server.SponsorText, out var discordUrl))
+@if (Server?.Variables != null && Server.Variables.TryGetValue("website", out var websiteUrl) && Uri.IsWellFormedUriString(websiteUrl, UriKind.Absolute))
+{
+    <a role="button" class="btn btn-dark ms-2" target="_blank" href="@websiteUrl">
+        <i class="bi bi-link icon-in-a-button-big"></i> Website
+    </a>
+}
+@if (Server?.Variables != null && Server.Variables.TryGetValue("discord", out var discordUrl) && Uri.IsWellFormedUriString(discordUrl, UriKind.Absolute))
 {
     <a role="button" class="btn btn-dark ms-2" target="_blank" href="@discordUrl">
-        <i class="bi bi-discord icon-in-a-button-big"></i> Join Discord
+        <i class="bi bi-discord icon-in-a-button-big"></i> Discord
+    </a>
+}
+@if (Server?.Variables != null && Server.Variables.TryGetValue("teamspeak", out var teamspeakUrl) && Uri.IsWellFormedUriString(teamspeakUrl, UriKind.Absolute))
+{
+    <a role="button" class="btn btn-dark ms-2" target="_blank" href="@teamspeakUrl">
+        <img src="_content/BF2TV.Frontend/img/teamspeak.png" alt="TeamSpeak" style="width: 15pt; height: 15pt; margin: 3.75pt 5px 3.75pt 0"/> TeamSpeak
     </a>
 }
 @if (Server?.Battlerecorder == true && !string.IsNullOrWhiteSpace(Server.DemoIndex) && Uri.IsWellFormedUriString(Server.DemoIndex, UriKind.Absolute))
@@ -152,7 +162,7 @@
                 {
                     <a href="@Server.SponsorText" target="_blank">@Server.SponsorText</a>
                 }
-                else
+                else if (!Server.SponsorText.Contains("$vars:"))
                 {
                     <div class="m-2">@Server.SponsorText</div>
                 }
