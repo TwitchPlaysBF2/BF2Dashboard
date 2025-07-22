@@ -6,7 +6,7 @@ using BF2TV.Domain.GeoApi;
 namespace BF2TV.Domain.Repositories;
 
 /// <summary>
-///     https://bflist.io/api-endpoints/battlefield-2/
+///     https://bflist.io/api-endpoints/v2/battlefield-2/
 /// </summary>
 public class ServerDetailRepository : HttpRepositoryBase
 {

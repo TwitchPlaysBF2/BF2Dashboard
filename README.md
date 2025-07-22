@@ -36,4 +36,4 @@ Having a personal dashboard to see what's going on, before playing a round of BF
 
 Made using [C#](https://dotnet.microsoft.com) and [ASP.NET Core Blazor WebAssembly](https://blazor.net/).
 
-Special thanks to [@cetteup](https://github.com/cetteup) for providing the [bflist.io](https://bflist.io/api-endpoints/battlefield-2/) API, the [joinme.click launcher](https://joinme.click/download) and moral support.
+Special thanks to [@cetteup](https://github.com/cetteup) for providing the [bflist.io](https://bflist.io/api-endpoints/v2/battlefield-2/) API, the [joinme.click launcher](https://joinme.click/download) and moral support.

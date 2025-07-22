@@ -3,7 +3,7 @@
 public static class Constants
 {
     /// <summary>
-    ///     https://bflist.io/api-endpoints/battlefield-2/
+    ///     https://bflist.io/api-endpoints/v2/battlefield-2/
     /// </summary>
-    public static string ApiBaseUrl => "https://api.bflist.io/bf2/v1";
+    public static string ApiBaseUrl => "https://api.bflist.io/v2/bf2";
 }
