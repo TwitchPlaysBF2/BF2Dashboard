@@ -13,6 +13,7 @@
 @inject IEnvironment Environment
 @inject IActivePlayerLookupService ActivePlayerLookupService
 @inject IPeriodicRefresher PeriodicRefresher
+@inject IJSRuntime JsRuntime
 
 @if (Environment.IsApp() && _activePlayerName != null)
 {
@@ -574,4 +575,38 @@ else
         "btn btn-sm btn-outline-warning bi bi-person-dash grow" :
         "btn btn-sm btn-outline-success bi bi-person-plus grow";
 
+}
+
+@code {
+    private bool _paused;
+    private DotNetObjectReference<Dashboard>? _dotNetRef;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            _dotNetRef = DotNetObjectReference.Create(this);
+            await JsRuntime.InvokeVoidAsync("focusInterop.registerFocusHandlers", _dotNetRef);
+        }
+    }
+
+    [JSInvokable]
+    public void OnWindowBlur()
+    {
+        if (!PeriodicRefresher.IsEnabled) return;
+        
+        PeriodicRefresher.UpdateSetting(false);
+        _paused = true;
+    }
+
+    [JSInvokable]
+    public void OnWindowFocus() {
+        if (!_paused) return;
+
+        PeriodicRefresher.UpdateSetting(true);
+        _paused = false;
+        
+        // Force an immediate update after regaining focus
+        Dispatcher.Dispatch(new InitializeServerListsAction());
+    }
 }
