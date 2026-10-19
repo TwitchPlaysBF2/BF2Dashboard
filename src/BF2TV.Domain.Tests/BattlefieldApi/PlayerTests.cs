@@ -33,4 +33,29 @@ public class PlayerTests
 
         Assert.That(player.IsHuman, Is.False);
     }
+
+    [Test]
+    public void ProfileUrl_IncludesEncodedNick()
+    {
+        var player = new Player
+        {
+            Pid = 123,
+            Name = "Player Name+&?"
+        };
+
+        Assert.That(player.ProfileUrl,
+            Is.EqualTo("https://playerpath.link/p/123?nick=Player%20Name%2B%26%3F"));
+    }
+
+    [Test]
+    public void ProfileUrl_IsNullForZeroPid()
+    {
+        var player = new Player
+        {
+            Pid = 0,
+            Name = "Player"
+        };
+
+        Assert.That(player.ProfileUrl, Is.Null);
+    }
 }

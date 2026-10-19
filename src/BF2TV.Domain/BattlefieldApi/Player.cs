@@ -16,7 +16,10 @@ public class Player
 
     // When players join online server with local profiles, they receive a pid of 0.
     // It makes no sense to link to them, so only provide a ProfileUrl for players with a non-zero pid.
-    public string? ProfileUrl => Pid > 0 ? $"https://playerpath.link/p/{Pid}" : null;
+    // Provide nick via query parameter to potentially break ties between players with the same pid.
+    public string? ProfileUrl => Pid > 0
+        ? $"https://playerpath.link/p/{Pid}?nick={Uri.EscapeDataString(Name)}"
+        : null;
     
     [JsonPropertyName("pid")]
     public int? Pid { get; set; }
