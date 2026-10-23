@@ -40,11 +40,12 @@ public class PlayerTests
         var player = new Player
         {
             Pid = 123,
-            Name = "Player Name+&?"
+            Name = "Player Name+&?",
+            Tag = string.Empty
         };
 
         Assert.That(player.ProfileUrl,
-            Is.EqualTo("https://playerpath.link/p/123?nick=Player%20Name%2B%26%3F"));
+            Is.EqualTo("https://playerpath.link/p/123?nick=Player%20Name%2B%26%3F&tag="));
     }
 
     [Test]
