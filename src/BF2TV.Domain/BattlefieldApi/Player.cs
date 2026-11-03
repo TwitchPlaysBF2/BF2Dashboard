@@ -7,8 +7,18 @@ namespace BF2TV.Domain.BattlefieldApi;
 [Serializable]
 public class Player
 {
-    public bool IsHuman => Aibot != true && (Ping.GetValueOrDefault() > 0 || Score.GetValueOrDefault() != 0 ||
-                                             Kills.GetValueOrDefault() != 0 || Deaths.GetValueOrDefault() != 0);
+    public bool IsHuman =>
+        // Exclude players explicitly marked as bots.
+        Aibot != true &&
+        // Exclude players without a valid pid (e.g. players that have not fully connected yet)
+        // (will cause a negligible number of false positives by matching players using local profiles on unranked servers)
+        Pid.GetValueOrDefault() > 0 &&
+        // Human players are expected to have a ping > 0 (once fully connected),
+        // or at least one of score/kills/deaths > 0
+        (Ping.GetValueOrDefault() > 0 ||
+         Score.GetValueOrDefault() != 0 ||
+         Kills.GetValueOrDefault() != 0 ||
+         Deaths.GetValueOrDefault() != 0);
 
     public bool IsFriend { get; set; } = false;
 
