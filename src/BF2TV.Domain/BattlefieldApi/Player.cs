@@ -7,8 +7,7 @@ namespace BF2TV.Domain.BattlefieldApi;
 [Serializable]
 public class Player
 {
-    public bool IsHuman => Aibot != true && (Ping.GetValueOrDefault() > 0 || Score.GetValueOrDefault() != 0 ||
-                                             Kills.GetValueOrDefault() != 0 || Deaths.GetValueOrDefault() != 0);
+    public bool IsHuman => Kind == "human";
 
     public bool IsFriend { get; set; } = false;
 
@@ -52,5 +51,8 @@ public class Player
 
     [JsonPropertyName("aibot")]
     public bool? Aibot { get; set; }
+
+    [JsonPropertyName("kind")]
+    public string? Kind { get; set; }
 }
 #pragma warning restore CS8618
