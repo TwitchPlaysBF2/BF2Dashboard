@@ -5,36 +5,34 @@ namespace BF2TV.Domain.Tests.BattlefieldApi;
 
 public class PlayerTests
 {
-    [TestCase(false, 1, 1)]
-    [TestCase(false, 1, 0)]
-    [TestCase(false, 0, 1)]
-    public void IsLikelyHuman_HumanSignature_IsHuman(bool isAibot, int score, int ping)
+    [TestCase("human")]
+    public void IsHuman_KindHuman_IsHuman(string kind)
     {
         var player = new Player
         {
-            Aibot = isAibot,
-            Score = score,
-            Ping = ping
+            Kind = kind
         };
 
         Assert.That(player.IsHuman, Is.True);
     }
 
-    [TestCase(true, 0, 0)]
-    [TestCase(false, 0, 0)]
-    public void IsLikelyHuman_BotSignature_IsNotHuman(bool isAibot, int score, int ping)
+    [TestCase("aibot")]
+    [TestCase("bot")]
+    [TestCase("seeder")]
+    [TestCase("unknown")]
+    [TestCase(null)]
+    public void IsHuman_NonHumanKind_IsNotHuman(string? kind)
     {
         var player = new Player
         {
-            Aibot = isAibot,
-            Score = score,
-            Ping = ping
+            Kind = kind,
+            Aibot = false,
+            Score = 1,
+            Ping = 1
         };
 
         Assert.That(player.IsHuman, Is.False);
-    }
-
-    [Test]
+    }    [Test]
     public void ProfileUrl_IncludesEncodedNick()
     {
         var player = new Player
